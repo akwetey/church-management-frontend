@@ -2,7 +2,7 @@ const path = require("path");
 
 module.exports = {
   devServer: {
-    proxy: "http://scim.test",
+    proxy: process.env.API_URL,
   },
   chainWebpack: (config) => {
     config.resolve.alias.set(
