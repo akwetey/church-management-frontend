@@ -53,6 +53,7 @@
                 <button
                   class="btn btn-danger btn-icon mr-2"
                   v-tooltip.top="'Delete'"
+                  @click="deleteBook(slotProps.data.mask, $event)"
                 >
                   <i class="pi pi-trash no-pointer-events"></i>
                 </button> </template
@@ -87,10 +88,12 @@ export default {
   },
   methods: {
     getBooks() {
-      Book.all().then(({ data: res }) => {
-        this.books = res.data;
-        this.loading = false;
-      });
+      Book.all()
+        .then(({ data: res }) => {
+          this.books = res.data;
+          this.loading = false;
+        })
+        .catch((err) => console.log(err));
     },
 
     generateLink(mask, e) {
@@ -114,6 +117,36 @@ export default {
           });
         })
         .catch((err) => console.log(err));
+    },
+
+    /* delete book  */
+    deleteBook(mask, e) {
+      const btn = e.target;
+      // console.log(mask);
+      Swal.fire({
+        text: "Do you want to delete this book?",
+        icon: "warning",
+        showCancelButton: true,
+        cancelButtonText: "No",
+        confirmButtonText: "Yes Delete It",
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.value) {
+          addBtnLoading(btn);
+          Book.delete(mask)
+            .then((response) => {
+              removeBtnLoading(btn);
+              //  console.log(response);
+              const res = response.data;
+              Swal.fire({
+                icon: "success",
+                title: res.message,
+              });
+              this.getBooks();
+            })
+            .catch((err) => console.log(err));
+        }
+      });
     },
   },
   created() {

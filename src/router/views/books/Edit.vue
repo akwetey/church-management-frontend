@@ -8,72 +8,85 @@
 
         <form @submit.prevent="updateBook">
           <div class="row">
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="title">Title *</label>
-                <input
-                  type="text"
-                  name="title"
-                  id="title"
-                  class="form-control"
-                  required
-                  v-model.trim="title"
-                />
+            <div class="col-md-8">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="title">Title *</label>
+                    <input
+                      type="text"
+                      name="title"
+                      id="title"
+                      class="form-control"
+                      required
+                      v-model.trim="title"
+                    />
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="description">Description</label>
+                    <input
+                      type="text"
+                      name="description"
+                      id="description"
+                      class="form-control"
+                      v-model.trim="description"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="file">File </label>
+                    <input
+                      type="file"
+                      name="file"
+                      id="file"
+                      class="form-control-file"
+                      ref="file"
+                    />
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="cover">Book Cover</label>
+                    <input
+                      type="file"
+                      name="cover"
+                      id="cover"
+                      class="form-control-file"
+                      ref="cover"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group mt-3">
+                    <button class="btn btn-success px-5" ref="submitBtn">
+                      Save
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-
             <div class="col-md-4">
-              <div class="form-group">
-                <label for="description">Description</label>
-                <input
-                  type="text"
-                  name="description"
-                  id="description"
-                  class="form-control"
-                  v-model.trim="description"
-                />
+              <div class=" mb-3">
+                <i class="link-icon pi pi-file-pdf" style="color:red;"></i>
+                <span class="d-block">{{ fileName }}</span>
               </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="file">File </label>
-                <input
-                  type="file"
-                  name="file"
-                  id="file"
-                  class="form-control-file"
-                  ref="file"
+              <div class="">
+                <img
+                  :src="image"
+                  width="200"
+                  height="200"
+                  class="image-fluid"
                 />
-              </div>
-            </div>
-
-            <div class="col-md-4">
-              <div class="form-group">
-                <label for="cover">Book Cover</label>
-                <input
-                  type="file"
-                  name="cover"
-                  id="cover"
-                  class="form-control-file"
-                  ref="cover"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-8"></div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-4">
-              <div class="form-group mt-3">
-                <button class="btn btn-success px-5" ref="submitBtn">
-                  Save
-                </button>
               </div>
             </div>
           </div>
@@ -95,6 +108,8 @@ export default {
       title: "",
       description: "",
       book: null,
+      image: "",
+      fileName: "",
     };
   },
   methods: {
@@ -143,6 +158,11 @@ export default {
     setData(book) {
       this.title = book.title;
       this.description = book.description;
+      this.image = book.cover;
+      this.fileName = book.file
+        .split("//")[1]
+        .split("/")
+        .pop();
       this.book = book;
     },
   },

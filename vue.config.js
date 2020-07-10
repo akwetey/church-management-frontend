@@ -2,7 +2,11 @@ const path = require("path");
 
 module.exports = {
   devServer: {
+<<<<<<< HEAD
     proxy: process.env.API_URL,
+=======
+    proxy: "http://church-management.io/",
+>>>>>>> ccd93a1ea387716c2bc245de6b0ef8d536a05823
   },
   chainWebpack: (config) => {
     config.resolve.alias.set(
