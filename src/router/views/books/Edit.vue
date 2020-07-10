@@ -76,7 +76,7 @@
               </div>
             </div>
             <div class="col-md-4">
-              <div class=" mb-5">
+              <div class=" mb-3">
                 <i class="link-icon pi pi-file-pdf" style="color:red;"></i>
                 <span class="d-block">{{ fileName }}</span>
               </div>
