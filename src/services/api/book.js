@@ -19,4 +19,9 @@ export default {
   generateDownloadableLink(mask) {
     return Axios.get("/api/books/" + mask + "/generate-link");
   },
+  public: {
+    all() {
+      return Axios.get("/api/public/books");
+    },
+  },
 };

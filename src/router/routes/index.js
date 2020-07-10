@@ -44,4 +44,20 @@ export default [
       },
     ],
   },
+  {
+    path: "/store",
+    component: () => import("@layouts/Store.vue"),
+    children: [
+      {
+        path: "books",
+        name: "StoreBooks",
+        component: () => import("@views/store/Books.vue"),
+      },
+      {
+        path: "book/:token",
+        name: "StoreBook",
+        component: () => import("@views/store/Book.vue"),
+      },
+    ],
+  },
 ];
