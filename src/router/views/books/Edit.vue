@@ -115,8 +115,10 @@ export default {
   methods: {
     updateBook(e) {
       const form = e.target;
-      const btn = this.$refs.submitBnt;
+      const btn = this.$refs.submitBtn;
       const formMsg = this.$refs.formMsg;
+
+      addBtnLoading(btn);
       const formData = new FormData();
       const cover = this.$refs.cover;
       const file = this.$refs.file;
@@ -134,6 +136,7 @@ export default {
 
       Book.update(formData, this.book.mask)
         .then((response) => {
+          removeBtnLoading(btn);
           const res = response.data;
           Swal.fire("Success", res.message, "success");
 
@@ -144,6 +147,7 @@ export default {
           let errorBag = "";
 
           if (status === 400) {
+            removeBtnLoading(btn);
             data.errors.forEach(
               (error) => (errorBag += `<span class="d-block">${error}</span>`)
             );
