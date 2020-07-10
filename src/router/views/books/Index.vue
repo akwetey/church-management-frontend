@@ -121,7 +121,7 @@ export default {
 
     /* delete book  */
     deleteBook(mask, e) {
-      const btn = e.currentTarget;
+      const btn = e.target;
       // console.log(mask);
       Swal.fire({
         text: "Do you want to delete this book?",
