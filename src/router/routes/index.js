@@ -47,6 +47,11 @@ export default [
         name: "user",
         component: () => import("@views/users/Index.vue"),
       },
+      {
+        path: "user/add",
+        name: "adduser",
+        component: () => import("@views/users/Add.vue"),
+      },
     ],
   },
   {
