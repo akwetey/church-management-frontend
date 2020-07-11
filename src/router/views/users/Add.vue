@@ -67,6 +67,7 @@
                   id="password"
                   class="form-control"
                   v-model.trim="password"
+                  ref="password"
                 />
               </div>
             </div>
@@ -79,6 +80,7 @@
                   id="password_confirm"
                   class="form-control"
                   v-model.trim="password_confirm"
+                  ref="password_confirm"
                 />
               </div>
             </div>
@@ -90,7 +92,8 @@
                     name="generate_password"
                     id="generate_password"
                     v-model.trim="generate_password"
-                    value="yes"
+                    @change="generatePassword"
+                    ref="generate_password"
                   />
                   Generate Password
                 </label>
@@ -104,7 +107,7 @@
                     name="send_notification"
                     id="send_notification"
                     v-model.trim="send_notification"
-                    value="yes"
+                    ref="send_notification"
                   />
                   Send User Notification
                 </label>
@@ -127,11 +130,11 @@
 
 <script>
 import { addBtnLoading, removeBtnLoading } from "@services/helpers";
-import Book from "@services/api/book";
+import User from "@services/api/user";
 import Swal from "sweetalert2";
 
 export default {
-  name: "BooksAdd",
+  name: "UserAdd",
   data() {
     return {
       first_name: "",
@@ -151,25 +154,24 @@ export default {
       const formMsg = this.$refs.formMsg;
 
       addBtnLoading(btn);
-      const formData = new FormData();
-      const cover = this.$refs.cover;
-      const file = this.$refs.file;
+      const formData = {
+        first_name: this.first_name,
+        last_name: this.last_name,
+        telephone_number: this.telephone_number,
+        password: this.password,
+        password_confirm: this.password_confirm,
+        role: this.role,
+        generate_password: this.generate_password ? "Yes" : "No",
+        send_notification: this.send_notification ? "Yes" : "No",
+      };
 
-      formData.append("title", this.title);
-      formData.append("description", this.description);
-      formData.append("file", file.files[0]);
-
-      if (cover.files.length) {
-        formData.append("cover", cover.files[0]);
-      }
-
-      Book.store(formData)
+      User.store(formData)
         .then((response) => {
           removeBtnLoading(btn);
           const res = response.data;
           Swal.fire("Success", res.message, "success");
 
-          this.$router.push({ name: "Books" });
+          this.$router.push({ name: "user" });
         })
         .catch((err) => {
           const { status, data } = err.response;
@@ -186,6 +188,30 @@ export default {
 
           formMsg.innerHTML = `<div class="alert alert-danger">${errorBag}</div>`;
         });
+    },
+
+    generatePassword(e) {
+      const isChecked = this.generate_password;
+      //console.log(isChecked);
+      if (isChecked) {
+        this.$refs.password.disabled = true;
+        this.$refs.password_confirm.disabled = true;
+        this.$refs.send_notification.disabled = true;
+        this.$refs.send_notification.checked = true;
+        this.$refs.password.style.backgroundColor = "#e9ecef";
+        this.$refs.password_confirm.style.backgroundColor = "#e9ecef";
+        this.password = "Password";
+        this.password_confirm = "Password";
+      } else {
+        this.$refs.send_notification.checked = false;
+        this.$refs.send_notification.disabled = false;
+        this.$refs.password.disabled = false;
+        this.$refs.password_confirm.disabled = false;
+        this.$refs.password.style.backgroundColor = "";
+        this.$refs.password_confirm.style.backgroundColor = "";
+        this.password = "";
+        this.password_confirm = "";
+      }
     },
   },
 };
