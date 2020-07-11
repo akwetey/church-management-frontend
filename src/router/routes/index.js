@@ -42,6 +42,11 @@ export default [
         name: "BooksEdit",
         component: () => import("@views/books/Edit.vue"),
       },
+      {
+        path: "user",
+        name: "user",
+        component: () => import("@views/users/Index.vue"),
+      },
     ],
   },
   {
