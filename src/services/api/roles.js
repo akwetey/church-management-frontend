@@ -11,7 +11,7 @@ export default {
     return axios.get("/api/roles/" + mask);
   },
   update(payload, mask) {
-    return axios.post("/api/roles/" + mask, payload);
+    return axios.put("/api/roles/" + mask, payload);
   },
   delete(mask) {
     return axios.delete("/api/roles/" + mask);
