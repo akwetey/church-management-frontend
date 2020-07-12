@@ -10,7 +10,7 @@
 
         <div>
           <DataTable
-            :value="books"
+            :value="users"
             :paginator="true"
             :rows="10"
             :loading="loading"
@@ -21,7 +21,22 @@
             <Column field="name" header="Name" sortable></Column>
             <Column field="email" header="Email" sortable></Column>
             <Column field="role" header="Role" sortable></Column>
-            <Column field="created_at" header="Date Added" sortable></Column>
+            <Column field="status" header="Status" sortable>
+              <template #body="slotProps">
+                <span
+                  class="badge badge-success"
+                  v-if="slotProps.data.status == 'active'"
+                  >{{
+                    slotProps.data.status[0].toUpperCase() +
+                      slotProps.data.status.slice(1)
+                  }}</span
+                >
+                <span class="badge badge-danger" v-else>{{
+                  slotProps.data.status[0].toUpperCase() +
+                    slotProps.data.status.slice(1)
+                }}</span>
+              </template>
+            </Column>
             <Column field="actions" header="Actions">
               <template #body="slotProps">
                 <router-link
@@ -67,50 +82,54 @@ export default {
     };
   },
   methods: {
-    getUsers() {
-      User.all()
-        .then(({ data: res }) => {
-          this.users = res.data;
-          this.loading = false;
-        })
-        .catch((err) => {
-          console.log(err);
-          this.loading = false;
-        });
+    //fetch users
+    async getUsers() {
+      try {
+        const response = await User.all();
+        this.loading = false;
+        const res = response.data;
+        this.users = res.data;
+      } catch (error) {
+        console.log(error);
+        this.loading = false;
+      }
     },
 
     /* delete user  */
-    deleteUser(mask, e) {
+    async deleteUser(mask, e) {
       const btn = e.target;
-
-      Swal.fire({
-        text: "Do you want to delete this user?",
-        icon: "warning",
-        showCancelButton: true,
-        cancelButtonText: "No",
-        confirmButtonText: "Yes Delete It",
-        reverseButtons: true,
-      }).then((result) => {
+      try {
+        const result = await Swal.fire({
+          text: "Do you want to delete this user?",
+          icon: "warning",
+          showCancelButton: true,
+          cancelButtonText: "No",
+          confirmButtonText: "Yes Delete It",
+          reverseButtons: true,
+        });
         if (result.value) {
           addBtnLoading(btn);
-          User.delete(mask)
-            .then((response) => {
-              removeBtnLoading(btn);
-              //  console.log(response);
-              const res = response.data;
-              Swal.fire({
-                icon: "success",
-                title: res.message,
-              });
-              this.getUsers();
-            })
-            .catch((err) => console.log(err));
+          const response = await User.delete(mask);
+          removeBtnLoading(btn);
+          const res = response.data;
+          Swal.fire({
+            icon: "success",
+            title: res.message,
+          });
+          this.getUsers();
         }
-      });
+      } catch (error) {
+        removeBtnLoading(btn);
+        const res = error.response.data;
+        Swal.fire({
+          icon: "error",
+          title: res.message,
+        });
+      }
     },
   },
-  created() {
-    this.getUsers();
+  async created() {
+    await this.getUsers();
   },
 };
 </script>

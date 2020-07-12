@@ -37,7 +37,20 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="last_name">Mobile Phone </label>
+                <label for="email">Email *</label>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  class="form-control"
+                  v-model.trim="email"
+                  required
+                />
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="telephone_number">Mobile Phone </label>
                 <input
                   type="text"
                   name="telephone_number"
@@ -49,12 +62,39 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="last_name">Role *</label>
-                <select name="role" id="role" class="form-control">
-                  <option>1</option>
-                  <option>2</option>
-                  <option>3</option>
-                  <option>4</option>
+                <label for="role">Role *</label>
+                <select
+                  name="role"
+                  id="role"
+                  v-model.trim="role"
+                  class="form-control"
+                  required
+                >
+                  <option value="">Select</option>
+                  <option
+                    v-for="role in roles"
+                    :value="role.id"
+                    :key="role.id"
+                    >{{ role.name }}</option
+                  >
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="status">
+                  Status *
+                </label>
+                <select
+                  name="status"
+                  id="status"
+                  v-model.trim="status"
+                  class="form-control"
+                  required
+                >
+                  <option value="">Select</option>
+                  <option value="1">Active</option>
+                  <option value="0">Inactive</option>
                 </select>
               </div>
             </div>
@@ -73,27 +113,27 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="password_confirm">Confirm Password </label>
+                <label for="password_confirmation">Confirm Password </label>
                 <input
                   type="password"
-                  name="password_confirm"
-                  id="password_confirm"
+                  name="password_confirmation"
+                  id="password_confirmation"
                   class="form-control"
-                  v-model.trim="password_confirm"
-                  ref="password_confirm"
+                  v-model.trim="password_confirmation"
+                  ref="password_confirmation"
                 />
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="generate_password">
+                <label for="auto_password">
                   <input
                     type="checkbox"
-                    name="generate_password"
-                    id="generate_password"
-                    v-model.trim="generate_password"
+                    name="auto_password"
+                    id="auto_password"
+                    v-model.trim="auto_password"
                     @change="generatePassword"
-                    ref="generate_password"
+                    ref="auto_password"
                   />
                   Generate Password
                 </label>
@@ -101,13 +141,13 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="send_notification">
+                <label for="notify_user">
                   <input
                     type="checkbox"
-                    name="send_notification"
-                    id="send_notification"
-                    v-model.trim="send_notification"
-                    ref="send_notification"
+                    name="notify_user"
+                    id="notify_user"
+                    v-model.trim="notify_user"
+                    ref="notify_user"
                   />
                   Send User Notification
                 </label>
@@ -131,6 +171,7 @@
 <script>
 import { addBtnLoading, removeBtnLoading } from "@services/helpers";
 import User from "@services/api/user";
+import Role from "@services/api/roles";
 import Swal from "sweetalert2";
 
 export default {
@@ -140,79 +181,95 @@ export default {
       first_name: "",
       last_name: "",
       telephone_number: "",
+      email: "",
       password: "",
-      password_confirm: "",
-      generate_password: "",
-      send_notification: "",
+      password_confirmation: "",
+      auto_password: "",
+      notify_user: "",
+      status: "",
       role: "",
+      roles: [],
     };
   },
   methods: {
-    addUser(e) {
-      const form = e.target;
+    async addUser(e) {
       const btn = this.$refs.submitBtn;
       const formMsg = this.$refs.formMsg;
-
-      addBtnLoading(btn);
-      const formData = {
-        first_name: this.first_name,
-        last_name: this.last_name,
-        telephone_number: this.telephone_number,
-        password: this.password,
-        password_confirm: this.password_confirm,
-        role: this.role,
-        generate_password: this.generate_password ? "Yes" : "No",
-        send_notification: this.send_notification ? "Yes" : "No",
-      };
-
-      User.store(formData)
-        .then((response) => {
+      try {
+        addBtnLoading(btn);
+        const formData = {
+          first_name: this.first_name,
+          last_name: this.last_name,
+          telephone: this.telephone_number,
+          email: this.email,
+          password: this.password,
+          password_confirmation: this.password_confirmation,
+          role: this.role,
+          auto_password: this.auto_password,
+          notify_user: this.notify_user,
+          status: this.status,
+        };
+        const response = await User.store(formData);
+        const res = response.data;
+        removeBtnLoading(btn);
+        Swal.fire("Success", res.message, "success");
+        this.$router.push({ name: "user" });
+      } catch (err) {
+        const res = err.response.data;
+        let errorBag = "";
+        if (res.code === 422) {
           removeBtnLoading(btn);
-          const res = response.data;
-          Swal.fire("Success", res.message, "success");
+          const errorData = Object.values(res.errors);
+          errorData.map((error) => {
+            errorBag += `<span class="d-block">${error}</span>`;
+          });
+        } else {
+          errorBag += res.message;
+        }
+        formMsg.innerHTML = `<div class="alert alert-danger">${errorBag}</div>`;
+      }
+    },
 
-          this.$router.push({ name: "user" });
-        })
-        .catch((err) => {
-          const { status, data } = err.response;
-          let errorBag = "";
-
-          if (status === 400) {
-            removeBtnLoading(btn);
-            data.errors.forEach(
-              (error) => (errorBag += `<span class="d-block">${error}</span>`)
-            );
-          } else {
-            errorBag += data.message;
-          }
-
-          formMsg.innerHTML = `<div class="alert alert-danger">${errorBag}</div>`;
-        });
+    //fetch roles
+    async getRoles() {
+      try {
+        const response = await Role.all();
+        const res = response.data;
+        this.roles = res.data;
+      } catch (error) {
+        console.log(error);
+      }
     },
 
     generatePassword(e) {
-      const isChecked = this.generate_password;
+      const isChecked = this.auto_password;
       //console.log(isChecked);
       if (isChecked) {
         this.$refs.password.disabled = true;
-        this.$refs.password_confirm.disabled = true;
-        this.$refs.send_notification.disabled = true;
-        this.$refs.send_notification.checked = true;
+        this.$refs.password_confirmation.disabled = true;
+        this.$refs.notify_user.disabled = true;
+        this.$refs.notify_user.checked = true;
+        this.notify_user = true;
         this.$refs.password.style.backgroundColor = "#e9ecef";
-        this.$refs.password_confirm.style.backgroundColor = "#e9ecef";
+        this.$refs.password_confirmation.style.backgroundColor = "#e9ecef";
         this.password = "Password";
-        this.password_confirm = "Password";
+        this.password_confirmation = "Password";
       } else {
-        this.$refs.send_notification.checked = false;
-        this.$refs.send_notification.disabled = false;
+        this.$refs.notify_user.checked = false;
+        this.notify_user = "";
+        this.$refs.notify_user.disabled = false;
         this.$refs.password.disabled = false;
-        this.$refs.password_confirm.disabled = false;
+        this.$refs.password_confirmation.disabled = false;
         this.$refs.password.style.backgroundColor = "";
-        this.$refs.password_confirm.style.backgroundColor = "";
+        this.$refs.password_confirmation.style.backgroundColor = "";
         this.password = "";
-        this.password_confirm = "";
+        this.password_confirmation = "";
       }
     },
+  },
+
+  async created() {
+    await this.getRoles();
   },
 };
 </script>

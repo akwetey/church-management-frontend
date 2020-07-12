@@ -52,6 +52,11 @@ export default [
         name: "adduser",
         component: () => import("@views/users/Add.vue"),
       },
+      {
+        path: "user/edit/:mask",
+        name: "useredit",
+        component: () => import("@views/users/Edit.vue"),
+      },
     ],
   },
   {

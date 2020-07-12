@@ -2,7 +2,7 @@ import axios from "axios";
 
 const token = localStorage.getItem("_chms_token") || null;
 const apiURL = "http://api.salvationclinicinternationalministries.org";
-const devURL = "http://church-management.io";
+const devURL = "https://church-management-system-scim.herokuapp.com";
 const Axios = axios.create({
   baseURL: process.env.NODE_ENV === "production" ? apiURL : devURL,
 });
