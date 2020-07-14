@@ -27,10 +27,16 @@
             <span class="link-title">Books</span>
           </router-link>
         </li>
+        <li class="nav-item">
+          <router-link :to="{ name: 'groups' }" class="nav-link">
+            <i class="link-icon pi pi-users"></i>
+            <span class="link-title">Groups</span>
+          </router-link>
+        </li>
         <li class="nav-item nav-category">Users & Roles</li>
         <li class="nav-item">
           <router-link :to="{ name: 'user' }" class="nav-link">
-            <i class="link-icon pi pi-users"></i>
+            <i class="link-icon pi pi-user"></i>
             <span class="link-title">User</span>
           </router-link>
         </li>
