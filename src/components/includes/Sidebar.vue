@@ -1,13 +1,15 @@
 <template>
   <nav class="sidebar">
     <div class="sidebar-header">
-      <a class="sidebar-brand"><span>CHMS</span></a>
+      <a class="sidebar-brand">
+        <span>CHMS</span>
+      </a>
 
       <!-- <div class="sidebar-toggler not-active">
         <span></span>
         <span></span>
         <span></span>
-      </div> -->
+      </div>-->
     </div>
     <div class="sidebar-body ps ps--active-y">
       <ul class="nav">
@@ -27,60 +29,44 @@
             <span class="link-title">Books</span>
           </router-link>
         </li>
-        <li class="nav-item nav-category">Users & Roles</li>
-        <li class="nav-item">
-          <router-link :to="{ name: 'user' }" class="nav-link">
-            <i class="link-icon pi pi-users"></i>
-            <span class="link-title">User</span>
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link :to="{ name: 'role' }" class="nav-link">
-            <i class="pi pi-bars"></i>
-            <span class="link-title">Roles</span>
-          </router-link>
-        </li>
 
-        <!-- <li class="nav-item">
+        <li class="nav-item">
           <a
-            id="email-collapse-btn"
+            id="users-role-collapse-btn"
             class="nav-link"
             data-toggle="collapse"
-            href="#emails"
+            href="#users-roles"
             role="button"
             aria-expanded="false"
-            aria-controls="emails"
+            aria-controls="users-roles"
           >
-            <i class="link-icon pi pi-envelope"></i>
-            <span class="link-title">Email</span>
+            <i class="link-icon pi pi-user"></i>
+            <span class="link-title">Users & Roles</span>
             <i class="link-arrow pi pi-chevron-down"></i>
           </a>
-          <div class="collapse" id="emails">
+          <div class="collapse" id="users-roles">
             <ul class="nav sub-menu">
               <li class="nav-item">
-                <a href="" class="nav-link">Inbox</a>
+                <router-link :to="{ name: 'user' }" class="nav-link">Users</router-link>
               </li>
               <li class="nav-item">
-                <a href="" class="nav-link">Read</a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link">Compose</a>
+                <router-link :to="{ name: 'role' }" class="nav-link">Roles</router-link>
               </li>
             </ul>
           </div>
-        </li> -->
+        </li>
       </ul>
     </div>
   </nav>
 </template>
 
 <script>
-// import BSN from "bootstrap.native";
+import BSN from "bootstrap.native";
 
 export default {
   name: "Sidebar",
   mounted() {
-    // new BSN.Collapse("#email-collapse-btn");
-  },
+    new BSN.Collapse("#users-role-collapse-btn");
+  }
 };
 </script>
