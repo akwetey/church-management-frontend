@@ -57,6 +57,16 @@ export default [
         name: "useredit",
         component: () => import("@views/users/Edit.vue"),
       },
+      {
+        path: "role",
+        name: "role",
+        component: () => import("@views/roles/Index.vue"),
+      },
+      {
+        path: "role/add",
+        name: "roleadd",
+        component: () => import("@views/roles/Add.vue"),
+      },
     ],
   },
   {

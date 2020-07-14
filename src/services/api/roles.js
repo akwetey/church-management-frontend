@@ -4,6 +4,9 @@ export default {
   all() {
     return axios.get("/api/roles");
   },
+  rolepermissions() {
+    return axios.get("/api/roles/permissions");
+  },
   store(payload) {
     return axios.post("/api/roles", payload);
   },

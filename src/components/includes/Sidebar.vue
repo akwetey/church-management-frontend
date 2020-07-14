@@ -34,6 +34,12 @@
             <span class="link-title">User</span>
           </router-link>
         </li>
+        <li class="nav-item">
+          <router-link :to="{ name: 'role' }" class="nav-link">
+            <i class="pi pi-bars"></i>
+            <span class="link-title">Roles</span>
+          </router-link>
+        </li>
 
         <!-- <li class="nav-item">
           <a
