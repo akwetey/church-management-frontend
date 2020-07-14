@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="mb-5">
           <router-link :to="{ name: 'roleadd' }" class="btn btn-primary px-5"
-            >Add Role</router-link
+            >Add Group</router-link
           >
         </div>
 
@@ -19,7 +19,7 @@
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
           >
             <Column field="name" header="Name" sortable></Column>
-            <Column field="users" header="Users" sortable></Column>
+            <Column field="leader" header="Leader" sortable></Column>
             <Column field="created_at" header="Date Added" sortable></Column>
             <Column field="actions" header="Actions">
               <template #body="slotProps">
@@ -52,39 +52,39 @@
 <script>
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import Role from "@services/api/roles";
+import Group from "@services/api/groups";
 import { addBtnLoading, removeBtnLoading } from "@services/helpers";
 import Swal from "sweetalert2";
 
 export default {
-  name: "Roles",
+  name: "Groups",
   components: { DataTable, Column },
   data() {
     return {
-      roles: [],
+      groups: [],
       loading: true,
     };
   },
   methods: {
-    //fetch groups
-    async getRoles() {
+    //fetch geoups
+    async getGroups() {
       try {
-        const response = await Role.all();
+        const response = await Group.all();
         this.loading = false;
         const res = response.data;
-        this.roles = res.data;
+        this.groups = res.data;
       } catch (error) {
         console.log(error);
         this.loading = false;
       }
     },
 
-    /* delete role  */
+    /* delete group  */
     async deleteRole(mask, e) {
       const btn = e.target;
       try {
         const result = await Swal.fire({
-          text: "Do you want to delete this role?",
+          text: "Do you want to delete this group?",
           icon: "warning",
           showCancelButton: true,
           cancelButtonText: "No",
@@ -93,14 +93,14 @@ export default {
         });
         if (result.value) {
           addBtnLoading(btn);
-          const response = await Role.delete(mask);
+          const response = await Group.delete(mask);
           removeBtnLoading(btn);
           const res = response.data;
           Swal.fire({
             icon: "success",
             title: res.message,
           });
-          this.getRoles();
+          this.getGroups();
         }
       } catch (error) {
         removeBtnLoading(btn);
@@ -113,7 +113,7 @@ export default {
     },
   },
   async created() {
-    await this.getRoles();
+    await this.getGroups();
   },
 };
 </script>

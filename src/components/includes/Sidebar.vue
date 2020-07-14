@@ -29,7 +29,12 @@
             <span class="link-title">Books</span>
           </router-link>
         </li>
-
+        <li class="nav-item">
+          <router-link :to="{ name: 'groups' }" class="nav-link">
+            <i class="link-icon pi pi-users"></i>
+            <span class="link-title">Groups</span>
+          </router-link>
+        </li>
         <li class="nav-item">
           <a
             id="users-role-collapse-btn"
