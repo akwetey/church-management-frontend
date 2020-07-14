@@ -67,6 +67,11 @@ export default [
         name: "roleadd",
         component: () => import("@views/roles/Add.vue"),
       },
+      {
+        path: "role/edit/:mask",
+        name: "roleedit",
+        component: () => import("@views/roles/Edit.vue"),
+      },
     ],
   },
   {

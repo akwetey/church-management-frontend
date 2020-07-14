@@ -24,16 +24,15 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label for="description">Description</label>
-                <input
-                  type="text"
+                <textarea
                   name="description"
                   id="description"
                   class="form-control"
                   v-model.trim="description"
-                />
+                ></textarea>
               </div>
             </div>
-            <div class="col-md-12 text-center mb-5">
+            <div class="col-md-12 text-center mb-3">
               <h5>Role Permissions</h5>
             </div>
             <div
@@ -41,19 +40,38 @@
               class="col-md-6"
               :key="permission.id"
             >
-              <h6 class="border-bottom">{{ permission.module }}</h6>
+              <h6 class="text-muted mt-3">{{ permission.module }}</h6>
+              <hr />
+              <div
+                v-for="permission in permission.permissions"
+                :key="permission.id"
+                class="mb-0 form-check-inline custom-control custom-checkbox"
+                style="display:inline-flex;"
+              >
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  :value="permission.id"
+                  :id="permission.id"
+                  v-model="checkedPermissions"
+                />
+                <label
+                  class="custom-control-label text-muted"
+                  style="font-size:15px; font-weight: 600;"
+                  :for="permission.id"
+                >
+                  {{ permission.name }}
+                </label>
+              </div>
             </div>
           </div>
 
-          <!-- {{ permission }} -->
-          <!-- <div :key="permission.id" class="border-bottom">
-                    <h6>{{ permission.module }}</h6>
-                  </div> -->
+          <!-- <span>Checked names: {{ checkedPermissions }}</span> -->
 
           <div class="text-center">
             <div class="form-group mt-5">
               <button class="btn btn-success px-5" ref="submitBtn">
-                Update
+                Save
               </button>
             </div>
           </div>
@@ -65,7 +83,6 @@
 
 <script>
 import { addBtnLoading, removeBtnLoading } from "@services/helpers";
-import User from "@services/api/user";
 import Role from "@services/api/roles";
 import Swal from "sweetalert2";
 
@@ -76,7 +93,7 @@ export default {
       name: "",
       description: "",
       permissions: [],
-      mask: "",
+      checkedPermissions: [],
     };
   },
   methods: {
@@ -84,11 +101,19 @@ export default {
       const btn = this.$refs.submitBtn;
       const formMsg = this.$refs.formMsg;
       try {
+        const checked = document.querySelectorAll(
+          "input[type=checkbox]:checked"
+        ).length;
+
+        if (!checked) {
+          Swal.fire("", "You must check at least one checkbox.", "error");
+          return false;
+        }
         addBtnLoading(btn);
         const formData = {
           name: this.name,
           description: this.description,
-          permissions: this.permissions,
+          permissions: this.checkedPermissions,
         };
         const response = await Role.store(formData);
         const res = response.data;
@@ -118,10 +143,6 @@ export default {
 
   async beforeRouteEnter(to, from, next) {
     try {
-      //   const mask = to.params.mask;
-      //   if (!mask) {
-      //     next({ name: "Home" });
-      //   }
       const response = await Role.rolepermissions();
       next((vm) => vm.setData(response.data));
     } catch (error) {
