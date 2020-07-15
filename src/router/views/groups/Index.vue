@@ -3,14 +3,14 @@
     <div class="card">
       <div class="card-body">
         <div class="mb-5">
-          <router-link :to="{ name: 'roleadd' }" class="btn btn-primary px-5"
+          <router-link :to="{ name: 'groupadd' }" class="btn btn-primary px-5"
             >Add Group</router-link
           >
         </div>
 
         <div>
           <DataTable
-            :value="roles"
+            :value="groups"
             :paginator="true"
             :rows="10"
             :loading="loading"
@@ -19,6 +19,7 @@
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
           >
             <Column field="name" header="Name" sortable></Column>
+            <Column field="persons" header="Persons" sortable></Column>
             <Column field="leader" header="Leader" sortable></Column>
             <Column field="created_at" header="Date Added" sortable></Column>
             <Column field="actions" header="Actions">
@@ -26,7 +27,7 @@
                 <router-link
                   tag="button"
                   :to="{
-                    name: 'roleedit',
+                    name: 'groupedit',
                     params: { mask: slotProps.data.mask },
                   }"
                   class="btn btn-primary btn-icon mr-2"

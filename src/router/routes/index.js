@@ -72,6 +72,21 @@ export default [
         name: "roleedit",
         component: () => import("@views/roles/Edit.vue"),
       },
+      {
+        path: "groups",
+        name: "groups",
+        component: () => import("@views/groups/Index.vue"),
+      },
+      {
+        path: "groups/add",
+        name: "groupadd",
+        component: () => import("@views/groups/Add.vue"),
+      },
+      {
+        path: "groups/edit/:mask",
+        name: "groupedit",
+        component: () => import("@views/groups/Edit.vue"),
+      },
     ],
   },
   {
