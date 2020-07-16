@@ -87,6 +87,16 @@ export default [
         name: "groupedit",
         component: () => import("@views/groups/Edit.vue"),
       },
+      {
+        path: "people",
+        name: "people",
+        component: () => import("@views/people/Index.vue"),
+      },
+      {
+        path: "people/add",
+        name: "addperson",
+        component: () => import("@views/people/Add.vue"),
+      },
     ],
   },
   {

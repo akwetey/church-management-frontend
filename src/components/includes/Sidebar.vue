@@ -30,6 +30,12 @@
           </router-link>
         </li>
         <li class="nav-item">
+          <router-link :to="{ name: 'people' }" class="nav-link">
+            <i class="pi pi-user"></i>
+            <span class="link-title">People</span>
+          </router-link>
+        </li>
+        <li class="nav-item">
           <router-link :to="{ name: 'groups' }" class="nav-link">
             <i class="link-icon pi pi-users"></i>
             <span class="link-title">Groups</span>
@@ -45,17 +51,21 @@
             aria-expanded="false"
             aria-controls="users-roles"
           >
-            <i class="link-icon pi pi-user"></i>
+            <i class="pi pi-user-plus"></i>
             <span class="link-title">Users & Roles</span>
             <i class="link-arrow pi pi-chevron-down"></i>
           </a>
           <div class="collapse" id="users-roles">
             <ul class="nav sub-menu">
               <li class="nav-item">
-                <router-link :to="{ name: 'user' }" class="nav-link">Users</router-link>
+                <router-link :to="{ name: 'user' }" class="nav-link"
+                  >Users</router-link
+                >
               </li>
               <li class="nav-item">
-                <router-link :to="{ name: 'role' }" class="nav-link">Roles</router-link>
+                <router-link :to="{ name: 'role' }" class="nav-link"
+                  >Roles</router-link
+                >
               </li>
             </ul>
           </div>
@@ -72,6 +82,6 @@ export default {
   name: "Sidebar",
   mounted() {
     new BSN.Collapse("#users-role-collapse-btn");
-  }
+  },
 };
 </script>
