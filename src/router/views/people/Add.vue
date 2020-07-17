@@ -52,6 +52,8 @@
                 <label for="date_of_birth">Date of Birth </label>
                 <flat-pickr
                   v-model="date_of_birth"
+                  :config="config"
+                  placeholder="Select Date"
                   name="date_of_birth"
                   id="date_of_birth"
                   class="form-control bg-white"
@@ -132,6 +134,8 @@
                 <label for="baptism_date ">Baptismal Date </label>
                 <flat-pickr
                   v-model="baptism_date"
+                  placeholder="Select Date"
+                  :config="config"
                   name="baptism_date"
                   id="baptism_date "
                   class="form-control bg-white"
@@ -143,6 +147,8 @@
                 <label for="join_date ">Join Date </label>
                 <flat-pickr
                   v-model="join_date"
+                  :config="config"
+                  placeholder="Select Date"
                   name="join_date"
                   id="join_date"
                   class="form-control bg-white"
@@ -236,20 +242,15 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label for="role">Groups</label>
-                <select
-                  name="group"
-                  id="group"
-                  v-model.trim="group"
+                <MultiSelect
+                  v-model="group"
+                  :options="groups"
+                  :filter="true"
+                  optionValue="id"
+                  optionLabel="name"
+                  placeholder="Select Group"
                   class="form-control"
-                >
-                  <option value="">Select</option>
-                  <option
-                    v-for="group in groups"
-                    :value="group.id"
-                    :key="group.id"
-                    >{{ group.name }}</option
-                  >
-                </select>
+                />
               </div>
             </div>
           </div>
@@ -274,11 +275,13 @@ import "flatpickr/dist/flatpickr.css";
 import People from "@services/api/people";
 import Group from "@services/api/groups";
 import Swal from "sweetalert2";
+import MultiSelect from "primevue/multiselect";
 
 export default {
   name: "PersonAdd",
   components: {
     flatPickr,
+    MultiSelect,
   },
   data() {
     return {
@@ -299,8 +302,11 @@ export default {
       postal_address: "",
       physical_address: "",
       tithe_number: "",
-      group: "",
+      group: [],
       groups: [],
+      config: {
+        maxDate: new Date(),
+      },
     };
   },
   methods: {
@@ -359,6 +365,17 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+
+    addTag(newTag) {
+      const tag = {
+        name: newTag,
+        code: newTag.substring(0, 2) + Math.floor(Math.random() * 10000000),
+      };
+      this.groups.push(tag);
+      this.group.push(tag);
+      console.log(this.group, "group");
+      console.log(this.groups, "groups");
     },
   },
   async created() {
