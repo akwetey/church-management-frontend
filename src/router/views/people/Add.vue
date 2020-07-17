@@ -54,7 +54,7 @@
                   v-model="date_of_birth"
                   name="date_of_birth"
                   id="date_of_birth"
-                  class="form-control"
+                  class="form-control bg-white"
                 ></flat-pickr>
               </div>
             </div>
@@ -99,8 +99,11 @@
                   class="form-control"
                 >
                   <option value="">Select</option>
-                  <option value="Undergraduate">Undergraduate</option>
-                  <option value="Graduate">Graduate</option>
+                  <option value="Primary">Primary</option>
+                  <option value="Junior High">Junior High</option>
+                  <option value="Senior High">Senior High</option>
+                  <option value="College">College</option>
+                  <option value="None">None</option>
                 </select>
               </div>
             </div>
@@ -131,7 +134,7 @@
                   v-model="baptism_date"
                   name="baptism_date"
                   id="baptism_date "
-                  class="form-control"
+                  class="form-control bg-white"
                 ></flat-pickr>
               </div>
             </div>
@@ -141,8 +144,8 @@
                 <flat-pickr
                   v-model="join_date"
                   name="join_date"
-                  id="join_date "
-                  class="form-control"
+                  id="join_date"
+                  class="form-control bg-white"
                 ></flat-pickr>
               </div>
             </div>
@@ -288,7 +291,7 @@ export default {
       grade: "",
       marital_status: "",
       baptism_date: "",
-      join_date: new Date(),
+      join_date: "",
       employer: "",
       occupation: "",
       primary_telephone: "",
