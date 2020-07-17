@@ -50,9 +50,10 @@
                 <label for="date_of_birth">Date of Birth </label>
                 <flat-pickr
                   v-model="date_of_birth"
+                  placeholder="Select Date"
                   name="date_of_birth"
                   id="date_of_birth"
-                  class="form-control"
+                  class="form-control bg-white"
                 ></flat-pickr>
               </div>
             </div>
@@ -97,8 +98,11 @@
                   class="form-control"
                 >
                   <option value="">Select</option>
-                  <option value="Undergraduate">Undergraduate</option>
-                  <option value="Graduate">Graduate</option>
+                  <option value="Primary">Primary</option>
+                  <option value="Junior High">Junior High</option>
+                  <option value="Senior High">Senior High</option>
+                  <option value="College">College</option>
+                  <option value="None">None</option>
                 </select>
               </div>
             </div>
@@ -127,9 +131,10 @@
                 <label for="baptism_date ">Baptismal Date </label>
                 <flat-pickr
                   v-model="baptism_date"
+                  placeholder="Select Date"
                   name="baptism_date"
                   id="baptism_date "
-                  class="form-control"
+                  class="form-control bg-white"
                 ></flat-pickr>
               </div>
             </div>
@@ -138,9 +143,10 @@
                 <label for="join_date ">Join Date </label>
                 <flat-pickr
                   v-model="join_date"
+                  placeholder="Select Date"
                   name="join_date"
                   id="join_date "
-                  class="form-control"
+                  class="form-control bg-white"
                 ></flat-pickr>
               </div>
             </div>
@@ -231,20 +237,16 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label for="role">Groups</label>
-                <select
-                  name="group"
-                  id="group"
-                  v-model.trim="group"
+                <MultiSelect
+                  v-model="group"
+                  :options="groups"
+                  :value="groups.id"
+                  :filter="true"
+                  optionValue="id"
+                  optionLabel="name"
+                  placeholder="Select Group"
                   class="form-control"
-                >
-                  <option value="">Select</option>
-                  <option
-                    v-for="group in groups"
-                    :value="group.id"
-                    :key="group.id"
-                    >{{ group.name }}</option
-                  >
-                </select>
+                />
               </div>
             </div>
           </div>
@@ -269,11 +271,12 @@ import "flatpickr/dist/flatpickr.css";
 import People from "@services/api/people";
 import Group from "@services/api/groups";
 import Swal from "sweetalert2";
-
+import MultiSelect from "primevue/multiselect";
 export default {
   name: "PersonAdd",
   components: {
     flatPickr,
+    MultiSelect,
   },
   data() {
     return {
@@ -346,9 +349,9 @@ export default {
       }
     },
 
-    setData(user) {
-      const { data } = user[1].data;
-      this.groups = user[0].data.data;
+    setData(group) {
+      const { data } = group[1].data;
+      this.groups = group[0].data.data;
       this.first_name = data.first_name;
       this.last_name = data.last_name;
       this.middle_name = data.middle_name;

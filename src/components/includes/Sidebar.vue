@@ -31,7 +31,7 @@
         </li>
         <li class="nav-item">
           <router-link :to="{ name: 'people' }" class="nav-link">
-            <i class="pi pi-user"></i>
+            <i class="link-icon pi pi-user"></i>
             <span class="link-title">People</span>
           </router-link>
         </li>
@@ -51,7 +51,7 @@
             aria-expanded="false"
             aria-controls="users-roles"
           >
-            <i class="pi pi-user-plus"></i>
+            <i class="link-icon pi pi-user-plus"></i>
             <span class="link-title">Users & Roles</span>
             <i class="link-arrow pi pi-chevron-down"></i>
           </a>
