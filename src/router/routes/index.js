@@ -93,9 +93,14 @@ export default [
         component: () => import("@views/people/Index.vue"),
       },
       {
-        path: "people/add",
+        path: "person/add",
         name: "addperson",
         component: () => import("@views/people/Add.vue"),
+      },
+      {
+        path: "person/edit/:mask",
+        name: "personedit",
+        component: () => import("@views/people/Edit.vue"),
       },
     ],
   },

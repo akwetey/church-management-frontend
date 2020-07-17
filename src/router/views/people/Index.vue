@@ -20,29 +20,18 @@
           >
             <Column field="name" header="Name" sortable></Column>
             <Column field="email" header="Email" sortable></Column>
-            <Column field="role" header="Role" sortable></Column>
-            <Column field="status" header="Status" sortable>
-              <template #body="slotProps">
-                <span
-                  class="badge badge-success"
-                  v-if="slotProps.data.status == 'active'"
-                  >{{
-                    slotProps.data.status[0].toUpperCase() +
-                      slotProps.data.status.slice(1)
-                  }}</span
-                >
-                <span class="badge badge-danger" v-else>{{
-                  slotProps.data.status[0].toUpperCase() +
-                    slotProps.data.status.slice(1)
-                }}</span>
-              </template>
-            </Column>
+            <Column
+              field="primary_telephone"
+              header="Mobile Phone"
+              sortable
+            ></Column>
+            <Column field="created_at" header="Date Added" sortable> </Column>
             <Column field="actions" header="Actions">
               <template #body="slotProps">
                 <router-link
                   tag="button"
                   :to="{
-                    name: 'useredit',
+                    name: 'personedit',
                     params: { mask: slotProps.data.mask },
                   }"
                   class="btn btn-primary btn-icon mr-2"
