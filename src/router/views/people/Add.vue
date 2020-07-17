@@ -8,6 +8,18 @@
 
         <form @submit.prevent="addPerson">
           <div class="row">
+            <!-- <div class="col-md-4">
+              <div class="form-group">
+                <label for="cover">Avatar</label>
+                <input
+                  type="file"
+                  name="avatar"
+                  id="cover"
+                  class="form-control-file"
+                  ref="avatar"
+                />
+              </div>
+            </div> -->
             <div class="col-md-6">
               <div class="form-group">
                 <label for="first_name">First Name *</label>
@@ -313,9 +325,31 @@ export default {
     async addPerson(e) {
       const btn = this.$refs.submitBtn;
       const formMsg = this.$refs.formMsg;
+      const avatar = this.$refs.avatar;
       try {
         addBtnLoading(btn);
-        const formData = {
+        const formData = new FormData();
+        formData.append("avatar", avatar.files[0]);
+        formData.append("first_name", this.first_name);
+        formData.append("last_name", this.last_name);
+        formData.append("middle_name", this.middle_name);
+        formData.append("date_of_birth", this.date_of_birth);
+        formData.append("email", this.email);
+        formData.append("gender", this.gender);
+        formData.append("grade", this.grade);
+        formData.append("marital_status", this.marital_status);
+        formData.append("baptism_date", this.baptism_date);
+        formData.append("baptism_date", this.baptism_date);
+        formData.append("join_date", this.join_date);
+        formData.append("employer", this.employer);
+        formData.append("occupation", this.occupation);
+        formData.append("primary_telephone", this.primary_telephone);
+        formData.append("secondary_telephone", this.secondary_telephone);
+        formData.append("postal_address", this.postal_address);
+        formData.append("physical_address", this.physical_address);
+        formData.append("tithe_number", this.tithe_number);
+        formData.append("groups", this.groups);
+        /*  const formData = {
           first_name: this.first_name,
           last_name: this.last_name,
           middle_name: this.middle_name,
@@ -334,7 +368,7 @@ export default {
           physical_address: this.physical_address,
           tithe_number: this.tithe_number,
           groups: this.group,
-        };
+        }; */
         const response = await People.store(formData);
         const res = response.data;
         removeBtnLoading(btn);
