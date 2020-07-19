@@ -8,18 +8,28 @@
 
         <form @submit.prevent="addPerson">
           <div class="row">
-            <!-- <div class="col-md-4">
+            <div class="col-md-12 d-flex justify-content-center">
               <div class="form-group">
-                <label for="cover">Avatar</label>
-                <input
-                  type="file"
-                  name="avatar"
-                  id="cover"
-                  class="form-control-file"
-                  ref="avatar"
-                />
+                <div class="avatar-upload">
+                  <div class="avatar-edit">
+                    <input
+                      type="file"
+                      id="imageUpload"
+                      accept=".png, .jpg, .jpeg"
+                    />
+                    <label for="imageUpload">
+                      <i
+                        class="pi pi-pencil"
+                        style="position:absolute;top:5px; left:10px;"
+                      ></i>
+                    </label>
+                  </div>
+                  <div class="avatar-preview">
+                    <div id="imagePreview" :style="avatar"></div>
+                  </div>
+                </div>
               </div>
-            </div> -->
+            </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label for="first_name">First Name *</label>
@@ -319,6 +329,9 @@ export default {
       config: {
         maxDate: new Date(),
       },
+      avatar: {
+        backgroundImage: `url(${require("@assets/img/avatar.svg")})`,
+      },
     };
   },
   methods: {
@@ -349,26 +362,7 @@ export default {
         formData.append("physical_address", this.physical_address);
         formData.append("tithe_number", this.tithe_number);
         formData.append("groups", this.groups);
-        /*  const formData = {
-          first_name: this.first_name,
-          last_name: this.last_name,
-          middle_name: this.middle_name,
-          date_of_birth: this.date_of_birth,
-          email: this.email,
-          gender: this.gender,
-          grade: this.grade,
-          marital_status: this.marital_status,
-          baptism_date: this.baptism_date,
-          join_date: this.join_date,
-          employer: this.employer,
-          occupation: this.occupation,
-          primary_telephone: this.primary_telephone,
-          secondary_telephone: this.secondary_telephone,
-          postal_address: this.postal_address,
-          physical_address: this.physical_address,
-          tithe_number: this.tithe_number,
-          groups: this.group,
-        }; */
+
         const response = await People.store(formData);
         const res = response.data;
         removeBtnLoading(btn);
