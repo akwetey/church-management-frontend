@@ -16,6 +16,7 @@
                       type="file"
                       id="imageUpload"
                       accept=".png, .jpg, .jpeg"
+                      @change="changeImage"
                     />
                     <label for="imageUpload">
                       <i
@@ -25,7 +26,11 @@
                     </label>
                   </div>
                   <div class="avatar-preview">
-                    <div id="imagePreview" :style="avatar"></div>
+                    <div
+                      id="imagePreview"
+                      ref="imagePreview"
+                      :style="avatar"
+                    ></div>
                   </div>
                 </div>
               </div>
@@ -324,6 +329,7 @@ export default {
       postal_address: "",
       physical_address: "",
       tithe_number: "",
+      image: "",
       group: [],
       groups: [],
       config: {
@@ -338,11 +344,10 @@ export default {
     async addPerson(e) {
       const btn = this.$refs.submitBtn;
       const formMsg = this.$refs.formMsg;
-      const avatar = this.$refs.avatar;
       try {
         addBtnLoading(btn);
         const formData = new FormData();
-        formData.append("avatar", avatar.files[0]);
+        formData.append("avatar", this.image);
         formData.append("first_name", this.first_name);
         formData.append("last_name", this.last_name);
         formData.append("middle_name", this.middle_name);
@@ -402,8 +407,19 @@ export default {
       };
       this.groups.push(tag);
       this.group.push(tag);
-      console.log(this.group, "group");
-      console.log(this.groups, "groups");
+    },
+    changeImage(e) {
+      // console.log(e.target.files[0]);
+      const file = e.target.files[0];
+      if (file.size / 1024 / 1024 > 2) {
+        Swal.fire("Error", "The file must be less than 2MB", "error");
+        return;
+      }
+      const imageUrl = URL.createObjectURL(file);
+      const imagePreview = this.$refs.imagePreview;
+      imagePreview.setAttribute("style", `background-image:url(${imageUrl})`);
+
+      this.image = file;
     },
   },
   async created() {
