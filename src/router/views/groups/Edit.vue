@@ -43,12 +43,12 @@
                   class="form-control"
                 >
                   <option value="">Select</option>
-                  <!-- <option
-                    v-for="role in roles"
-                    :value="role.id"
-                    :key="role.id"
-                    >{{ role.name }}</option
-                  > -->
+                  <option
+                    v-for="leader in leaders"
+                    :value="leader.id"
+                    :key="leader.id"
+                    >{{ leader.name }}</option
+                  >
                 </select>
               </div>
             </div>
@@ -70,6 +70,7 @@
 import { addBtnLoading, removeBtnLoading } from "@services/helpers";
 //import User from "@services/api/user";
 import Group from "@services/api/groups";
+import Member from "@services/api/people";
 import Swal from "sweetalert2";
 
 export default {
@@ -115,10 +116,9 @@ export default {
       }
     },
 
-    setData(data) {
-      // console.log(data);
-      // const { data } = user[1].data;
-      // this.leaders = user[0].data.data;
+    setData(group) {
+      const { data } = group[1].data;
+      this.leaders = group[0].data.data;
       this.name = data.name;
       this.description = data.description;
       this.leader = data.leader;
@@ -132,10 +132,8 @@ export default {
       if (!mask) {
         next({ name: "Home" });
       }
-      // const response = await Promise.all([Role.all(), User.show(mask)]);
-      const response = await Group.show(mask);
-      const res = response.data;
-      next((vm) => vm.setData(res.data));
+      const response = await Promise.all([Member.members(), Group.show(mask)]);
+      next((vm) => vm.setData(response));
     } catch (error) {
       console.log(error);
     }
