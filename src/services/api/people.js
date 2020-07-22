@@ -4,6 +4,9 @@ export default {
   all() {
     return axios.get("/api/people");
   },
+  members() {
+    return axios.get("/api/people/members");
+  },
   store(payload) {
     return axios.post("/api/people", payload);
   },

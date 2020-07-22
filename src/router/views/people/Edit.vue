@@ -6,6 +6,33 @@
         <div class="form-msg" ref="formMsg"></div>
         <form @submit.prevent="updatePerson">
           <div class="row">
+            <div class="col-md-12 d-flex justify-content-center">
+              <div class="form-group">
+                <div class="avatar-upload">
+                  <div class="avatar-edit">
+                    <input
+                      type="file"
+                      id="imageUpload"
+                      accept=".png, .jpg, .jpeg"
+                      @change="changeImage"
+                    />
+                    <label for="imageUpload">
+                      <i
+                        class="pi pi-pencil"
+                        style="position:absolute;top:5px; left:10px;"
+                      ></i>
+                    </label>
+                  </div>
+                  <div class="avatar-preview">
+                    <div
+                      id="imagePreview"
+                      ref="imagePreview"
+                      :style="avatar"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div class="col-md-6">
               <div class="form-group">
                 <label for="first_name">First Name *</label>
@@ -50,6 +77,7 @@
                 <label for="date_of_birth">Date of Birth </label>
                 <flat-pickr
                   v-model="date_of_birth"
+                  :config="config"
                   placeholder="Select Date"
                   name="date_of_birth"
                   id="date_of_birth"
@@ -128,10 +156,28 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="baptism_date ">Baptismal Date </label>
+                <label for="member_status">
+                  Member Status
+                </label>
+                <select
+                  name="member_status"
+                  id="member_status"
+                  v-model.trim="member_status"
+                  class="form-control"
+                >
+                  <option value="">Select</option>
+                  <option value="1">Member</option>
+                  <option value="2">Guest</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="baptism_date">Baptismal Date </label>
                 <flat-pickr
                   v-model="baptism_date"
                   placeholder="Select Date"
+                  :config="config"
                   name="baptism_date"
                   id="baptism_date "
                   class="form-control bg-white"
@@ -140,19 +186,20 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="join_date ">Join Date </label>
+                <label for="join_date">Join Date </label>
                 <flat-pickr
                   v-model="join_date"
+                  :config="config"
                   placeholder="Select Date"
                   name="join_date"
-                  id="join_date "
+                  id="join_date"
                   class="form-control bg-white"
                 ></flat-pickr>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="employer ">Employer </label>
+                <label for="employer">Employer </label>
                 <input
                   type="text"
                   name="employer "
@@ -164,7 +211,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="occupation ">Occupation </label>
+                <label for="occupation">Occupation </label>
                 <input
                   type="text"
                   name="occupation "
@@ -240,7 +287,6 @@
                 <MultiSelect
                   v-model="group"
                   :options="groups"
-                  :value="groups.id"
                   :filter="true"
                   optionValue="id"
                   optionLabel="name"
@@ -288,6 +334,7 @@ export default {
       gender: "",
       grade: "",
       marital_status: "",
+      member_status: "",
       baptism_date: "",
       join_date: "",
       employer: "",
@@ -298,9 +345,20 @@ export default {
       physical_address: "",
       tithe_number: "",
       group: "",
+      profile: "",
       groups: [],
       mask: "",
+      config: {
+        maxDate: new Date(),
+      },
     };
+  },
+  computed: {
+    avatar() {
+      return {
+        backgroundImage: "url(" + this.profile + ")",
+      };
+    },
   },
   methods: {
     async updatePerson(e) {
@@ -308,26 +366,28 @@ export default {
       const formMsg = this.$refs.formMsg;
       try {
         addBtnLoading(btn);
-        const formData = {
-          first_name: this.first_name,
-          last_name: this.last_name,
-          middle_name: this.middle_name,
-          date_of_birth: this.date_of_birth,
-          email: this.email,
-          gender: this.gender,
-          grade: this.grade,
-          marital_status: this.marital_status,
-          baptism_date: this.baptism_date,
-          join_date: this.join_date,
-          employer: this.employer,
-          occupation: this.occupation,
-          primary_telephone: this.primary_telephone,
-          secondary_telephone: this.secondary_telephone,
-          postal_address: this.postal_address,
-          physical_address: this.physical_address,
-          tithe_number: this.tithe_number,
-          groups: this.group,
-        };
+        const formData = new FormData();
+        formData.append("avatar", this.profile);
+        formData.append("first_name", this.first_name);
+        formData.append("last_name", this.last_name);
+        formData.append("middle_name", this.middle_name);
+        formData.append("date_of_birth", this.date_of_birth);
+        formData.append("email", this.email);
+        formData.append("gender", this.gender);
+        formData.append("grade", this.grade);
+        formData.append("marital_status", this.marital_status);
+        formData.append("member_status", this.member_status);
+        formData.append("baptism_date", this.baptism_date);
+        formData.append("baptism_date", this.baptism_date);
+        formData.append("join_date", this.join_date);
+        formData.append("employer", this.employer);
+        formData.append("occupation", this.occupation);
+        formData.append("primary_telephone", this.primary_telephone);
+        formData.append("secondary_telephone", this.secondary_telephone);
+        formData.append("postal_address", this.postal_address);
+        formData.append("physical_address", this.physical_address);
+        formData.append("tithe_number", this.tithe_number);
+        formData.append("groups", this.groups);
         const response = await People.update(formData, this.mask);
         const res = response.data;
         removeBtnLoading(btn);
@@ -358,7 +418,9 @@ export default {
       this.email = data.email;
       this.gender = data.gender;
       this.marital_status = data.marital_status;
+      this.member_status = data.member_status;
       this.baptism_date = data.baptism_date;
+      this.date_of_birth = data.date_of_birth;
       this.join_date = data.join_date;
       this.employer = data.employer;
       this.occupation = data.occupation;
@@ -369,6 +431,20 @@ export default {
       this.tithe_number = data.tithe_number;
       this.group = data.groups;
       this.mask = data.mask;
+      this.profile = data.avatar;
+    },
+    changeImage(e) {
+      // console.log(e.target.files[0]);
+      const file = e.target.files[0];
+      if (file.size / 1024 / 1024 > 2) {
+        Swal.fire("Error", "The file must be less than 2MB", "error");
+        return;
+      }
+      const imageUrl = URL.createObjectURL(file);
+      const imagePreview = this.$refs.imagePreview;
+      imagePreview.setAttribute("style", `background-image:url(${imageUrl})`);
+
+      this.profile = file;
     },
   },
 

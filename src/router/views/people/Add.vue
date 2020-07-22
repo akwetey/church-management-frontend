@@ -158,7 +158,24 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="baptism_date ">Baptismal Date </label>
+                <label for="member_status">
+                  Member Status
+                </label>
+                <select
+                  name="member_status"
+                  id="member_status"
+                  v-model.trim="member_status"
+                  class="form-control"
+                >
+                  <option value="">Select</option>
+                  <option value="1">Member</option>
+                  <option value="2">Guest</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="baptism_date">Baptismal Date </label>
                 <flat-pickr
                   v-model="baptism_date"
                   placeholder="Select Date"
@@ -171,7 +188,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="join_date ">Join Date </label>
+                <label for="join_date">Join Date </label>
                 <flat-pickr
                   v-model="join_date"
                   :config="config"
@@ -184,7 +201,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="employer ">Employer </label>
+                <label for="employer">Employer </label>
                 <input
                   type="text"
                   name="employer "
@@ -196,7 +213,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="occupation ">Occupation </label>
+                <label for="occupation">Occupation </label>
                 <input
                   type="text"
                   name="occupation "
@@ -320,6 +337,7 @@ export default {
       gender: "",
       grade: "",
       marital_status: "",
+      member_status: "",
       baptism_date: "",
       join_date: "",
       employer: "",
@@ -356,6 +374,7 @@ export default {
         formData.append("gender", this.gender);
         formData.append("grade", this.grade);
         formData.append("marital_status", this.marital_status);
+        formData.append("member_status", this.member_status);
         formData.append("baptism_date", this.baptism_date);
         formData.append("baptism_date", this.baptism_date);
         formData.append("join_date", this.join_date);

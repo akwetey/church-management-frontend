@@ -43,12 +43,12 @@
                   class="form-control"
                 >
                   <option value="">Select</option>
-                  <!-- <option
-                    v-for="role in roles"
-                    :value="role.id"
-                    :key="role.id"
-                    >{{ role.name }}</option
-                  > -->
+                  <option
+                    v-for="leader in leaders"
+                    :value="leader.id"
+                    :key="leader.id"
+                    >{{ leader.name }}</option
+                  >
                 </select>
               </div>
             </div>
@@ -68,7 +68,7 @@
 
 <script>
 import { addBtnLoading, removeBtnLoading } from "@services/helpers";
-//import User from "@services/api/user";
+import Member from "@services/api/people";
 import Group from "@services/api/groups";
 import Swal from "sweetalert2";
 
@@ -114,20 +114,20 @@ export default {
       }
     },
 
-    //fetch persons
-    /*     async getRoles() {
+    //fetch members
+    async getMembers() {
       try {
-        const response = await Role.all();
+        const response = await Member.members();
         const res = response.data;
-        this.roles = res.data;
+        this.leaders = res.data;
       } catch (error) {
         console.log(error);
       }
-    }, */
+    },
   },
 
-  //   async created() {
-  //     await this.getRoles();
-  //   },
+  async created() {
+    await this.getMembers();
+  },
 };
 </script>
