@@ -3,8 +3,8 @@
     <div class="card">
       <div class="card-body">
         <div class="mb-5">
-          <router-link :to="{ name: 'groupadd' }" class="btn btn-primary px-5"
-            >Add Group</router-link
+          <router-link :to="{ name: 'familyadd' }" class="btn btn-primary px-5"
+            >Add Family</router-link
           >
         </div>
 
@@ -20,14 +20,13 @@
           >
             <Column field="name" header="Name" sortable></Column>
             <Column field="persons" header="Persons" sortable></Column>
-            <Column field="leader" header="Leader" sortable></Column>
             <Column field="created_at" header="Date Added" sortable></Column>
             <Column field="actions" header="Actions">
               <template #body="slotProps">
                 <router-link
                   tag="button"
                   :to="{
-                    name: 'groupedit',
+                    name: 'familyedit',
                     params: { mask: slotProps.data.mask },
                   }"
                   class="btn btn-primary btn-icon mr-2"
@@ -53,7 +52,7 @@
 <script>
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import Group from "@services/api/groups";
+import Family from "@services/api/family";
 import { addBtnLoading, removeBtnLoading } from "@services/helpers";
 import Swal from "sweetalert2";
 
@@ -67,10 +66,10 @@ export default {
     };
   },
   methods: {
-    //fetch groups
-    async getGroups() {
+    //fetch families
+    async fetchFamilies() {
       try {
-        const response = await Group.all();
+        const response = await Family.all();
         this.loading = false;
         const res = response.data;
         this.groups = res.data;
@@ -80,12 +79,12 @@ export default {
       }
     },
 
-    /* delete group  */
+    /* delete family  */
     async deleteRole(mask, e) {
       const btn = e.target;
       try {
         const result = await Swal.fire({
-          text: "Do you want to delete this group?",
+          text: "Do you want to delete this family?",
           icon: "warning",
           showCancelButton: true,
           cancelButtonText: "No",
@@ -94,14 +93,14 @@ export default {
         });
         if (result.value) {
           addBtnLoading(btn);
-          const response = await Group.delete(mask);
+          const response = await Family.delete(mask);
           removeBtnLoading(btn);
           const res = response.data;
           Swal.fire({
             icon: "success",
             title: res.message,
           });
-          this.getGroups();
+          this.fetchFamilies();
         }
       } catch (error) {
         removeBtnLoading(btn);
@@ -114,7 +113,7 @@ export default {
     },
   },
   async created() {
-    await this.getGroups();
+    await this.fetchFamilies();
   },
 };
 </script>

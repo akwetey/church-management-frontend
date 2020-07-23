@@ -6,7 +6,7 @@
 
         <div class="form-msg" ref="formMsg"></div>
 
-        <form @submit.prevent="updateGroup">
+        <form @submit.prevent="addFamily">
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
@@ -21,42 +21,25 @@
                 />
               </div>
             </div>
-
             <div class="col-md-6">
               <div class="form-group">
-                <label for="description">Description</label>
-                <textarea
-                  name="description"
-                  id="description"
+                <label for="leader">Add Member</label>
+                <MultiSelect
+                  v-model="member"
+                  :options="members"
+                  :filter="true"
+                  optionValue="id"
+                  optionLabel="name"
+                  placeholder="Select Group"
                   class="form-control"
-                  v-model.trim="description"
-                ></textarea>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="leader">Leader</label>
-                <select
-                  name="leader"
-                  id="leader"
-                  v-model.trim="leader"
-                  class="form-control"
-                >
-                  <option value="">Select</option>
-                  <option
-                    v-for="leader in leaders"
-                    :value="leader.id"
-                    :key="leader.id"
-                    >{{ leader.name }}</option
-                  >
-                </select>
+                />
               </div>
             </div>
           </div>
           <div class="text-center">
             <div class="form-group mt-5">
               <button class="btn btn-success px-5" ref="submitBtn">
-                Update
+                Save
               </button>
             </div>
           </div>
@@ -68,37 +51,38 @@
 
 <script>
 import { addBtnLoading, removeBtnLoading } from "@services/helpers";
-import Group from "@services/api/groups";
 import Member from "@services/api/people";
+import Family from "@services/api/family";
 import Swal from "sweetalert2";
+import MultiSelect from "primevue/multiselect";
 
 export default {
-  name: "groupEdit",
+  name: "FamilyAdd",
+  components: {
+    MultiSelect,
+  },
   data() {
     return {
       name: "",
-      description: "",
-      leader: "",
-      leaders: [],
-      mask: "",
+      member: [],
+      members: [],
     };
   },
   methods: {
-    async updateGroup(e) {
+    async addFamily(e) {
       const btn = this.$refs.submitBtn;
       const formMsg = this.$refs.formMsg;
       try {
         addBtnLoading(btn);
         const formData = {
           name: this.name,
-          description: this.description,
-          leader: this.leader,
+          people: this.member,
         };
-        const response = await Group.update(formData, this.mask);
+        const response = await Family.store(formData);
         const res = response.data;
         removeBtnLoading(btn);
         Swal.fire("Success", res.message, "success");
-        this.$router.push({ name: "groups" });
+        this.$router.push({ name: "family" });
       } catch (err) {
         const res = err.response.data;
         let errorBag = "";
@@ -115,27 +99,20 @@ export default {
       }
     },
 
-    setData(group) {
-      const { data } = group[1].data;
-      this.leaders = group[0].data.data;
-      this.name = data.name;
-      this.description = data.description;
-      this.leader = data.leader;
-      this.mask = data.mask;
+    //fetch members
+    async getMembers() {
+      try {
+        const response = await Member.members();
+        const res = response.data;
+        this.members = res.data;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 
-  async beforeRouteEnter(to, from, next) {
-    try {
-      const mask = to.params.mask;
-      if (!mask) {
-        next({ name: "Home" });
-      }
-      const response = await Promise.all([Member.members(), Group.show(mask)]);
-      next((vm) => vm.setData(response));
-    } catch (error) {
-      console.log(error);
-    }
+  async created() {
+    await this.getMembers();
   },
 };
 </script>

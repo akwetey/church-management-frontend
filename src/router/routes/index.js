@@ -102,6 +102,21 @@ export default [
         name: "personedit",
         component: () => import("@views/people/Edit.vue"),
       },
+      {
+        path: "family",
+        name: "family",
+        component: () => import("@views/family/Index.vue"),
+      },
+      {
+        path: "family/add",
+        name: "familyadd",
+        component: () => import("@views/family/Add.vue"),
+      },
+      {
+        path: "family/edit/:mask",
+        name: "familyedit",
+        component: () => import("@views/family/Edit.vue"),
+      },
     ],
   },
   {
