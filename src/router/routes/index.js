@@ -117,6 +117,16 @@ export default [
         name: "familyedit",
         component: () => import("@views/family/Edit.vue"),
       },
+      {
+        path: "follow-up",
+        name: "FollowUp",
+        component: () => import("@views/follow-up/Index.vue"),
+      },
+      {
+        path: "follow-up/add",
+        name: "FollowUpAdd",
+        component: () => import("@views/follow-up/Add.vue"),
+      },
     ],
   },
   {

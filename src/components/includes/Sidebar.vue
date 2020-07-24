@@ -48,6 +48,12 @@
           </router-link>
         </li>
         <li class="nav-item">
+          <router-link :to="{ name: 'FollowUp' }" class="nav-link">
+            <i class="link-icon pi pi-calendar"></i>
+            <span class="link-title">Follow Up</span>
+          </router-link>
+        </li>
+        <li class="nav-item">
           <a
             id="users-role-collapse-btn"
             class="nav-link"
@@ -59,19 +65,15 @@
           >
             <i class="link-icon pi pi-user-plus"></i>
             <span class="link-title">Users & Roles</span>
-            <i class="link-arrow pi pi-chevron-down"></i>
+            <i class="link-arrow pi pi-angle-down"></i>
           </a>
           <div class="collapse" id="users-roles">
             <ul class="nav sub-menu">
               <li class="nav-item">
-                <router-link :to="{ name: 'user' }" class="nav-link"
-                  >Users</router-link
-                >
+                <router-link :to="{ name: 'user' }" class="nav-link">Users</router-link>
               </li>
               <li class="nav-item">
-                <router-link :to="{ name: 'role' }" class="nav-link"
-                  >Roles</router-link
-                >
+                <router-link :to="{ name: 'role' }" class="nav-link">Roles</router-link>
               </li>
             </ul>
           </div>
