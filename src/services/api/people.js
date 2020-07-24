@@ -14,7 +14,7 @@ export default {
     return axios.get("/api/people/" + mask);
   },
   update(payload, mask) {
-    return axios.put("/api/people/" + mask, payload);
+    return axios.post("/api/people/" + mask, payload);
   },
   delete(mask) {
     return axios.delete("/api/people/" + mask);

@@ -35,6 +35,24 @@
                 />
               </div>
             </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="relation">Relation</label>
+                <select
+                  name="relation"
+                  id="relation"
+                  class="form-control"
+                  v-model.trim="relation"
+                >
+                  <option value=""> Select</option>
+                  <option value="Head">Head</option>
+                  <option value="Spouse">Spouse</option>
+                  <option value="Children">Children</option>
+                  <option value="Sibling">Sibling</option>
+                  <option value="Grand Parent">Grand Parent</option>
+                </select>
+              </div>
+            </div>
           </div>
           <div class="text-center">
             <div class="form-group mt-5">
@@ -57,13 +75,14 @@ import Swal from "sweetalert2";
 import MultiSelect from "primevue/multiselect";
 
 export default {
-  name: "FamilyAdd",
+  name: "FamilyEdit",
   components: {
     MultiSelect,
   },
   data() {
     return {
       name: "",
+      relation: "",
       member: [],
       members: [],
       mask: "",
@@ -73,13 +92,19 @@ export default {
     async updateFamily(e) {
       const btn = this.$refs.submitBtn;
       const formMsg = this.$refs.formMsg;
+      const relationData = [];
+      this.member.forEach((el) => {
+        const obj = {};
+        (obj.id = el), (obj.relation = this.relation);
+        relationData.push(obj);
+      });
       try {
         addBtnLoading(btn);
         const formData = {
           name: this.name,
-          people: this.member,
+          people: relationData,
         };
-        const response = await Family.put(formData, this.mask);
+        const response = await Family.update(formData, this.mask);
         const res = response.data;
         removeBtnLoading(btn);
         Swal.fire("Success", res.message, "success");
@@ -103,9 +128,11 @@ export default {
     //set data
     setData(family) {
       const { data } = family[1].data;
+      let relation = !data.people.length ? "" : data.people[0].relation;
       this.members = family[0].data.data;
       this.name = data.name;
-      this.member = data.people;
+      this.member = data.people.map(({ id }) => id);
+      this.relation = relation;
       this.mask = data.mask;
     },
   },
