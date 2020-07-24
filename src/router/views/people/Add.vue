@@ -385,7 +385,7 @@ export default {
         formData.append("postal_address", this.postal_address);
         formData.append("physical_address", this.physical_address);
         formData.append("tithe_number", this.tithe_number);
-        formData.append("groups", this.groups);
+        formData.append("groups", this.group);
 
         const response = await People.store(formData);
         const res = response.data;

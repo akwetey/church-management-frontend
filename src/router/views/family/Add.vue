@@ -35,6 +35,24 @@
                 />
               </div>
             </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="relation">Relation</label>
+                <select
+                  name="relation"
+                  id="relation"
+                  class="form-control"
+                  v-model.trim="relation"
+                >
+                  <option value=""> Select</option>
+                  <option value="Head">Head</option>
+                  <option value="Spouse">Spouse</option>
+                  <option value="Children">Children</option>
+                  <option value="Sibling">Sibling</option>
+                  <option value="Grand Parent">Grand Parent</option>
+                </select>
+              </div>
+            </div>
           </div>
           <div class="text-center">
             <div class="form-group mt-5">
@@ -64,6 +82,7 @@ export default {
   data() {
     return {
       name: "",
+      relation: "",
       member: [],
       members: [],
     };
@@ -72,11 +91,18 @@ export default {
     async addFamily(e) {
       const btn = this.$refs.submitBtn;
       const formMsg = this.$refs.formMsg;
+      const relationData = [];
+      this.member.forEach((el) => {
+        const obj = {};
+        (obj.id = el), (obj.relation = this.relation);
+        relationData.push(obj);
+      });
+      console.log(relationData);
       try {
         addBtnLoading(btn);
         const formData = {
           name: this.name,
-          people: this.member,
+          people: relationData,
         };
         const response = await Family.store(formData);
         const res = response.data;

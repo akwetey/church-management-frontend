@@ -344,7 +344,7 @@ export default {
       postal_address: "",
       physical_address: "",
       tithe_number: "",
-      group: "",
+      group: [],
       profile: "",
       groups: [],
       mask: "",
@@ -387,7 +387,7 @@ export default {
         formData.append("postal_address", this.postal_address);
         formData.append("physical_address", this.physical_address);
         formData.append("tithe_number", this.tithe_number);
-        formData.append("groups", this.groups);
+        formData.append("groups", this.group);
         const response = await People.update(formData, this.mask);
         const res = response.data;
         removeBtnLoading(btn);
