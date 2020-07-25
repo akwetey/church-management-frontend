@@ -3,8 +3,8 @@
     <div class="card">
       <div class="card-body">
         <div class="mb-5">
-          <router-link :to="{ name: 'familyadd' }" class="btn btn-primary px-5"
-            >Add Family</router-link
+          <router-link :to="{ name: 'groupadd' }" class="btn btn-primary px-5"
+            >Add Group</router-link
           >
         </div>
 
@@ -20,13 +20,14 @@
           >
             <Column field="name" header="Name" sortable></Column>
             <Column field="persons" header="Persons" sortable></Column>
+            <Column field="leader" header="Leader" sortable></Column>
             <Column field="created_at" header="Date Added" sortable></Column>
             <Column field="actions" header="Actions">
               <template #body="slotProps">
                 <router-link
                   tag="button"
                   :to="{
-                    name: 'familyedit',
+                    name: 'groupedit',
                     params: { mask: slotProps.data.mask },
                   }"
                   class="btn btn-primary btn-icon mr-2"
@@ -37,7 +38,7 @@
                 <button
                   class="btn btn-danger btn-icon mr-2"
                   v-tooltip.top="'Delete'"
-                  @click="deleteFamily(slotProps.data.mask, $event)"
+                  @click="deleteFollowup(slotProps.data.mask, $event)"
                 >
                   <i class="pi pi-trash no-pointer-events"></i>
                 </button> </template
@@ -52,39 +53,39 @@
 <script>
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import Family from "@services/api/family";
+import Followups from "@services/api/followups";
 import { addBtnLoading, removeBtnLoading } from "@services/helpers";
 import Swal from "sweetalert2";
 
 export default {
-  name: "Groups",
+  name: "Followups",
   components: { DataTable, Column },
   data() {
     return {
-      groups: [],
+      followups: [],
       loading: true,
     };
   },
   methods: {
-    //fetch families
-    async fetchFamilies() {
+    //fetch followups
+    async getFollowups() {
       try {
-        const response = await Family.all();
+        const response = await Followups.all();
         this.loading = false;
         const res = response.data;
-        this.groups = res.data;
+        this.followups = res.data;
       } catch (error) {
         console.log(error);
         this.loading = false;
       }
     },
 
-    /* delete family  */
-    async deleteFamily(mask, e) {
+    /* delete followup  */
+    async deleteFollowup(mask, e) {
       const btn = e.target;
       try {
         const result = await Swal.fire({
-          text: "Do you want to delete this family?",
+          text: "Do you want to delete this followup?",
           icon: "warning",
           showCancelButton: true,
           cancelButtonText: "No",
@@ -93,14 +94,14 @@ export default {
         });
         if (result.value) {
           addBtnLoading(btn);
-          const response = await Family.delete(mask);
+          const response = await Followups.delete(mask);
           removeBtnLoading(btn);
           const res = response.data;
           Swal.fire({
             icon: "success",
             title: res.message,
           });
-          this.fetchFamilies();
+          this.getFollowups();
         }
       } catch (error) {
         removeBtnLoading(btn);
@@ -113,7 +114,7 @@ export default {
     },
   },
   async created() {
-    await this.fetchFamilies();
+    await this.getFollowups();
   },
 };
 </script>
