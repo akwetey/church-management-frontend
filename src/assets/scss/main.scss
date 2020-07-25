@@ -12,6 +12,14 @@
   font-size: 0.875rem;
 }
 
+.form-control {
+  .p-inputtext {
+    font-size: inherit;
+    font-family: inherit;
+    padding: 3px;
+  }
+}
+
 .no-pointer-events {
   pointer-events: none;
 }
