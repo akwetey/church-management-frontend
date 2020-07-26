@@ -38,7 +38,7 @@
                 <button
                   class="btn btn-danger btn-icon mr-2"
                   v-tooltip.top="'Delete'"
-                  @click="deleteRole(slotProps.data.mask, $event)"
+                  @click="deleteGroup(slotProps.data.mask, $event)"
                 >
                   <i class="pi pi-trash no-pointer-events"></i>
                 </button> </template
@@ -81,7 +81,7 @@ export default {
     },
 
     /* delete group  */
-    async deleteRole(mask, e) {
+    async deleteGroup(mask, e) {
       const btn = e.target;
       try {
         const result = await Swal.fire({

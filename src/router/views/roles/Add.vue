@@ -35,7 +35,11 @@
             <div class="col-md-12 mt-3 mb-3">
               <h6>Role Permissions</h6>
             </div>
-            <div v-for="permission in permissions" class="col-md-6 mb-3" :key="permission.id">
+            <div
+              v-for="permission in permissions"
+              class="col-md-6 mb-3"
+              :key="permission.id"
+            >
               <h6 class="text-muted mt-3">{{ permission.module }}</h6>
               <hr />
               <div
@@ -55,7 +59,8 @@
                   class="custom-control-label text-muted"
                   style="font-size:15px; font-weight: 600;"
                   :for="permission.id"
-                >{{ permission.name }}</label>
+                  >{{ permission.name }}</label
+                >
               </div>
             </div>
           </div>
@@ -85,7 +90,7 @@ export default {
       name: "",
       description: "",
       permissions: [],
-      checkedPermissions: []
+      checkedPermissions: [],
     };
   },
   methods: {
@@ -105,7 +110,7 @@ export default {
         const formData = {
           name: this.name,
           description: this.description,
-          permissions: this.checkedPermissions
+          permissions: this.checkedPermissions,
         };
         const response = await Role.store(formData);
         const res = response.data;
@@ -118,7 +123,7 @@ export default {
         if (res.code === 422) {
           removeBtnLoading(btn);
           const errorData = Object.values(res.errors);
-          errorData.map(error => {
+          errorData.map((error) => {
             errorBag += `<span class="d-block">${error}</span>`;
           });
         } else {
@@ -130,16 +135,16 @@ export default {
 
     setData(data) {
       this.permissions = data.data;
-    }
+    },
   },
 
   async beforeRouteEnter(to, from, next) {
     try {
       const response = await Role.rolepermissions();
-      next(vm => vm.setData(response.data));
+      next((vm) => vm.setData(response.data));
     } catch (error) {
       console.log(error);
     }
-  }
+  },
 };
 </script>

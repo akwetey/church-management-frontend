@@ -54,6 +54,12 @@
           </router-link>
         </li>
         <li class="nav-item">
+          <router-link :to="{ name: 'attendance' }" class="nav-link">
+            <i class="link-icon pi pi-list"></i>
+            <span class="link-title">Attendance</span>
+          </router-link>
+        </li>
+        <li class="nav-item">
           <a
             id="users-role-collapse-btn"
             class="nav-link"
@@ -70,10 +76,14 @@
           <div class="collapse" id="users-roles">
             <ul class="nav sub-menu">
               <li class="nav-item">
-                <router-link :to="{ name: 'user' }" class="nav-link">Users</router-link>
+                <router-link :to="{ name: 'user' }" class="nav-link"
+                  >Users</router-link
+                >
               </li>
               <li class="nav-item">
-                <router-link :to="{ name: 'role' }" class="nav-link">Roles</router-link>
+                <router-link :to="{ name: 'role' }" class="nav-link"
+                  >Roles</router-link
+                >
               </li>
             </ul>
           </div>

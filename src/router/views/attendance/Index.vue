@@ -2,15 +2,9 @@
   <div>
     <div class="card">
       <div class="card-body">
-        <div class="mb-5">
-          <router-link :to="{ name: 'familyadd' }" class="btn btn-primary px-5"
-            >Add Family</router-link
-          >
-        </div>
-
         <div>
           <DataTable
-            :value="groups"
+            :value="attendance"
             :paginator="true"
             :rows="10"
             :loading="loading"
@@ -19,14 +13,15 @@
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
           >
             <Column field="name" header="Name" sortable></Column>
-            <Column field="persons" header="Persons" sortable></Column>
-            <Column field="created_at" header="Date Added" sortable></Column>
+            <Column field="description" header="Description" sortable></Column>
+            <Column field="in" header="In" sortable></Column>
+            <Column field="out" header="Out" sortable></Column>
             <Column field="actions" header="Actions">
               <template #body="slotProps">
                 <router-link
                   tag="button"
                   :to="{
-                    name: 'familyedit',
+                    name: 'groupedit',
                     params: { mask: slotProps.data.mask },
                   }"
                   class="btn btn-primary btn-icon mr-2"
@@ -37,7 +32,7 @@
                 <button
                   class="btn btn-danger btn-icon mr-2"
                   v-tooltip.top="'Delete'"
-                  @click="deleteFamily(slotProps.data.mask, $event)"
+                  @click="getAttendanceTemplate(slotProps.data.mask, $event)"
                 >
                   <i class="pi pi-trash no-pointer-events"></i>
                 </button> </template
@@ -52,56 +47,39 @@
 <script>
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
-import Family from "@services/api/family";
+import Attendance from "@services/api/attendance";
 import { addBtnLoading, removeBtnLoading } from "@services/helpers";
 import Swal from "sweetalert2";
 
 export default {
-  name: "Groups",
+  name: "Attendance",
   components: { DataTable, Column },
   data() {
     return {
-      groups: [],
+      attendance: [],
       loading: true,
     };
   },
   methods: {
-    //fetch families
-    async fetchFamilies() {
+    //fetch attendance
+    async getAttendance() {
       try {
-        const response = await Family.all();
+        const response = await Attendance.all();
         this.loading = false;
         const res = response.data;
-        this.groups = res.data;
+        this.attendance = res.data;
       } catch (error) {
         console.log(error);
         this.loading = false;
       }
     },
 
-    /* delete family  */
-    async deleteFamily(mask, e) {
+    /* get attendance template  */
+    async getAttendanceTemplate(mask, e) {
       const btn = e.target;
+      addBtnLoading(btn);
+      const response = await Attendance.all();
       try {
-        const result = await Swal.fire({
-          text: "Do you want to delete this family?",
-          icon: "warning",
-          showCancelButton: true,
-          cancelButtonText: "No",
-          confirmButtonText: "Yes Delete It",
-          reverseButtons: true,
-        });
-        if (result.value) {
-          addBtnLoading(btn);
-          const response = await Family.delete(mask);
-          removeBtnLoading(btn);
-          const res = response.data;
-          Swal.fire({
-            icon: "success",
-            title: res.message,
-          });
-          this.fetchFamilies();
-        }
       } catch (error) {
         removeBtnLoading(btn);
         const res = error.response.data;
@@ -113,7 +91,7 @@ export default {
     },
   },
   async created() {
-    await this.fetchFamilies();
+    await this.getAttendance();
   },
 };
 </script>
