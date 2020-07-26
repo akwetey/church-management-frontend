@@ -4,6 +4,9 @@ import router from "./router";
 import store from "./store";
 import Tooltip from "primevue/tooltip";
 
+// VeeValidate
+import "./validation";
+
 // Stylesheets
 import "@assets/css/style.css";
 import "primeicons/primeicons.css";
