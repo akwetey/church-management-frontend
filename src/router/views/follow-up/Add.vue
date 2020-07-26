@@ -4,15 +4,13 @@
       <div class="card-body">
         <div class="row">
           <div class="col-md-8 offset-md-2">
+            <div class="formMsg" ref="formMsg"></div>
+
             <ValidationObserver ref="validationObserver">
               <form @submit.prevent="createFollowUp">
                 <div class="row">
                   <div class="col-md-6">
-                    <ValidationProvider
-                      name="People field"
-                      rules="required"
-                      v-slot="{ errors }"
-                    >
+                    <ValidationProvider name="People field" rules="required" v-slot="{ errors }">
                       <div class="form-group">
                         <label for="people" class="d-block">
                           People
@@ -33,11 +31,7 @@
                   </div>
 
                   <div class="col-md-6">
-                    <ValidationProvider
-                      name="Assigned to"
-                      rules="required"
-                      v-slot="{ errors }"
-                    >
+                    <ValidationProvider name="Assigned to" rules="required" v-slot="{ errors }">
                       <div class="form-group">
                         <label for="assigned_to" class="d-block">
                           Assigned To
@@ -58,11 +52,7 @@
                   </div>
 
                   <div class="col-md-6">
-                    <ValidationProvider
-                      name="Follow-up date"
-                      rules="required"
-                      v-slot="{ errors }"
-                    >
+                    <ValidationProvider name="Follow-up date" rules="required" v-slot="{ errors }">
                       <div class="form-group">
                         <label for="date" class="d-block">
                           Follow-Up Date
@@ -106,9 +96,7 @@
                           id="done"
                           v-model="form.completed"
                         />
-                        <label class="custom-control-label" for="done"
-                          >Done</label
-                        >
+                        <label class="custom-control-label" for="done">Done</label>
                       </div>
 
                       <div class v-if="form.completed">
@@ -130,9 +118,11 @@
                                 placeholder="Select date"
                                 :config="dateConfig"
                               />
-                              <span class="text-danger d-block">{{
+                              <span class="text-danger d-block">
+                                {{
                                 errors[0]
-                              }}</span>
+                                }}
+                              </span>
                             </div>
                           </ValidationProvider>
                         </keep-alive>
@@ -156,13 +146,7 @@
 
                   <div class="col-md-12">
                     <div class="text-center">
-                      <button
-                        class="btn btn-success px-5"
-                        type="submit"
-                        ref="submitBtn"
-                      >
-                        Save
-                      </button>
+                      <button class="btn btn-success px-5" type="submit" ref="submitBtn">Save</button>
                     </div>
                   </div>
                 </div>
@@ -176,6 +160,7 @@
 </template>
 
 <script>
+import Swal from "sweetalert2";
 import { addBtnLoading, removeBtnloading } from "@services/helpers";
 import MultiSelect from "primevue/multiselect";
 import Dropdown from "primevue/dropdown";
@@ -248,7 +233,32 @@ export default {
     createFollowUp(e) {
       this.$refs.validationObserver.validate().then((result) => {
         if (result) {
-          console.log(e);
+          const btn = this.$refs.submitBtn;
+          const formMsg = this.$refs.formMsg;
+
+          formMsg.innerHTML = "";
+          addBtnLoading(btn);
+
+          FollowUp.store(this.form)
+            .then(({ data: res }) => {
+              Swal.fire("Success", res.message, "success");
+              this.$router.push({ name: "FollowUp" });
+            })
+            .catch((err) => {
+              removeBtnLoading(btn);
+              const { status, data } = err.response;
+              let errorBag = "";
+
+              if (status === 422) {
+                Object.values(data.errors).map((error) => {
+                  errorBag += `<span class="d-block">${error}</span>`;
+                });
+              } else {
+                errorBag += `<span class="d-block">${data.message}</span>`;
+              }
+
+              formMsg.innerHTML = `<div class="alert alert-danger">${errorBag}</div>`;
+            });
         }
       });
     },

@@ -11,7 +11,28 @@
 </template>
 
 <script>
+import FollowUp from "@services/api/followup";
+
 export default {
   name: "FollowUp",
+  data() {
+    return {
+      followups: [],
+    };
+  },
+  methods: {
+    async setData() {
+      const response = await FollowUp.all();
+      const { data } = await response.data;
+
+      console.log(data);
+    },
+  },
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.setData();
+      next();
+    });
+  },
 };
 </script>
