@@ -127,6 +127,11 @@ export default [
         name: "FollowUpAdd",
         component: () => import("@views/follow-up/Add.vue"),
       },
+      {
+        path: "attendance",
+        name: "attendance",
+        component: () => import("@views/attendance/Index.vue"),
+      },
     ],
   },
   {
