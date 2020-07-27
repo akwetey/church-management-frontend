@@ -128,6 +128,11 @@ export default [
         component: () => import("@views/follow-up/Add.vue"),
       },
       {
+        path: "follow-up/:mask",
+        name: "FollowUpEdit",
+        component: () => import("@views/follow-up/Edit.vue"),
+      },
+      {
         path: "attendance",
         name: "attendance",
         component: () => import("@views/attendance/Index.vue"),
