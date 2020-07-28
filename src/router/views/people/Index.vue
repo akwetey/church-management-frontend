@@ -18,7 +18,23 @@
             :rowsPerPageOptions="[10, 25, 50]"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
           >
-            <Column field="name" header="Name" sortable></Column>
+            <Column field="name" header="Name" sortable>
+              <template #body="slotProps">
+                <div class="d-flex align-items-center">
+                  <div>
+                    <img
+                      :src="
+                        slotProps.data.avatar ? slotProps.data.avatar : avatar
+                      "
+                      class="img-fluid rounded avatar-image "
+                    />
+                  </div>
+                  <div class="ml-3">
+                    <span> {{ slotProps.data.name }}</span>
+                  </div>
+                </div>
+              </template>
+            </Column>
             <Column field="email" header="Email" sortable></Column>
             <Column
               field="primary_telephone"
@@ -69,6 +85,11 @@ export default {
       people: [],
       loading: true,
     };
+  },
+  computed: {
+    avatar() {
+      return require("@assets/img/avatar.svg");
+    },
   },
   methods: {
     //fetch people
@@ -122,5 +143,14 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.avatar-image {
+  width: 50px;
+  height: 50px;
 
-<style lang="scss" scoped></style>
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+</style>
