@@ -2,6 +2,13 @@
   <div>
     <div class="card">
       <div class="card-body">
+        <div class="mb-5">
+          <router-link
+            :to="{ name: 'attendanceadd' }"
+            class="btn btn-primary px-5"
+            >Add Attendance</router-link
+          >
+        </div>
         <div>
           <DataTable
             :value="attendance"
