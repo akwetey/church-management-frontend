@@ -20,9 +20,9 @@ import Axios from "@services/api/axios";
 export default {
   name: "MainLayout",
   components: { Header, Sidebar },
-  created() {
+  mounted() {
     // Request interceptor
-    Axios.interceptors.request.use(function(config) {
+    Axios.interceptors.request.use(function (config) {
       const token = localStorage.getItem("_chms_token");
       config.headers.Authorization = `Bearer ${token}`;
 

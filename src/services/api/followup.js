@@ -10,7 +10,7 @@ export default {
   show(mask) {
     return Axios.get("/api/follow-up/" + mask);
   },
-  update(mask, formDatat) {
+  update(mask, formData) {
     return Axios.put("/api/follow-up/" + mask, formData);
   },
 };

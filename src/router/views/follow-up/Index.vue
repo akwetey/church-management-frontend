@@ -70,11 +70,8 @@ export default {
       this.followups = data;
     },
   },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      vm.setData();
-      next();
-    });
+  created() {
+    this.setData();
   },
   beforeUpdate() {
     this.setData();
