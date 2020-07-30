@@ -3,11 +3,14 @@
     <div class="card">
       <div class="card-body">
         <div class="mb-5">
-          <router-link
+          <!-- <router-link
             :to="{ name: 'attendanceadd' }"
             class="btn btn-primary px-5"
             >Add Attendance</router-link
-          >
+          > -->
+          <button class="btn btn-primary" @click="downloadTemplate($event)">
+            Download Template
+          </button>
         </div>
         <div>
           <DataTable
@@ -82,10 +85,11 @@ export default {
     },
 
     /* get attendance template  */
-    async getAttendanceTemplate(mask, e) {
+    async downloadTemplate(e) {
+      // console.log(e);
       const btn = e.target;
       addBtnLoading(btn);
-      const response = await Attendance.all();
+      const response = await Attendance.template();
       try {
       } catch (error) {
         removeBtnLoading(btn);

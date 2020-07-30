@@ -16,4 +16,10 @@ export default {
   delete(mask) {
     return axios.delete("/api/attendance/" + mask);
   },
+  delete(mask) {
+    return axios.delete("/api/attendance/template" + mask);
+  },
+  template() {
+    return axios.get("/api/attendance/template");
+  },
 };
