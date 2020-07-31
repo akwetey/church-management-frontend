@@ -217,10 +217,11 @@ export default {
           anchor.click();
           document.body.removeChild(anchor);
         } catch (error) {
-          console.log(error);
-          if (error) {
-            console.log(error.response.data);
-          }
+          const res = error.response.data;
+          Swal.fire({
+            icon: "error",
+            title: res.message,
+          });
           removeBtnLoading(btn);
         }
       })();
@@ -320,10 +321,11 @@ export default {
           anchor.click();
           document.body.removeChild(anchor);
         } catch (error) {
-          console.log(error);
-          if (error) {
-            console.log(error.response.data);
-          }
+          const res = error.response.data;
+          Swal.fire({
+            icon: "error",
+            title: res.message,
+          });
           removeBtnLoading(btn);
         }
       })();
