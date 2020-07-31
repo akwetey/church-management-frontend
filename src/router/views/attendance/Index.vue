@@ -45,9 +45,16 @@
                   <i class="pi pi-pencil"></i>
                 </router-link>
                 <button
+                  class="btn btn-info btn-icon mr-2"
+                  v-tooltip.top="'Download Attendance'"
+                  @click="downloadAttendance(slotProps.data.mask, $event)"
+                >
+                  <i class="pi pi-cloud-download"></i>
+                </button>
+                <button
                   class="btn btn-danger btn-icon mr-2"
                   v-tooltip.top="'Delete'"
-                  @click="getAttendanceTemplate(slotProps.data.mask, $event)"
+                  @click="deleteAttendance(slotProps.data.mask, $event)"
                 >
                   <i class="pi pi-trash no-pointer-events"></i>
                 </button> </template
@@ -194,11 +201,11 @@ export default {
     },
 
     /* get attendance template  */
-    async downloadTemplate(e) {
+    downloadTemplate(e) {
       const btn = e.target;
-      addBtnLoading(btn);
-      (async () => {
+      return (async () => {
         try {
+          addBtnLoading(btn);
           const response = await Attendance.template();
           removeBtnLoading(btn);
           const res = response.data;
@@ -227,6 +234,7 @@ export default {
       const myModal = new BSN.Modal("#myModal");
       myModal.hide();
     },
+    /* add attendance */
     async addAttendance(e) {
       const form = e.target;
       const btn = this.$refs.submitBtn;
@@ -260,6 +268,65 @@ export default {
         }
         formMsg.innerHTML = `<div class="alert alert-danger">${errorBag}</div>`;
       }
+    },
+
+    /* delete attendance  */
+    async deleteAttendance(mask, e) {
+      const btn = e.target;
+      try {
+        const result = await Swal.fire({
+          text: "Do you want to delete this attendance?",
+          icon: "warning",
+          showCancelButton: true,
+          cancelButtonText: "No",
+          confirmButtonText: "Yes Delete It",
+          reverseButtons: true,
+        });
+        if (result.value) {
+          addBtnLoading(btn);
+          const response = await Attendance.delete(mask);
+          removeBtnLoading(btn);
+          const res = response.data;
+          Swal.fire({
+            icon: "success",
+            title: res.message,
+          });
+          this.getPeople();
+        }
+      } catch (error) {
+        removeBtnLoading(btn);
+        const res = error.response.data;
+        Swal.fire({
+          icon: "error",
+          title: res.message,
+        });
+      }
+    },
+
+    /* download attendance */
+    downloadAttendance(mask, e) {
+      const btn = e.target;
+      return (async () => {
+        try {
+          addBtnLoading(btn);
+          const response = await Attendance.download(mask);
+          removeBtnLoading(btn);
+          const res = response.data;
+          const { url, filename } = res.data;
+          const anchor = document.createElement("a");
+          anchor.setAttribute("download", filename);
+          anchor.setAttribute("href", url);
+          document.body.appendChild(anchor);
+          anchor.click();
+          document.body.removeChild(anchor);
+        } catch (error) {
+          console.log(error);
+          if (error) {
+            console.log(error.response.data);
+          }
+          removeBtnLoading(btn);
+        }
+      })();
     },
   },
   async created() {
