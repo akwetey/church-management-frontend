@@ -46,7 +46,7 @@
                 </router-link>
                 <button
                   class="btn btn-info btn-icon mr-2"
-                  v-tooltip.top="'Download Attendance'"
+                  v-tooltip.top="'Download This Attendance Data'"
                   @click="downloadAttendance(slotProps.data.mask, $event)"
                 >
                   <i class="pi pi-cloud-download"></i>
@@ -227,6 +227,12 @@ export default {
       })();
     },
 
+    resetForm() {
+      this.name = "";
+      this.description = "";
+      this.date = "";
+    },
+
     showModal() {
       const myModal = new BSN.Modal("#myModal", { backdrop: "static" });
       myModal.show();
@@ -255,6 +261,7 @@ export default {
         Swal.fire("Success", res.message, "success");
         this.hideModal();
         this.getAttendance();
+        this.resetForm();
       } catch (err) {
         const res = err.response.data;
         let errorBag = "";
@@ -292,7 +299,7 @@ export default {
             icon: "success",
             title: res.message,
           });
-          this.getPeople();
+          this.getAttendance();
         }
       } catch (error) {
         removeBtnLoading(btn);
