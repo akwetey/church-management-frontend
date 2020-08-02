@@ -195,7 +195,7 @@ export default {
       name: "",
       description: "",
       date: "",
-      mask: "5466888",
+      mask: "",
       config: {
         minDate: new Date(),
       },
@@ -272,6 +272,7 @@ export default {
       const myModal = new BSN.Modal("#myModal", { backdrop: "static" });
       myModal.show();
     },
+
     hideModal() {
       const myModal = new BSN.Modal("#myModal");
       myModal.hide();
@@ -394,7 +395,7 @@ export default {
         this.name = res.attendance.name;
         this.description = res.attendance.description;
         this.date = res.attendance.date;
-        // this.mask = res.attendance.mask;
+        this.mask = res.attendance.mask;
         this.$refs.myModalLabel.innerHTML = "Modify Attendance";
         // console.log(typeof res.attendance.date);
         this.showModal();
