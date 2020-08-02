@@ -14,10 +14,27 @@
             :paginator="true"
             :rows="10"
             :loading="loading"
+            :filters="filters"
             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
             :rowsPerPageOptions="[10, 25, 50]"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
           >
+            <template #header>
+              <div class="table-header d-flex justify-content-end">
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search" />
+                  <InputText
+                    v-model="filters['global']"
+                    placeholder="Search For"
+                  />
+                </span>
+              </div>
+            </template>
+            <template #empty>
+              <div class="text-center">
+                No data found.
+              </div>
+            </template>
             <Column field="name" header="Name" sortable></Column>
             <Column field="email" header="Email" sortable></Column>
             <Column field="role" header="Role" sortable></Column>
@@ -71,12 +88,14 @@ import Column from "primevue/column";
 import User from "@services/api/user";
 import { addBtnLoading, removeBtnLoading } from "@services/helpers";
 import Swal from "sweetalert2";
+import InputText from "primevue/inputtext";
 
 export default {
   name: "Users",
-  components: { DataTable, Column },
+  components: { DataTable, Column, InputText },
   data() {
     return {
+      filters: {},
       users: [],
       loading: true,
     };

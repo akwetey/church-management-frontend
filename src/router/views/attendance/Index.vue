@@ -20,10 +20,27 @@
             :paginator="true"
             :rows="10"
             :loading="loading"
+            :filters="filters"
             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
             :rowsPerPageOptions="[10, 25, 50]"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
           >
+            <template #header>
+              <div class="table-header d-flex justify-content-end">
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search" />
+                  <InputText
+                    v-model="filters['global']"
+                    placeholder="Search For"
+                  />
+                </span>
+              </div>
+            </template>
+            <template #empty>
+              <div class="text-center">
+                No data found.
+              </div>
+            </template>
             <Column field="name" header="Name" sortable></Column>
             <Column field="description" header="Description" sortable></Column>
             <Column field="in" header="In" sortable></Column>
@@ -185,11 +202,13 @@ import Swal from "sweetalert2";
 import BSN from "bootstrap.native";
 import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
+import InputText from "primevue/inputtext";
 export default {
   name: "Attendance",
-  components: { DataTable, Column, flatPickr },
+  components: { DataTable, Column, flatPickr, InputText },
   data() {
     return {
+      filters: {},
       attendance: [],
       loading: true,
       name: "",
