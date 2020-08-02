@@ -137,11 +137,6 @@ export default [
         name: "attendance",
         component: () => import("@views/attendance/Index.vue"),
       },
-      {
-        path: "attendance/add",
-        name: "attendanceadd",
-        component: () => import("@views/attendance/Add.vue"),
-      },
     ],
   },
   {
