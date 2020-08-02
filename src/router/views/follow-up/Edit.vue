@@ -185,9 +185,8 @@ import DatePicker from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.min.css";
 
 export default {
-  name: "AddFollowUp",
+  name: "EditFollowUp",
   components: {
-    MultiSelect,
     Dropdown,
     DatePicker,
   },
@@ -200,7 +199,7 @@ export default {
         assigned_to: null,
         date: null,
         completion_date: null,
-        type: 1,
+        type: null,
         completed: false,
         comment: "",
       },
@@ -228,35 +227,31 @@ export default {
     };
   },
   methods: {
-    async setData() {
-      try {
-        const followUpResponse = await FollowUp.show(this.$route.params.mask);
-        const peopleResponse = await People.members();
-        const usersReponse = await Users.all();
-        const followUpRes = await followUpResponse.data;
-        const peopleRes = await peopleResponse.data;
-        const usersRes = await usersReponse.data;
-        const followUp = followUpRes.data;
+    setData(response) {
+      const { data: followUp } = response[0].data;
+      const { data: peopleRes } = response[1].data;
+      const { data: usersRes } = response[2].data;
 
-        this.mask = followUp.mask;
-        this.form.people = followUp.perosn_id;
-        this.form.assigned_to = followUp.user_id;
-        this.form.date = followUp.date;
-        //this.form.type = followUp.type;
-        // this.form.people = followUp.id;
-        // this.form.people = followUp.id;
-        // this.form.people = followUp.id;
+      this.mask = followUp.mask;
+      this.form.people = followUp.person_id;
+      this.form.assigned_to = followUp.user_id;
+      this.form.date = followUp.date;
+      this.form.comment = followUp.comment;
+      this.form.type = followUp.type;
+      //this.form.type = followUp.type;
+      // this.form.people = followUp.id;
+      // this.form.people = followUp.id;
+      // this.form.people = followUp.id;
 
-        this.people = peopleRes.data.map((person) => ({
-          id: person.id,
-          name: person.name,
-        }));
+      this.people = peopleRes.map((person) => ({
+        id: person.id,
+        name: person.name,
+      }));
 
-        this.users = usersRes.data.map((user) => ({
-          id: user.id,
-          name: user.name,
-        }));
-      } catch (err) {}
+      this.users = usersRes.map((user) => ({
+        id: user.id,
+        name: user.name,
+      }));
     },
 
     updateFollowUp(e) {
@@ -268,7 +263,7 @@ export default {
           formMsg.innerHTML = "";
           addBtnLoading(btn);
 
-          FollowUp.update(this.form)
+          FollowUp.update(this.form, this.mask)
             .then(({ data: res }) => {
               Swal.fire("Success", res.message, "success");
               this.$router.push({ name: "FollowUp" });
@@ -292,11 +287,25 @@ export default {
       });
     },
   },
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      vm.setData();
-      next();
-    });
+  async beforeRouteEnter(to, from, next) {
+    try {
+      const mask = to.params.mask;
+      if (!mask) {
+        next({ name: "Home" });
+      }
+      const response = await Promise.all([
+        FollowUp.show(mask),
+        People.members(),
+        Users.all(),
+      ]);
+      next((vm) => vm.setData(response));
+    } catch (error) {
+      console.log(error);
+    }
+    // next((vm) => {
+    //   vm.setData();
+    //   next();
+    // });
   },
 };
 </script>
