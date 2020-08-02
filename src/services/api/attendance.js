@@ -11,7 +11,7 @@ export default {
     return axios.get("/api/attendance/" + mask);
   },
   update(payload, mask) {
-    return axios.put("/api/attendance/" + mask, payload);
+    return axios.post("/api/attendance/" + mask, payload);
   },
   delete(mask) {
     return axios.delete("/api/attendance/" + mask);
