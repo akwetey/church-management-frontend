@@ -68,7 +68,9 @@
           <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">New Attendance</h5>
+                <h5 class="modal-title" id="myModalLabel" ref="myModalLabel">
+                  New Attendance
+                </h5>
                 <div class="form-msg" ref="formMsg"></div>
                 <button
                   type="button"
@@ -276,7 +278,9 @@ export default {
       this.name = "";
       this.description = "";
       this.date = "";
+      // this.mask = "";
       this.$refs.file.value = "";
+      this.$refs.myModalLabel.innerHTML = "New Attendance";
     },
 
     /* add attendance */
@@ -293,10 +297,14 @@ export default {
         formData.append("date", this.date);
         formData.append("description", this.description);
         formData.append("file", file.files[0]);
-
-        const response = await Attendance.store(formData);
+        let response;
+        if (this.mask) {
+          response = await Attendance.update(formData, this.mask);
+        }
+        response = await Attendance.store(formData);
         const res = response.data;
         Swal.fire("Success", res.message, "success");
+        removeBtnLoading(btn);
         this.hideModal();
         this.getAttendance();
       } catch (err) {
@@ -381,14 +389,15 @@ export default {
       try {
         addBtnLoading(btn);
         const response = await Attendance.show(mask);
+        removeBtnLoading(btn);
         const res = response.data.data;
         this.name = res.attendance.name;
         this.description = res.attendance.description;
         this.date = res.attendance.date;
-        this.mask = res.attendance.mask;
+        // this.mask = res.attendance.mask;
+        this.$refs.myModalLabel.innerHTML = "Modify Attendance";
         // console.log(typeof res.attendance.date);
         this.showModal();
-        removeBtnLoading(btn);
       } catch (error) {
         const res = error.response.data;
         Swal.fire({
