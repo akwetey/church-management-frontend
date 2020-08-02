@@ -3,9 +3,6 @@
     <div class="card">
       <div class="card-body">
         <div class="mb-5">
-          <button class="btn btn-primary" @click="downloadTemplate($event)">
-            Download Template
-          </button>
           <button
             id="myModalTrigger"
             class="btn btn-primary ml-3"
@@ -14,7 +11,7 @@
             data-target="#myModal"
             @click="showModal"
           >
-            Import Template
+            New Attendance
           </button>
         </div>
         <div>
@@ -33,17 +30,17 @@
             <Column field="out" header="Out" sortable></Column>
             <Column field="actions" header="Actions">
               <template #body="slotProps">
-                <router-link
-                  tag="button"
-                  :to="{
-                    name: 'groupedit',
-                    params: { mask: slotProps.data.mask },
-                  }"
+                <button
+                  id="myModalUpdate"
                   class="btn btn-primary btn-icon mr-2"
+                  type="button"
+                  data-toggle="modal"
+                  data-target="#myModal"
+                  @click="getOneAttendance(slotProps.data.mask, $event)"
                   v-tooltip.top="'Edit'"
                 >
                   <i class="pi pi-pencil"></i>
-                </router-link>
+                </button>
                 <button
                   class="btn btn-info btn-icon mr-2"
                   v-tooltip.top="'Download This Attendance Data'"
@@ -71,21 +68,35 @@
           <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel">Import Template</h5>
+                <h5 class="modal-title" id="myModalLabel">New Attendance</h5>
                 <div class="form-msg" ref="formMsg"></div>
                 <button
                   type="button"
                   class="close"
                   data-dismiss="modal"
                   aria-label="Close"
+                  @click="hideModal"
                 >
                   <span aria-hidden="true">×</span>
                 </button>
               </div>
               <div class="modal-body">
-                <p class="mb-3 d-block">NB: Fields marked * are required</p>
-                <form @submit.prevent="addAttendance">
-                  <div class="row">
+                <div class="d-flex justify-content-between mb-3">
+                  <p>NB: Fields marked * are required</p>
+                  <button
+                    class="btn btn-primary btn-sm"
+                    ref="downloadTem"
+                    @click="downloadTemplate($event)"
+                  >
+                    Download Template
+                  </button>
+                </div>
+                <small class="d-flex justify-content-end text-danger"
+                  >Before you save make sure you download and fill the
+                  template.</small
+                >
+                <form @submit.prevent="addAttendance" ref="attendanceForm">
+                  <div class="row mt-4">
                     <div class="col-md-6">
                       <div class="form-group">
                         <label for="file">File *</label>
@@ -145,6 +156,7 @@
                       type="button"
                       class="btn btn-secondary"
                       data-dismiss="modal"
+                      @click="hideModal"
                     >
                       Close
                     </button>
@@ -181,6 +193,7 @@ export default {
       name: "",
       description: "",
       date: "",
+      mask: "5466888",
       config: {
         minDate: new Date(),
       },
@@ -201,8 +214,34 @@ export default {
     },
 
     /* get attendance template  */
-    downloadTemplate(e) {
-      const btn = e.target;
+    downloadTemplate(mask, e) {
+      const btn = this.$refs.downloadTem;
+      //console.log(this.mask);
+      if (this.mask) {
+        //  console.log(this.mask, "if");
+        return (async () => {
+          try {
+            addBtnLoading(btn);
+            const response = await Attendance.show(this.mask);
+            removeBtnLoading(btn);
+            const res = response.data;
+            const { url, filename } = res.data.file;
+            const anchor = document.createElement("a");
+            anchor.setAttribute("download", filename);
+            anchor.setAttribute("href", url);
+            document.body.appendChild(anchor);
+            anchor.click();
+            document.body.removeChild(anchor);
+          } catch (error) {
+            const res = error.response.data;
+            Swal.fire({
+              icon: "error",
+              title: res.message,
+            });
+            removeBtnLoading(btn);
+          }
+        })();
+      }
       return (async () => {
         try {
           addBtnLoading(btn);
@@ -227,12 +266,6 @@ export default {
       })();
     },
 
-    resetForm() {
-      this.name = "";
-      this.description = "";
-      this.date = "";
-    },
-
     showModal() {
       const myModal = new BSN.Modal("#myModal", { backdrop: "static" });
       myModal.show();
@@ -240,7 +273,12 @@ export default {
     hideModal() {
       const myModal = new BSN.Modal("#myModal");
       myModal.hide();
+      this.name = "";
+      this.description = "";
+      this.date = "";
+      this.$refs.file.value = "";
     },
+
     /* add attendance */
     async addAttendance(e) {
       const form = e.target;
@@ -261,7 +299,6 @@ export default {
         Swal.fire("Success", res.message, "success");
         this.hideModal();
         this.getAttendance();
-        this.resetForm();
       } catch (err) {
         const res = err.response.data;
         let errorBag = "";
@@ -336,6 +373,30 @@ export default {
           removeBtnLoading(btn);
         }
       })();
+    },
+
+    /* get an attendance */
+    async getOneAttendance(mask, e) {
+      const btn = e.target;
+      try {
+        addBtnLoading(btn);
+        const response = await Attendance.show(mask);
+        const res = response.data.data;
+        this.name = res.attendance.name;
+        this.description = res.attendance.description;
+        this.date = res.attendance.date;
+        this.mask = res.attendance.mask;
+        // console.log(typeof res.attendance.date);
+        this.showModal();
+        removeBtnLoading(btn);
+      } catch (error) {
+        const res = error.response.data;
+        Swal.fire({
+          icon: "error",
+          title: res.message,
+        });
+        removeBtnLoading(btn);
+      }
     },
   },
   async created() {
