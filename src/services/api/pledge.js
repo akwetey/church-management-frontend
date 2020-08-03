@@ -11,7 +11,7 @@ export default {
     return Axios.get("/api/contribution/pledges/" + mask);
   },
   update(payload, mask) {
-    return Axios.post("/api/contribution/pledges/" + mask, payload);
+    return Axios.put("/api/contribution/pledges/" + mask, payload);
   },
   delete(mask) {
     return Axios.delete("/api/contribution/pledges/" + mask);
