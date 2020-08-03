@@ -120,7 +120,7 @@ export default {
       this.leaders = group[0].data.data;
       this.name = data.name;
       this.description = data.description;
-      this.leader = data.leader;
+      this.leader = data.leader.id;
       this.mask = data.mask;
     },
   },
