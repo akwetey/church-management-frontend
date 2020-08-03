@@ -69,6 +69,35 @@
             aria-expanded="false"
             aria-controls="users-roles"
           >
+            <i class="link-icon pi pi-dollar"></i>
+            <span class="link-title">Contributions</span>
+            <i class="link-arrow pi pi-angle-down"></i>
+          </a>
+          <div class="collapse" id="users-roles">
+            <ul class="nav sub-menu">
+              <li class="nav-item">
+                <router-link :to="{ name: 'pledge' }" class="nav-link"
+                  >Pledge</router-link
+                >
+              </li>
+              <li class="nav-item">
+                <router-link :to="{ name: 'contribution' }" class="nav-link"
+                  >Contribution</router-link
+                >
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a
+            id="users-role-collapse-btn"
+            class="nav-link"
+            data-toggle="collapse"
+            href="#users-roles"
+            role="button"
+            aria-expanded="false"
+            aria-controls="users-roles"
+          >
             <i class="link-icon pi pi-user-plus"></i>
             <span class="link-title">Users & Roles</span>
             <i class="link-arrow pi pi-angle-down"></i>

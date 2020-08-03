@@ -137,6 +137,16 @@ export default [
         name: "attendance",
         component: () => import("@views/attendance/Index.vue"),
       },
+      {
+        path: "pledge",
+        name: "pledge",
+        component: () => import("@views/pledge/Index.vue"),
+      },
+      {
+        path: "pledge/add",
+        name: "pledgeadd",
+        component: () => import("@views/pledge/Add.vue"),
+      },
     ],
   },
   {
