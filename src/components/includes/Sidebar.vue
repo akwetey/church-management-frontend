@@ -61,10 +61,10 @@
         </li>
         <li class="nav-item">
           <a
-            id="users-role-collapse-btn"
+            id="contributions-collapse-btn"
             class="nav-link"
             data-toggle="collapse"
-            href="#users-roles"
+            href="#contributions"
             role="button"
             aria-expanded="false"
             aria-controls="users-roles"
@@ -73,7 +73,7 @@
             <span class="link-title">Contributions</span>
             <i class="link-arrow pi pi-angle-down"></i>
           </a>
-          <div class="collapse" id="users-roles">
+          <div class="collapse" id="contributions">
             <ul class="nav sub-menu">
               <li class="nav-item">
                 <router-link :to="{ name: 'pledge' }" class="nav-link"
@@ -129,6 +129,7 @@ export default {
   name: "Sidebar",
   mounted() {
     new BSN.Collapse("#users-role-collapse-btn");
+    new BSN.Collapse("#contributions-collapse-btn");
   },
 };
 </script>

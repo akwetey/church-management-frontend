@@ -50,7 +50,7 @@
           <div class="text-center">
             <div class="form-group mt-5">
               <button class="btn btn-success px-5" ref="submitBtn">
-                Save
+                Update
               </button>
             </div>
           </div>
