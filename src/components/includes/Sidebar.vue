@@ -76,14 +76,10 @@
           <div class="collapse" id="contributions">
             <ul class="nav sub-menu">
               <li class="nav-item">
-                <router-link :to="{ name: 'pledge' }" class="nav-link"
-                  >Pledge</router-link
-                >
+                <router-link :to="{ name: 'pledge' }" class="nav-link">Pledge</router-link>
               </li>
               <li class="nav-item">
-                <router-link :to="{ name: 'contribution' }" class="nav-link"
-                  >Contribution</router-link
-                >
+                <router-link :to="{ name: 'Contributions' }" class="nav-link">All Contributions</router-link>
               </li>
             </ul>
           </div>
@@ -105,14 +101,10 @@
           <div class="collapse" id="users-roles">
             <ul class="nav sub-menu">
               <li class="nav-item">
-                <router-link :to="{ name: 'user' }" class="nav-link"
-                  >Users</router-link
-                >
+                <router-link :to="{ name: 'user' }" class="nav-link">Users</router-link>
               </li>
               <li class="nav-item">
-                <router-link :to="{ name: 'role' }" class="nav-link"
-                  >Roles</router-link
-                >
+                <router-link :to="{ name: 'role' }" class="nav-link">Roles</router-link>
               </li>
             </ul>
           </div>

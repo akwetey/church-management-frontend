@@ -14,6 +14,9 @@ export default new Vuex.Store({
       password: "",
       remember: false,
     },
+    seetings: {
+      currency: "GH₵",
+    },
   },
   getters: {
     user(state) {
@@ -28,6 +31,9 @@ export default new Vuex.Store({
     },
     defaultAvatar(state) {
       return require("@assets/img/avatar.svg");
+    },
+    currency(state) {
+      return state.settings.currency;
     },
   },
 

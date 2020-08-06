@@ -152,6 +152,17 @@ export default [
         name: "pledgeedit",
         component: () => import("@views/pledge/Edit.vue"),
       },
+      {
+        path: "contributions",
+        component: () => import("@layouts/Finance.vue"),
+        children: [
+          {
+            path: "/",
+            name: "Contributions",
+            component: () => import("@views/contribution/Index.vue"),
+          },
+        ],
+      },
     ],
   },
   {
