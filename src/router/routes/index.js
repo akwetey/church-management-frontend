@@ -161,6 +161,11 @@ export default [
             name: "Contributions",
             component: () => import("@views/contribution/Index.vue"),
           },
+          {
+            path: "covenant-partner/add",
+            name: "covenantadd",
+            component: () => import("@views/contribution/covenant/Add.vue"),
+          },
         ],
       },
     ],
