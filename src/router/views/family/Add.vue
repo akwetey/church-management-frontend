@@ -97,7 +97,7 @@ export default {
         (obj.id = el), (obj.relation = this.relation);
         relationData.push(obj);
       });
-      console.log(relationData);
+      // console.log(relationData);
       try {
         addBtnLoading(btn);
         const formData = {
