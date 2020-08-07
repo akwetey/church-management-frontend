@@ -78,6 +78,7 @@ import Column from "primevue/column";
 import Contribution from "@services/api/contribution";
 import { addBtnLoading, removeBtnLoading } from "@services/helpers";
 import BSN from "bootstrap.native";
+import Swal from "sweetalert2";
 
 export default {
   name: "Contributions",

@@ -8,6 +8,6 @@ export default {
     return Axios.post("/api/contributions/covenant-partner", payload);
   },
   covedelete(mask) {
-    return axios.delete("/api/contributions/covenant-partner/" + mask);
+    return Axios.delete("/api/contributions/covenant-partner/" + mask);
   },
 };
