@@ -6,14 +6,15 @@
 
         <div class="form-msg" ref="formMsg"></div>
 
-        <form @submit.prevent="addFamily">
+        <form @submit.prevent="addCovenant">
           <div class="row">
             <div class="col-md-6">
               <div class="form-group">
                 <label for="amount">Amount *</label>
                 <input
-                  type="text"
+                  type="number"
                   name="amount"
+                  min="0"
                   id="amount"
                   class="form-control"
                   required
@@ -23,27 +24,29 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="date">Date</label>
+                <label for="date">Date *</label>
                 <flat-pickr
                   v-model="date"
                   placeholder="Select Date"
                   name="date"
                   id="date"
+                  required
                   class="form-control bg-white"
                 ></flat-pickr>
               </div>
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="person">Person</label>
+                <label for="person">Person *</label>
                 <MultiSelect
                   v-model="member"
                   :options="members"
                   :filter="true"
                   optionValue="id"
                   optionLabel="name"
-                  placeholder="Select Group"
+                  placeholder="Select Person"
                   class="form-control"
+                  required
                 />
               </div>
             </div>
@@ -77,14 +80,14 @@
 <script>
 import { addBtnLoading, removeBtnLoading } from "@services/helpers";
 import Member from "@services/api/people";
-import Family from "@services/api/family";
+import Contribution from "@services/api/contribution";
 import Swal from "sweetalert2";
 import MultiSelect from "primevue/multiselect";
 import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 
 export default {
-  name: "FamilyAdd",
+  name: "Covenant",
   components: {
     MultiSelect,
     flatPickr,
@@ -99,27 +102,28 @@ export default {
     };
   },
   methods: {
-    async addFamily(e) {
+    async addCovenant(e) {
       const btn = this.$refs.submitBtn;
       const formMsg = this.$refs.formMsg;
-      const relationData = [];
-      this.member.forEach((el) => {
+      const covenantData = [];
+      this.member.forEach((id) => {
         const obj = {};
-        (obj.id = el), (obj.relation = this.relation);
-        relationData.push(obj);
+        (obj.person = id),
+          (obj.date = this.date),
+          (obj.comment = this.comment),
+          (obj.amount = this.amount);
+        covenantData.push(obj);
       });
-      // console.log(relationData);
       try {
         addBtnLoading(btn);
         const formData = {
-          name: this.name,
-          people: relationData,
+          contributions: covenantData,
         };
-        const response = await Family.store(formData);
+        const response = await Contribution.covenant(formData);
         const res = response.data;
         removeBtnLoading(btn);
         Swal.fire("Success", res.message, "success");
-        this.$router.push({ name: "family" });
+        this.$router.push({ name: "Contributions" });
       } catch (err) {
         const res = err.response.data;
         let errorBag = "";

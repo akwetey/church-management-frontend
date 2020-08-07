@@ -14,7 +14,7 @@ export default new Vuex.Store({
       password: "",
       remember: false,
     },
-    seetings: {
+    settings: {
       currency: "GH₵",
     },
   },

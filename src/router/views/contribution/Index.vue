@@ -27,6 +27,46 @@
             </div>
           </div>
         </div>
+        <div>
+          <DataTable
+            :value="table.data"
+            :paginator="true"
+            :rows="10"
+            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+            :rowsPerPageOptions="[10, 25, 50]"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+          >
+            <template #empty>
+              <div class="text-center">
+                No data found.
+              </div>
+            </template>
+            <Column field="type" header="Type" sortable></Column>
+            <Column field="person.name" header="Persons" sortable></Column>
+            <Column field="created_at" header="Date Added" sortable></Column>
+            <Column field="actions" header="Actions">
+              <template #body="slotProps">
+                <router-link
+                  tag="button"
+                  :to="{
+                    name: 'familyedit',
+                    params: { mask: slotProps.data.mask },
+                  }"
+                  class="btn btn-primary btn-icon mr-2"
+                  v-tooltip.top="'Edit'"
+                >
+                  <i class="pi pi-pencil"></i>
+                </router-link>
+                <button
+                  class="btn btn-danger btn-icon mr-2"
+                  v-tooltip.top="'Delete'"
+                  @click="deleteContribution(slotProps.data.mask, $event)"
+                >
+                  <i class="pi pi-trash no-pointer-events"></i>
+                </button> </template
+            ></Column>
+          </DataTable>
+        </div>
       </div>
     </div>
   </div>
@@ -52,7 +92,7 @@ export default {
   },
   computed: {
     currency() {
-      return this.$store.getters.currency;
+      return this.$store.getters.settings.currency;
     },
   },
   methods: {
@@ -60,6 +100,39 @@ export default {
       const response = await Contribution.all();
       const { data: res } = response.data;
       this.table.data = res.items;
+    },
+
+    /* delete contribution  */
+    async deleteContribution(mask, e) {
+      const btn = e.target;
+      try {
+        const result = await Swal.fire({
+          text: "Do you want to delete this contribution?",
+          icon: "warning",
+          showCancelButton: true,
+          cancelButtonText: "No",
+          confirmButtonText: "Yes Delete It",
+          reverseButtons: true,
+        });
+        if (result.value) {
+          addBtnLoading(btn);
+          const response = await Contribution.covedelete(mask);
+          removeBtnLoading(btn);
+          const res = response.data;
+          Swal.fire({
+            icon: "success",
+            title: res.message,
+          });
+          this.setData();
+        }
+      } catch (error) {
+        removeBtnLoading(btn);
+        const res = error.response.data;
+        Swal.fire({
+          icon: "error",
+          title: res.message,
+        });
+      }
     },
   },
   beforeRouteEnter(to, from, next) {

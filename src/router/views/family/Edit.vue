@@ -30,7 +30,7 @@
                   :filter="true"
                   optionValue="id"
                   optionLabel="name"
-                  placeholder="Select Group"
+                  placeholder="Select Member"
                   class="form-control"
                 />
               </div>
