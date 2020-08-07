@@ -32,6 +32,7 @@
             :value="table.data"
             :paginator="true"
             :rows="10"
+            :loading="loading"
             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
             :rowsPerPageOptions="[10, 25, 50]"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
@@ -49,7 +50,7 @@
                 <router-link
                   tag="button"
                   :to="{
-                    name: 'familyedit',
+                    name: 'covenantedit',
                     params: { mask: slotProps.data.mask },
                   }"
                   class="btn btn-primary btn-icon mr-2"
@@ -89,6 +90,7 @@ export default {
         data: [],
         total: 0,
       },
+      loading: true,
     };
   },
   computed: {
@@ -99,6 +101,7 @@ export default {
   methods: {
     async setData() {
       const response = await Contribution.all();
+      this.loading = false;
       const { data: res } = response.data;
       this.table.data = res.items;
     },
