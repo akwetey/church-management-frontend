@@ -6,14 +6,24 @@
           <p class="mb-3">NB: Fields marked * are required</p>
 
           <div class="ml-auto">
-            <button class="btn btn-primary" type="button" @click="addMoreRecords">Add More Records</button>
+            <button
+              class="btn btn-primary"
+              type="button"
+              @click="addMoreRecords"
+            >
+              Add More Records
+            </button>
           </div>
         </div>
         <div class="form-msg" ref="formMsg"></div>
 
         <form @submit.prevent="addCovenant">
           <div class="row mt-3">
-            <div class="col-md-6 mb-4" v-for="(contribution, i) in contributions" :key="i">
+            <div
+              class="col-md-6 mb-4"
+              v-for="(contribution, i) in contributions"
+              :key="i"
+            >
               <div class="row border mr-2 py-4 px-3">
                 <div class="col-md-6">
                   <div class="form-group">
@@ -45,15 +55,14 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="person">Person *</label>
-                    <MultiSelect
+                    <Dropdown
                       v-model="contribution.person"
                       :options="members"
                       :filter="true"
-                      optionValue="id"
                       optionLabel="name"
+                      optionValue="id"
                       placeholder="Select Person"
                       class="form-control"
-                      required
                     />
                   </div>
                 </div>
@@ -70,6 +79,14 @@
                   </div>
                 </div>
               </div>
+              <button
+                class="btn btn-danger btn-sm mt-3"
+                type="button"
+                @click="RemoveRecord"
+                v-if="contributions.length > 1"
+              >
+                Remove Record
+              </button>
             </div>
           </div>
 
@@ -89,14 +106,14 @@ import { addBtnLoading, removeBtnLoading } from "@services/helpers";
 import Member from "@services/api/people";
 import Contribution from "@services/api/contribution";
 import Swal from "sweetalert2";
-import MultiSelect from "primevue/multiselect";
+import Dropdown from "primevue/dropdown";
 import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 
 export default {
   name: "Covenant",
   components: {
-    MultiSelect,
+    Dropdown,
     flatPickr,
   },
   data() {
@@ -120,19 +137,10 @@ export default {
     async addCovenant(e) {
       const btn = this.$refs.submitBtn;
       const formMsg = this.$refs.formMsg;
-      const covenantData = [];
-      this.member.forEach((id) => {
-        const obj = {};
-        (obj.person = id),
-          (obj.date = this.date),
-          (obj.comment = this.comment),
-          (obj.amount = this.amount);
-        covenantData.push(obj);
-      });
       try {
         addBtnLoading(btn);
         const formData = {
-          contributions: covenantData,
+          contributions: this.contributions,
         };
         const response = await Contribution.covenant(formData);
         const res = response.data;
@@ -173,6 +181,9 @@ export default {
         date: "",
         person: "",
       });
+    },
+    RemoveRecord() {
+      this.contributions.pop();
     },
   },
 
