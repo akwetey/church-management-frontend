@@ -2,73 +2,80 @@
   <div>
     <div class="card min-height-500">
       <div class="card-body">
-        <p class="mb-3">NB: Fields marked * are required</p>
+        <div class="d-flex">
+          <p class="mb-3">NB: Fields marked * are required</p>
 
+          <div class="ml-auto">
+            <button class="btn btn-primary" type="button" @click="addMoreRecords">Add More Records</button>
+          </div>
+        </div>
         <div class="form-msg" ref="formMsg"></div>
 
         <form @submit.prevent="addCovenant">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="amount">Amount *</label>
-                <input
-                  type="number"
-                  name="amount"
-                  min="0"
-                  id="amount"
-                  class="form-control"
-                  required
-                  v-model.trim="amount"
-                />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="date">Date *</label>
-                <flat-pickr
-                  v-model="date"
-                  placeholder="Select Date"
-                  name="date"
-                  id="date"
-                  required
-                  class="form-control bg-white"
-                ></flat-pickr>
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="person">Person *</label>
-                <MultiSelect
-                  v-model="member"
-                  :options="members"
-                  :filter="true"
-                  optionValue="id"
-                  optionLabel="name"
-                  placeholder="Select Person"
-                  class="form-control"
-                  required
-                />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="comment">Comment</label>
-                <textarea
-                  name="comment"
-                  id="comment"
-                  cols="30"
-                  rows="5"
-                  class="form-control"
-                  v-model="comment"
-                ></textarea>
+          <div class="row mt-3">
+            <div class="col-md-6 mb-4" v-for="(contribution, i) in contributions" :key="i">
+              <div class="row border mr-2 py-4 px-3">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="amount">Amount *</label>
+                    <input
+                      type="number"
+                      :name="`amount-${i}`"
+                      min="0"
+                      :id="`amount-${i}`"
+                      class="form-control"
+                      required
+                      v-model.trim="contribution.amount"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="date">Date *</label>
+                    <flat-pickr
+                      v-model="contribution.date"
+                      placeholder="Select Date"
+                      :name="`date-${i}`"
+                      :id="`date-${i}`"
+                      required
+                      class="form-control bg-white"
+                    ></flat-pickr>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="person">Person *</label>
+                    <MultiSelect
+                      v-model="contribution.person"
+                      :options="members"
+                      :filter="true"
+                      optionValue="id"
+                      optionLabel="name"
+                      placeholder="Select Person"
+                      class="form-control"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="comment">Comment</label>
+                    <input
+                      type="text"
+                      :name="`comment-${i}`"
+                      :id="`comment-${i}`"
+                      class="form-control"
+                      v-model="contribution.comment"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+
           <div class="text-center">
             <div class="form-group mt-5">
-              <button class="btn btn-success px-5" ref="submitBtn">
-                Save
-              </button>
+              <button class="btn btn-success px-5" ref="submitBtn">Save</button>
             </div>
           </div>
         </form>
@@ -94,6 +101,14 @@ export default {
   },
   data() {
     return {
+      contributions: [
+        {
+          amount: 0,
+          comment: "",
+          date: "",
+          person: "",
+        },
+      ],
       amount: "",
       comment: "",
       date: "",
@@ -149,6 +164,15 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+
+    addMoreRecords() {
+      this.contributions.push({
+        amount: 0,
+        comment: "",
+        date: "",
+        person: "",
+      });
     },
   },
 
