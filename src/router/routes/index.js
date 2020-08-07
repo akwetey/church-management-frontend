@@ -169,7 +169,7 @@ export default [
           {
             path: "covenant-partner/:mask",
             name: "covenantedit",
-            component: () => import("@views/contribution/covenant/Add.vue"),
+            component: () => import("@views/contribution/covenant/Edit.vue"),
           },
         ],
       },

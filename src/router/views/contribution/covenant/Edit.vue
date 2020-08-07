@@ -38,7 +38,16 @@
             <div class="col-md-6">
               <div class="form-group">
                 <label for="person">Person *</label>
-                <MultiSelect
+                <Dropdown
+                  v-model="member"
+                  :options="members"
+                  :filter="true"
+                  optionLabel="name"
+                  optionValue="id"
+                  placeholder="Select Person"
+                  class="form-control"
+                />
+                <!-- <MultiSelect
                   v-model="member"
                   :options="members"
                   :filter="true"
@@ -47,7 +56,7 @@
                   placeholder="Select Person"
                   class="form-control"
                   required
-                />
+                /> -->
               </div>
             </div>
             <div class="col-md-6">
@@ -67,7 +76,7 @@
           <div class="text-center">
             <div class="form-group mt-5">
               <button class="btn btn-success px-5" ref="submitBtn">
-                Save
+                Update
               </button>
             </div>
           </div>
@@ -82,14 +91,14 @@ import { addBtnLoading, removeBtnLoading } from "@services/helpers";
 import Member from "@services/api/people";
 import Contribution from "@services/api/contribution";
 import Swal from "sweetalert2";
-import MultiSelect from "primevue/multiselect";
+import Dropdown from "primevue/dropdown";
 import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 
 export default {
   name: "CovenantEdit",
   components: {
-    MultiSelect,
+    Dropdown,
     flatPickr,
   },
   data() {
@@ -97,7 +106,7 @@ export default {
       amount: "",
       comment: "",
       date: "",
-      member: [],
+      member: "",
       members: [],
       mask: "",
     };
@@ -106,19 +115,13 @@ export default {
     async updateCovenant(e) {
       const btn = this.$refs.submitBtn;
       const formMsg = this.$refs.formMsg;
-      const covenantData = [];
-      this.member.forEach((id) => {
-        const obj = {};
-        (obj.person = id),
-          (obj.date = this.date),
-          (obj.comment = this.comment),
-          (obj.amount = this.amount);
-        covenantData.push(obj);
-      });
       try {
         addBtnLoading(btn);
         const formData = {
-          contributions: covenantData,
+          amount: this.amount,
+          comment: this.comment,
+          date: this.date,
+          person: this.member,
         };
         const response = await Contribution.coveupdate(formData, this.mask);
         const res = response.data;
@@ -146,7 +149,7 @@ export default {
       const { data } = convenant[1].data;
       this.members = convenant[0].data.data;
       this.amount = data.amount;
-      this.member = data.people.map(({ id }) => id);
+      this.member = data.person.id;
       this.date = data.date;
       this.comment = data.comment;
       this.mask = data.mask;
@@ -159,12 +162,11 @@ export default {
       if (!mask) {
         next({ name: "Home" });
       }
-      console.log(mask);
+
       const response = await Promise.all([
         Member.members(),
         Contribution.coveshow(mask),
       ]);
-      console.log(response);
       next((vm) => vm.setData(response));
     } catch (error) {
       console.log(error);
