@@ -2,18 +2,18 @@ import Axios from "./axios";
 
 export default {
   all() {
-    return Axios.get("/api/contribution/pledges");
+    return Axios.get("/staff/contribution/pledges");
   },
   store(payload) {
-    return Axios.post("/api/contribution/pledges", payload);
+    return Axios.post("/staff/contribution/pledges", payload);
   },
   show(mask) {
-    return Axios.get("/api/contribution/pledges/" + mask);
+    return Axios.get("/staff/contribution/pledges/" + mask);
   },
   update(payload, mask) {
-    return Axios.put("/api/contribution/pledges/" + mask, payload);
+    return Axios.put("/staff/contribution/pledges/" + mask, payload);
   },
   delete(mask) {
-    return Axios.delete("/api/contribution/pledges/" + mask);
+    return Axios.delete("/staff/contribution/pledges/" + mask);
   },
 };

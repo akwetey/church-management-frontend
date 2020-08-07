@@ -2,18 +2,18 @@ import Axios from "./axios";
 
 export default {
   all() {
-    return Axios.get("/api/contributions");
+    return Axios.get("/staff/contributions");
   },
   covenant(payload) {
-    return Axios.post("/api/contributions/covenant-partner", payload);
+    return Axios.post("/staff/contributions/covenant-partner", payload);
   },
   covedelete(mask) {
-    return Axios.delete("/api/contributions/covenant-partner/" + mask);
+    return Axios.delete("/staff/contributions/covenant-partner/" + mask);
   },
   coveshow(mask) {
-    return Axios.get("/api/contributions/covenant-partner/" + mask);
+    return Axios.get("/staff/contributions/covenant-partner/" + mask);
   },
   coveupdate(payload, mask) {
-    return Axios.put("/api/contributions/covenant-partner/" + mask, payload);
+    return Axios.put("/staff/contributions/covenant-partner/" + mask, payload);
   },
 };

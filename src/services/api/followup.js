@@ -2,18 +2,18 @@ import Axios from "./axios";
 
 export default {
   all() {
-    return Axios.get("/api/follow-up");
+    return Axios.get("/staff/follow-up");
   },
   store(formData) {
-    return Axios.post("/api/follow-up", formData);
+    return Axios.post("/staff/follow-up", formData);
   },
   show(mask) {
-    return Axios.get("/api/follow-up/" + mask);
+    return Axios.get("/staff/follow-up/" + mask);
   },
   update(formData, mask) {
-    return Axios.put("/api/follow-up/" + mask, formData);
+    return Axios.put("/staff/follow-up/" + mask, formData);
   },
   delete(mask) {
-    return Axios.delete("/api/follow-up/" + mask);
+    return Axios.delete("/staff/follow-up/" + mask);
   },
 };

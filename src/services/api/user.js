@@ -2,18 +2,18 @@ import axios from "./axios";
 
 export default {
   all() {
-    return axios.get("/api/users");
+    return axios.get("/staff/users");
   },
   store(payload) {
-    return axios.post("/api/users", payload);
+    return axios.post("/staff/users", payload);
   },
   show(mask) {
-    return axios.get("/api/users/" + mask);
+    return axios.get("/staff/users/" + mask);
   },
   update(payload, mask) {
-    return axios.put("/api/users/" + mask, payload);
+    return axios.put("/staff/users/" + mask, payload);
   },
   delete(mask) {
-    return axios.delete("/api/users/" + mask);
+    return axios.delete("/staff/users/" + mask);
   },
 };
