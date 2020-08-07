@@ -6,24 +6,14 @@
           <p class="mb-3">NB: Fields marked * are required</p>
 
           <div class="ml-auto">
-            <button
-              class="btn btn-primary"
-              type="button"
-              @click="addMoreRecords"
-            >
-              Add More Records
-            </button>
+            <button class="btn btn-primary" type="button" @click="addMoreRecords">Add More Records</button>
           </div>
         </div>
         <div class="form-msg" ref="formMsg"></div>
 
         <form @submit.prevent="addCovenant">
           <div class="row mt-3">
-            <div
-              class="col-md-6 mb-4"
-              v-for="(contribution, i) in contributions"
-              :key="i"
-            >
+            <div class="col-md-6 mb-4" v-for="(contribution, i) in contributions" :key="i">
               <div class="row border mr-2 py-4 px-3">
                 <div class="col-md-6">
                   <div class="form-group">
@@ -78,15 +68,16 @@
                     />
                   </div>
                 </div>
+
+                <div class="col-md-6">
+                  <button
+                    :class="['btn btn-danger btn-sm mt-3']"
+                    type="button"
+                    @click="RemoveRecord"
+                    v-if="contributions.length > 1 && i !== 0"
+                  >Remove Record</button>
+                </div>
               </div>
-              <button
-                class="btn btn-danger btn-sm mt-3"
-                type="button"
-                @click="RemoveRecord"
-                v-if="contributions.length > 1"
-              >
-                Remove Record
-              </button>
             </div>
           </div>
 
