@@ -1,0 +1,197 @@
+<template>
+  <div>
+    <div class="card min-height-500">
+      <div class="card-body">
+        <div class="d-flex">
+          <p class="mb-3">NB: Fields marked * are required</p>
+
+          <div class="ml-auto">
+            <button
+              class="btn btn-primary"
+              type="button"
+              @click="addMoreRecords"
+            >
+              Add More Records
+            </button>
+          </div>
+        </div>
+        <div class="form-msg" ref="formMsg"></div>
+
+        <form @submit.prevent="addBusing">
+          <div class="row mt-3">
+            <div
+              class="col-md-6 mb-4"
+              v-for="(contribution, i) in contributions"
+              :key="i"
+            >
+              <div class="row border mr-2 py-4 px-3">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="amount">Amount *</label>
+                    <input
+                      type="number"
+                      :name="`amount-${i}`"
+                      min="0"
+                      :id="`amount-${i}`"
+                      class="form-control"
+                      required
+                      v-model.trim="contribution.amount"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="date">Date *</label>
+                    <flat-pickr
+                      v-model="contribution.date"
+                      placeholder="Select Date"
+                      :name="`date-${i}`"
+                      :id="`date-${i}`"
+                      required
+                      class="form-control bg-white"
+                    ></flat-pickr>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="person">Person *</label>
+                    <Dropdown
+                      v-model="contribution.person"
+                      :options="members"
+                      :filter="true"
+                      optionLabel="name"
+                      optionValue="id"
+                      placeholder="Select Person"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="comment">Comment</label>
+                    <input
+                      type="text"
+                      :name="`comment-${i}`"
+                      :id="`comment-${i}`"
+                      class="form-control"
+                      v-model="contribution.comment"
+                    />
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <button
+                    :class="['btn btn-danger btn-sm mt-3']"
+                    type="button"
+                    @click="RemoveRecord"
+                    v-if="contributions.length > 1 && i !== 0"
+                  >
+                    Remove Record
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center">
+            <div class="form-group mt-5">
+              <button class="btn btn-success px-5" ref="submitBtn">Save</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { addBtnLoading, removeBtnLoading } from "@services/helpers";
+import Member from "@services/api/people";
+import Contribution from "@services/api/contribution";
+import Swal from "sweetalert2";
+import Dropdown from "primevue/dropdown";
+import flatPickr from "vue-flatpickr-component";
+import "flatpickr/dist/flatpickr.css";
+
+export default {
+  name: "Covenant",
+  components: {
+    Dropdown,
+    flatPickr,
+  },
+  data() {
+    return {
+      contributions: [
+        {
+          amount: 0,
+          comment: "",
+          date: "",
+          person: "",
+        },
+      ],
+      amount: "",
+      comment: "",
+      date: "",
+      member: [],
+      members: [],
+    };
+  },
+  methods: {
+    async addBusing(e) {
+      const btn = this.$refs.submitBtn;
+      const formMsg = this.$refs.formMsg;
+      try {
+        addBtnLoading(btn);
+        const formData = {
+          contributions: this.contributions,
+        };
+        const response = await Contribution.covenant(formData);
+        const res = response.data;
+        removeBtnLoading(btn);
+        Swal.fire("Success", res.message, "success");
+        this.$router.push({ name: "Contributions" });
+      } catch (err) {
+        const res = err.response.data;
+        let errorBag = "";
+        if (res.code === 422) {
+          removeBtnLoading(btn);
+          const errorData = Object.values(res.errors);
+          errorData.map((error) => {
+            errorBag += `<span class="d-block">${error}</span>`;
+          });
+        } else {
+          errorBag += res.message;
+        }
+        formMsg.innerHTML = `<div class="alert alert-danger">${errorBag}</div>`;
+      }
+    },
+
+    //fetch members
+    async getMembers() {
+      try {
+        const response = await Member.members();
+        const res = response.data;
+        this.members = res.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    addMoreRecords() {
+      this.contributions.push({
+        amount: 0,
+        comment: "",
+        date: "",
+        person: "",
+      });
+    },
+    RemoveRecord() {
+      this.contributions.pop();
+    },
+  },
+
+  async created() {
+    await this.getMembers();
+  },
+};
+</script>

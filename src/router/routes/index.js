@@ -172,6 +172,16 @@ export default [
             component: () => import("@views/contribution/covenant/Edit.vue"),
           },
           {
+            path: "busing/add",
+            name: "busingadd",
+            component: () => import("@views/contribution/busing/Add.vue"),
+          },
+          {
+            path: "busing/:mask",
+            name: "busingedit",
+            component: () => import("@views/contribution/busing/Edit.vue"),
+          },
+          {
             path: "tithe/add",
             name: "TitheAdd",
             component: () => import("@views/contribution/tithe/Add.vue"),

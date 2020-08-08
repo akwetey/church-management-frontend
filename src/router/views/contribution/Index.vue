@@ -16,9 +16,15 @@
               <i class="link-arrow pi pi-angle-down"></i>
             </button>
             <div class="dropdown-menu" aria-labelledby="myDropdown">
-              <a class="dropdown-item" href="#">Busing</a>
-              <router-link :to="{ name: 'covenantadd' }" class="dropdown-item">Covenant Partner</router-link>
-              <router-link :to="{ name: 'TitheAdd' }" class="dropdown-item">Tithe</router-link>
+              <router-link :to="{ name: 'busingadd' }" class="dropdown-item"
+                >Covenant Partner</router-link
+              >
+              <router-link :to="{ name: 'covenantadd' }" class="dropdown-item"
+                >Covenant Partner</router-link
+              >
+              <router-link :to="{ name: 'TitheAdd' }" class="dropdown-item"
+                >Tithe</router-link
+              >
               <a class="dropdown-item" href="#">Group</a>
               <a class="dropdown-item" href="#">Welfare</a>
               <a class="dropdown-item" href="#">Pledge</a>
