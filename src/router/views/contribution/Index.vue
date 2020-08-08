@@ -12,14 +12,13 @@
               aria-expanded="false"
               class="btn btn-primary"
             >
-              Select Contribution
+              Add Contribution
               <i class="link-arrow pi pi-angle-down"></i>
             </button>
             <div class="dropdown-menu" aria-labelledby="myDropdown">
-              <a class="dropdown-item" href="#">Tithe</a>
-              <router-link :to="{ name: 'covenantadd' }" class="dropdown-item"
-                >Covenant Partner</router-link
-              >
+              <a class="dropdown-item" href="#">Busing</a>
+              <router-link :to="{ name: 'covenantadd' }" class="dropdown-item">Covenant Partner</router-link>
+              <router-link :to="{ name: 'TitheAdd' }" class="dropdown-item">Tithe</router-link>
               <a class="dropdown-item" href="#">Group</a>
               <a class="dropdown-item" href="#">Welfare</a>
               <a class="dropdown-item" href="#">Pledge</a>
@@ -38,12 +37,10 @@
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
           >
             <template #empty>
-              <div class="text-center">
-                No data found.
-              </div>
+              <div class="text-center">No data found.</div>
             </template>
             <Column field="type" header="Type" sortable></Column>
-            <Column field="person.name" header="Persons" sortable></Column>
+            <Column field="person.name" header="Person" sortable></Column>
             <Column field="created_at" header="Date Added" sortable></Column>
             <Column field="actions" header="Actions">
               <template #body="slotProps">
@@ -64,8 +61,9 @@
                   @click="deleteContribution(slotProps.data.mask, $event)"
                 >
                   <i class="pi pi-trash no-pointer-events"></i>
-                </button> </template
-            ></Column>
+                </button>
+              </template>
+            </Column>
           </DataTable>
         </div>
       </div>

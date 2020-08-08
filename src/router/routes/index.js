@@ -171,6 +171,11 @@ export default [
             name: "covenantedit",
             component: () => import("@views/contribution/covenant/Edit.vue"),
           },
+          {
+            path: "tithe/add",
+            name: "TitheAdd",
+            component: () => import("@views/contribution/tithe/Add.vue"),
+          },
         ],
       },
     ],
