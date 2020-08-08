@@ -13,7 +13,7 @@ const Axios = axios.create({
 Axios.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("_chms_token");
-    console.log(token);
+    //console.log(token);
     if (token) {
       config.headers.common["Authorization"] = `Bearer ${token}`;
     }
