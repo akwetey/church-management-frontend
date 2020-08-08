@@ -16,19 +16,70 @@
               <div class="border py-3 px-3">
                 <div class="row">
                   <div class="col-md-6">
-                    <label>Person *</label>
-                    <Dropdown
-                      class="form-control"
-                      v-model="tithe.person"
-                      :options="people"
-                      optionLabel="name"
-                      optionValue="id"
-                      :filter="true"
-                      placeholder
-                    ></Dropdown>
+                    <div class="form-group">
+                      <label>Person *</label>
+                      <Dropdown
+                        class="form-control"
+                        v-model="tithe.person"
+                        :options="people"
+                        optionLabel="name"
+                        optionValue="id"
+                        :filter="true"
+                        placeholder="Select person"
+                        :id="`dropdown-${i}`"
+                      ></Dropdown>
+                    </div>
                   </div>
-                  <div class="col-md-6"></div>
-                  <div class="col-md-6"></div>
+
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for>Amount *</label>
+                      <input
+                        type="text"
+                        :name="`amount-${i}`"
+                        :id="`amount-${i}`"
+                        class="form-control"
+                        v-model.number="tithe.amount"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for>Frequency *</label>
+                      <Dropdown
+                        class="form-control"
+                        v-model="tithe.frequency"
+                        :options="frequencies"
+                        placeholder
+                        :id="`frequency-${i}`"
+                      ></Dropdown>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-group" v-if="tithe.frequency.toLowerCase() === 'monthly'">
+                      <label for class="d-block">Select Month *</label>
+                      <Calendar
+                        class="w-100"
+                        :id="`date-${i}`"
+                        v-model="tithe.date"
+                        view="month"
+                        dateFormat="mm-yy"
+                        :yearNavigator="true"
+                        yearRange="2000:2100"
+                        placeholder="Select Month"
+                      />
+                    </div>
+                    <div class="form-group" v-else>
+                      <label for class="d-block">Select Date *</label>
+                      <flatPickr
+                        class="form-control bg-white"
+                        v-model="tithe.date"
+                        placeholder="Select Date"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -45,21 +96,25 @@ import People from "@services/api/people";
 import Swal from "sweetalert2";
 import Dropdown from "primevue/dropdown";
 import Calendar from "primevue/calendar";
+import flatPickr from "vue-flatpickr-component";
+import "flatpickr/dist/flatpickr.css";
 
 export default {
   name: "TitheAdd",
   components: {
     Dropdown,
     Calendar,
+    flatPickr,
   },
   data() {
     return {
       people: [],
+      frequencies: ["Weekly", "Monthly"],
       tithes: [
         {
-          amount: "",
-          date: "",
-          frequency: "",
+          amount: 0,
+          date: null,
+          frequency: "Monthly",
           person: "",
           comment: "",
         },

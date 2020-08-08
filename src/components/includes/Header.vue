@@ -35,7 +35,7 @@
           <div class="dropdown-menu" aria-labelledby="profileDropdown">
             <div class="dropdown-header d-flex flex-column align-items-center">
               <div class="figure mb-3">
-                <img :src="avatar" alt="" />
+                <img :src="avatar" alt />
               </div>
               <div class="info text-center">
                 <p class="name font-weight-bold mb-0">{{ user.name }}</p>
@@ -45,7 +45,7 @@
             <div class="dropdown-body">
               <ul class="profile-nav p-0 pt-3">
                 <li class="nav-item">
-                  <a href="" class="nav-link">
+                  <a href class="nav-link">
                     <i class="pr-2 pi pi-user"></i>
                     <span>Profile</span>
                   </a>
@@ -82,6 +82,7 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch("logout");
+      this.$router.replace({ name: "Home" });
     },
   },
   mounted() {

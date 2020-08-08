@@ -19,6 +19,5 @@ import Sidebar from "@components/includes/Sidebar";
 export default {
   name: "MainLayout",
   components: { Header, Sidebar },
-  mounted() {},
 };
 </script>
