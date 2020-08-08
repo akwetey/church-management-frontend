@@ -145,7 +145,7 @@ export default {
         const formData = {
           contributions: this.contributions,
         };
-        const response = await Contribution.covenant(formData);
+        const response = await Contribution.busing(formData);
         const res = response.data;
         removeBtnLoading(btn);
         Swal.fire("Success", res.message, "success");

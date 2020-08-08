@@ -17,7 +17,7 @@
             </button>
             <div class="dropdown-menu" aria-labelledby="myDropdown">
               <router-link :to="{ name: 'busingadd' }" class="dropdown-item"
-                >Covenant Partner</router-link
+                >Busing</router-link
               >
               <router-link :to="{ name: 'covenantadd' }" class="dropdown-item"
                 >Covenant Partner</router-link

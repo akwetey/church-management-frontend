@@ -16,4 +16,7 @@ export default {
   coveupdate(payload, mask) {
     return Axios.put("/staff/contributions/covenant-partner/" + mask, payload);
   },
+  busing(payload) {
+    return Axios.post("/staff/contributions/busing", payload);
+  },
 };
