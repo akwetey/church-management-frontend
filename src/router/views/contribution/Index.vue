@@ -16,9 +16,15 @@
               <i class="link-arrow pi pi-angle-down"></i>
             </button>
             <div class="dropdown-menu" aria-labelledby="myDropdown">
-              <router-link :to="{ name: 'busingadd' }" class="dropdown-item">Busing</router-link>
-              <router-link :to="{ name: 'covenantadd' }" class="dropdown-item">Covenant Partner</router-link>
-              <router-link :to="{ name: 'TitheAdd' }" class="dropdown-item">Tithe</router-link>
+              <router-link :to="{ name: 'busingadd' }" class="dropdown-item"
+                >Busing</router-link
+              >
+              <router-link :to="{ name: 'covenantadd' }" class="dropdown-item"
+                >Covenant Partner</router-link
+              >
+              <router-link :to="{ name: 'TitheAdd' }" class="dropdown-item"
+                >Tithe</router-link
+              >
               <a class="dropdown-item" href="#">Group</a>
               <a class="dropdown-item" href="#">Welfare</a>
               <a class="dropdown-item" href="#">Pledge</a>
@@ -39,9 +45,16 @@
             <template #empty>
               <div class="text-center">No data found.</div>
             </template>
-            <Column field="type" header="Type" sortable></Column>
             <Column field="person.name" header="Person" sortable></Column>
-            <Column field="created_at" header="Date Added" sortable></Column>
+            <Column field="type" header="Type" sortable></Column>
+
+            <Column field="amount" header="Amount" sortable>
+              <template #body="slotProps">
+                <small>{{ currency }}</small
+                >{{ slotProps.data.amount }}
+              </template>
+            </Column>
+            <Column field="created_at" header="Date Recorded" sortable></Column>
             <Column field="actions" header="Actions">
               <template #body="slotProps">
                 <router-link
@@ -126,7 +139,7 @@ export default {
   },
   computed: {
     currency() {
-      return this.$store.getters.settings.currency;
+      return this.$store.getters.currency;
     },
   },
   methods: {

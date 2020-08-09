@@ -31,4 +31,10 @@ export default {
   titheAdd(payload) {
     return Axios.post("/staff/contributions/tithes", payload);
   },
+  titheShow(mask) {
+    return Axios.get("/staff/contributions/tithes/" + mask);
+  },
+  titheUpdate(payload, mask) {
+    return Axios.put("/staff/contributions/tithes/" + mask, payload);
+  },
 };

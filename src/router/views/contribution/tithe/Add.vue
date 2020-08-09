@@ -117,6 +117,7 @@
                         :name="`comment-${i}`"
                         :id="`comment-${i}`"
                         class="form-control"
+                        v-model="tithe.comment"
                       />
                     </div>
                   </div>

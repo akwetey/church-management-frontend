@@ -187,9 +187,9 @@ export default [
             component: () => import("@views/contribution/tithe/Add.vue"),
           },
           {
-            path: "tithe/add",
+            path: "tithe/:mask",
             name: "TitheEdit",
-            component: () => import("@views/contribution/tithe/Add.vue"),
+            component: () => import("@views/contribution/tithe/Edit.vue"),
           },
         ],
       },
