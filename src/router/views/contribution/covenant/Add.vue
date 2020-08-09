@@ -41,7 +41,19 @@
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="date">Date *</label>
+                    <div class="d-flex">
+                      <label for="date">Date *</label>
+                      <button
+                        style="margin-top: -8px;"
+                        class="btn btn-danger btn-icon-28 ml-auto"
+                        type="button"
+                        @click="RemoveRecord"
+                        v-if="contributions.length > 1 && i !== 0"
+                        v-tooltip.top="'Remove'"
+                      >
+                        <i class="pi pi-trash"></i>
+                      </button>
+                    </div>
                     <flat-pickr
                       v-model="contribution.date"
                       placeholder="Select Date"
@@ -78,17 +90,6 @@
                     />
                   </div>
                 </div>
-
-                <div class="col-md-6">
-                  <button
-                    :class="['btn btn-danger btn-sm mt-3']"
-                    type="button"
-                    @click="RemoveRecord"
-                    v-if="contributions.length > 1 && i !== 0"
-                  >
-                    Remove Record
-                  </button>
-                </div>
               </div>
             </div>
           </div>
@@ -106,13 +107,12 @@
 
 <script>
 import { addBtnLoading, removeBtnLoading } from "@services/helpers";
-import Member from "@services/api/people";
 import Contribution from "@services/api/contribution";
 import Swal from "sweetalert2";
 import Dropdown from "primevue/dropdown";
 import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
-import contributinMixin from "@/mixins/contributionMixin";
+import contributionMixin from "@/mixins/contributionMixin";
 
 export default {
   name: "Covenant",
@@ -120,13 +120,23 @@ export default {
     Dropdown,
     flatPickr,
   },
-  mixins: [contributinMixin],
+  mixins: [contributionMixin],
 
   methods: {
     async addCovenant(e) {
       const btn = this.$refs.submitBtn;
       const formMsg = this.$refs.formMsg;
       try {
+        const errors = [];
+        this.contributions.forEach((contribution) => {
+          if (!contribution.person) errors.push("error");
+          if (!contribution.date) errors.push("error");
+        });
+
+        if (errors.length) {
+          Swal.fire("", "All fields marked * are required", "info");
+          return;
+        }
         addBtnLoading(btn);
         const formData = {
           contributions: this.contributions,
