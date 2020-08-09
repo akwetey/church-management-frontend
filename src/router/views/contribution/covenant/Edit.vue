@@ -145,7 +145,6 @@ export default {
     },
     //set data
     setData(convenant) {
-      console.log(convenant);
       const { data } = convenant[1].data;
       this.members = convenant[0].data.data;
       this.amount = data.amount;

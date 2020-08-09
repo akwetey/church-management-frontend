@@ -58,13 +58,46 @@
                   }"
                   class="btn btn-primary btn-icon mr-2"
                   v-tooltip.top="'Edit'"
+                  v-if="
+                    slotProps.data.type.toLowerCase() === 'covenant partner'
+                  "
+                >
+                  <i class="pi pi-pencil"></i>
+                </router-link>
+                <router-link
+                  tag="button"
+                  :to="{
+                    name: 'busingedit',
+                    params: { mask: slotProps.data.mask },
+                  }"
+                  class="btn btn-primary btn-icon mr-2"
+                  v-tooltip.top="'Edit'"
+                  v-if="slotProps.data.type.toLowerCase() === 'busing'"
+                >
+                  <i class="pi pi-pencil"></i>
+                </router-link>
+                <router-link
+                  tag="button"
+                  :to="{
+                    name: 'tithedit',
+                    params: { mask: slotProps.data.mask },
+                  }"
+                  class="btn btn-primary btn-icon mr-2"
+                  v-tooltip.top="'Edit'"
+                  v-if="slotProps.data.type.toLowerCase() === 'tithe'"
                 >
                   <i class="pi pi-pencil"></i>
                 </router-link>
                 <button
                   class="btn btn-danger btn-icon mr-2"
                   v-tooltip.top="'Delete'"
-                  @click="deleteContribution(slotProps.data.mask, $event)"
+                  @click="
+                    deleteContribution(
+                      slotProps.data.mask,
+                      $event,
+                      slotProps.data.type
+                    )
+                  "
                 >
                   <i class="pi pi-trash no-pointer-events"></i>
                 </button>
@@ -111,7 +144,7 @@ export default {
     },
 
     /* delete contribution  */
-    async deleteContribution(mask, e) {
+    async deleteContribution(mask, e, type) {
       const btn = e.target;
       try {
         const result = await Swal.fire({
@@ -124,7 +157,16 @@ export default {
         });
         if (result.value) {
           addBtnLoading(btn);
-          const response = await Contribution.covedelete(mask);
+          let response;
+          switch (type.toLowerCase()) {
+            case "covenant partner":
+              response = await Contribution.covedelete(mask);
+              break;
+            case "busing":
+              response = await Contribution.busingdelete(mask);
+              break;
+          }
+
           removeBtnLoading(btn);
           const res = response.data;
           Swal.fire({

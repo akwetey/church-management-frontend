@@ -19,4 +19,13 @@ export default {
   busing(payload) {
     return Axios.post("/staff/contributions/busing", payload);
   },
+  busingshow(mask) {
+    return Axios.get("/staff/contributions/busing/" + mask);
+  },
+  busingupdate(payload, mask) {
+    return Axios.put("/staff/contributions/busing/" + mask, payload);
+  },
+  busingdelete(mask) {
+    return Axios.delete("/staff/contributions/busing/" + mask);
+  },
 };

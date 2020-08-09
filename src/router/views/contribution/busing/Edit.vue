@@ -113,7 +113,7 @@ export default {
           date: this.date,
           person: this.member,
         };
-        const response = await Contribution.coveupdate(formData, this.mask);
+        const response = await Contribution.busingupdate(formData, this.mask);
         const res = response.data;
         removeBtnLoading(btn);
         Swal.fire("Success", res.message, "success");
@@ -135,7 +135,6 @@ export default {
     },
     //set data
     setData(convenant) {
-      console.log(convenant);
       const { data } = convenant[1].data;
       this.members = convenant[0].data.data;
       this.amount = data.amount;
@@ -155,7 +154,7 @@ export default {
 
       const response = await Promise.all([
         Member.members(),
-        Contribution.coveshow(mask),
+        Contribution.busingshow(mask),
       ]);
       next((vm) => vm.setData(response));
     } catch (error) {
