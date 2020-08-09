@@ -225,18 +225,34 @@ export default {
       addBtnLoading(btn);
 
       const tithes = this.tithes.map((tithe) => {
+        const date = dayjs(tithe.date).format("YYYY-MM-DD");
+
         return {
           ...tithe,
-          date: dayjs(tithe.date).format("YYYY-MM-DD"),
+          frequency: tithe.frequency.toLowerCase(),
+          date,
         };
       });
 
-      Contribution.titheAdd({ tithes: this.tithes })
+      Contribution.titheAdd({ tithes })
         .then((response) => {
           const res = response.data;
           Swal.fire("Success", res.message, "success");
+          this.$router.push({ name: "Contributions" });
         })
-        .catch((err) => {})
+        .catch((err) => {
+          const { status, data } = err.response;
+          let errorBag = "";
+          if (status === 422) {
+            const errorData = Object.values(data.errors);
+            errorData.map((error) => {
+              errorBag += `<span class="d-block">${error}</span>`;
+            });
+          } else {
+            errorBag += data.message;
+          }
+          Swal.fire("", errorBag, "warning");
+        })
         .finally(() => {
           removeBtnLoading(btn);
         });
