@@ -35,6 +35,7 @@
                 No data found.
               </div>
             </template>
+            <Column field="id" header="S/N" sortable></Column>
             <Column field="name" header="Name" sortable>
               <template #body="slotProps">
                 <div class="d-flex align-items-center">
