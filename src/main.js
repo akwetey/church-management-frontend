@@ -3,7 +3,6 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import Tooltip from "primevue/tooltip";
-import Axios from "@services/api/axios";
 
 // VeeValidate
 import "./validation";

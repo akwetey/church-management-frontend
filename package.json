@@ -11,6 +11,7 @@
     "axios": "^0.19.2",
     "bootstrap.native": "^3.0.9",
     "core-js": "^3.6.5",
+    "dayjs": "^1.8.32",
     "flatpickr": "^4.6.3",
     "nprogress": "^0.2.0",
     "primeflex": "^2.0.0-rc.1",

@@ -28,4 +28,7 @@ export default {
   busingdelete(mask) {
     return Axios.delete("/staff/contributions/busing/" + mask);
   },
+  titheAdd(payload) {
+    return Axios.post("/staff/contributions/tithes", payload);
+  },
 };

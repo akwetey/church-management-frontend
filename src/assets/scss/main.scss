@@ -12,11 +12,28 @@
   font-size: 0.875rem;
 }
 
+.p-inputtext {
+  height: calc(1.5em + 0.75rem + 2px);
+}
+
 .form-control {
   .p-inputtext {
     font-size: inherit;
     font-family: inherit;
     padding: 3px;
+  }
+}
+
+select.form-control {
+  color: #495057;
+}
+
+.btn-icon-28 {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  i {
+    font-size: 14px;
   }
 }
 
