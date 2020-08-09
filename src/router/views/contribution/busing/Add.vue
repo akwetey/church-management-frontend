@@ -112,6 +112,7 @@ import Swal from "sweetalert2";
 import Dropdown from "primevue/dropdown";
 import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
+import contributinMixin from "@/mixins/contributionMixin";
 
 export default {
   name: "Covenant",
@@ -119,23 +120,8 @@ export default {
     Dropdown,
     flatPickr,
   },
-  data() {
-    return {
-      contributions: [
-        {
-          amount: 0,
-          comment: "",
-          date: "",
-          person: "",
-        },
-      ],
-      amount: "",
-      comment: "",
-      date: "",
-      member: [],
-      members: [],
-    };
-  },
+  mixins: [contributinMixin],
+
   methods: {
     async addBusing(e) {
       const btn = this.$refs.submitBtn;
@@ -165,33 +151,6 @@ export default {
         formMsg.innerHTML = `<div class="alert alert-danger">${errorBag}</div>`;
       }
     },
-
-    //fetch members
-    async getMembers() {
-      try {
-        const response = await Member.members();
-        const res = response.data;
-        this.members = res.data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
-    addMoreRecords() {
-      this.contributions.push({
-        amount: 0,
-        comment: "",
-        date: "",
-        person: "",
-      });
-    },
-    RemoveRecord() {
-      this.contributions.pop();
-    },
-  },
-
-  async created() {
-    await this.getMembers();
   },
 };
 </script>
