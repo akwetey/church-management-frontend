@@ -10,10 +10,6 @@ const contribution = {
           person: "",
         },
       ],
-      amount: "",
-      comment: "",
-      date: "",
-      member: [],
       members: [],
     };
   },

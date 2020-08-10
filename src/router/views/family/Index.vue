@@ -37,7 +37,6 @@
             </template>
             <Column field="name" header="Name" sortable></Column>
             <Column field="persons" header="Persons" sortable></Column>
-            <Column field="created_at" header="Date Added" sortable></Column>
             <Column field="actions" header="Actions">
               <template #body="slotProps">
                 <router-link

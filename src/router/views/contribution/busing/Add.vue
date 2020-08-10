@@ -59,7 +59,6 @@
                       placeholder="Select Date"
                       :name="`date-${i}`"
                       :id="`date-${i}`"
-                      required
                       class="form-control bg-white"
                     ></flat-pickr>
                   </div>
