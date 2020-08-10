@@ -6,14 +6,24 @@
           <p class="mb-3">NB: Fields marked * are required</p>
 
           <div class="ml-auto">
-            <button class="btn btn-primary" type="button" @click="addMoreRecords">Add More Records</button>
+            <button
+              class="btn btn-primary"
+              type="button"
+              @click="addMoreRecords"
+            >
+              Add More Records
+            </button>
           </div>
         </div>
         <div class="form-msg" ref="formMsg"></div>
 
         <form @submit.prevent="addCovenant">
           <div class="row mt-3">
-            <div class="col-md-6 mb-4" v-for="(contribution, i) in contributions" :key="i">
+            <div
+              class="col-md-6 mb-4"
+              v-for="(contribution, i) in contributions"
+              :key="i"
+            >
               <div class="row border mr-2 py-4 px-3">
                 <div class="col-md-6">
                   <div class="form-group">
@@ -31,13 +41,24 @@
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="date">Date *</label>
+                    <div class="d-flex">
+                      <label for="date">Date *</label>
+                      <button
+                        style="margin-top: -8px;"
+                        class="btn btn-danger btn-icon-28 ml-auto"
+                        type="button"
+                        @click="RemoveRecord"
+                        v-if="contributions.length > 1 && i !== 0"
+                        v-tooltip.top="'Remove'"
+                      >
+                        <i class="pi pi-trash"></i>
+                      </button>
+                    </div>
                     <flat-pickr
                       v-model="contribution.date"
                       placeholder="Select Date"
                       :name="`date-${i}`"
                       :id="`date-${i}`"
-                      required
                       class="form-control bg-white"
                     ></flat-pickr>
                   </div>
@@ -68,15 +89,6 @@
                     />
                   </div>
                 </div>
-
-                <div class="col-md-6">
-                  <button
-                    :class="['btn btn-danger btn-sm mt-3']"
-                    type="button"
-                    @click="RemoveRecord"
-                    v-if="contributions.length > 1 && i !== 0"
-                  >Remove Record</button>
-                </div>
               </div>
             </div>
           </div>
@@ -94,12 +106,12 @@
 
 <script>
 import { addBtnLoading, removeBtnLoading } from "@services/helpers";
-import Member from "@services/api/people";
 import Contribution from "@services/api/contribution";
 import Swal from "sweetalert2";
 import Dropdown from "primevue/dropdown";
 import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
+import contributionMixin from "@/mixins/contributionMixin";
 
 export default {
   name: "Covenant",
@@ -107,28 +119,23 @@ export default {
     Dropdown,
     flatPickr,
   },
-  data() {
-    return {
-      contributions: [
-        {
-          amount: 0,
-          comment: "",
-          date: "",
-          person: "",
-        },
-      ],
-      amount: "",
-      comment: "",
-      date: "",
-      member: [],
-      members: [],
-    };
-  },
+  mixins: [contributionMixin],
+
   methods: {
     async addCovenant(e) {
       const btn = this.$refs.submitBtn;
       const formMsg = this.$refs.formMsg;
       try {
+        const errors = [];
+        this.contributions.forEach((contribution) => {
+          if (!contribution.person) errors.push("error");
+          if (!contribution.date) errors.push("error");
+        });
+
+        if (errors.length) {
+          Swal.fire("", "All fields marked * are required", "info");
+          return;
+        }
         addBtnLoading(btn);
         const formData = {
           contributions: this.contributions,
@@ -153,33 +160,6 @@ export default {
         formMsg.innerHTML = `<div class="alert alert-danger">${errorBag}</div>`;
       }
     },
-
-    //fetch members
-    async getMembers() {
-      try {
-        const response = await Member.members();
-        const res = response.data;
-        this.members = res.data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
-    addMoreRecords() {
-      this.contributions.push({
-        amount: 0,
-        comment: "",
-        date: "",
-        person: "",
-      });
-    },
-    RemoveRecord() {
-      this.contributions.pop();
-    },
-  },
-
-  async created() {
-    await this.getMembers();
   },
 };
 </script>
