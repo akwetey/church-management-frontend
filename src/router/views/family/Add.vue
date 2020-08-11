@@ -91,60 +91,6 @@
               <button class="btn btn-success px-5" ref="submitBtn">Save</button>
             </div>
           </div>
-          <!-- <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="name">Name *</label>
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  class="form-control"
-                  required
-                  v-model.trim="name"
-                />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="leader">Add Member</label>
-                <MultiSelect
-                  v-model="member"
-                  :options="members"
-                  :filter="true"
-                  optionValue="id"
-                  optionLabel="name"
-                  placeholder="Select Member"
-                  class="form-control"
-                />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="relation">Relation</label>
-                <select
-                  name="relation"
-                  id="relation"
-                  class="form-control"
-                  v-model.trim="relation"
-                >
-                  <option value=""> Select</option>
-                  <option value="Head">Head</option>
-                  <option value="Spouse">Spouse</option>
-                  <option value="Children">Children</option>
-                  <option value="Sibling">Sibling</option>
-                  <option value="Grand Parent">Grand Parent</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="text-center">
-            <div class="form-group mt-5">
-              <button class="btn btn-success px-5" ref="submitBtn">
-                Save
-              </button>
-            </div>
-          </div> -->
         </form>
       </div>
     </div>

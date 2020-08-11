@@ -2,15 +2,27 @@
   <div>
     <div class="card min-height-500">
       <div class="card-body">
-        <p class="mb-3">NB: Fields marked * are required</p>
+        <div class="d-flex">
+          <p class="mb-3">NB: Fields marked * are required</p>
+
+          <div class="ml-auto">
+            <button
+              class="btn btn-primary"
+              type="button"
+              @click="addMoreRecords"
+            >
+              Add More Records
+            </button>
+          </div>
+        </div>
 
         <div class="form-msg" ref="formMsg"></div>
 
         <form @submit.prevent="updateFamily">
-          <div class="row">
+          <div class="row mt-4">
             <div class="col-md-6">
               <div class="form-group">
-                <label for="name">Name *</label>
+                <label for="amount">Name *</label>
                 <input
                   type="text"
                   name="name"
@@ -21,39 +33,59 @@
                 />
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="leader">Add Member</label>
-                <MultiSelect
-                  v-model="member"
-                  :options="members"
-                  :filter="true"
-                  optionValue="id"
-                  optionLabel="name"
-                  placeholder="Select Member"
-                  class="form-control"
-                />
+            <div
+              class="row border ml-2 py-4 px-3 col-md-6 mt-4"
+              v-for="(family, i) in families"
+              :key="i"
+            >
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="leader">Add Member</label>
+                  <Dropdown
+                    v-model="family.id"
+                    :options="members"
+                    :filter="true"
+                    optionValue="id"
+                    optionLabel="name"
+                    placeholder="Select Member"
+                    class="form-control"
+                  />
+                </div>
               </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="relation">Relation</label>
-                <select
-                  name="relation"
-                  id="relation"
-                  class="form-control"
-                  v-model.trim="relation"
-                >
-                  <option value=""> Select</option>
-                  <option value="Head">Head</option>
-                  <option value="Spouse">Spouse</option>
-                  <option value="Children">Children</option>
-                  <option value="Sibling">Sibling</option>
-                  <option value="Grand Parent">Grand Parent</option>
-                </select>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <!--  -->
+                  <div class="d-flex">
+                    <label for="relation">Relation</label>
+                    <button
+                      style="margin-top: -8px;"
+                      class="btn btn-danger btn-icon-28 ml-auto"
+                      type="button"
+                      @click="RemoveRecord"
+                      v-if="families.length > 1 && i !== 0"
+                      v-tooltip.top="'Remove'"
+                    >
+                      <i class="pi pi-trash"></i>
+                    </button>
+                  </div>
+                  <select
+                    name="relation"
+                    id="relation"
+                    class="form-control"
+                    v-model.trim="family.relation"
+                  >
+                    <option value=""> Select</option>
+                    <option value="Head">Head</option>
+                    <option value="Spouse">Spouse</option>
+                    <option value="Children">Children</option>
+                    <option value="Sibling">Sibling</option>
+                    <option value="Grand Parent">Grand Parent</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
+
           <div class="text-center">
             <div class="form-group mt-5">
               <button class="btn btn-success px-5" ref="submitBtn">
@@ -72,18 +104,22 @@ import { addBtnLoading, removeBtnLoading } from "@services/helpers";
 import Member from "@services/api/people";
 import Family from "@services/api/family";
 import Swal from "sweetalert2";
-import MultiSelect from "primevue/multiselect";
+import Dropdown from "primevue/dropdown";
 
 export default {
   name: "FamilyEdit",
   components: {
-    MultiSelect,
+    Dropdown,
   },
   data() {
     return {
       name: "",
-      relation: "",
-      member: [],
+      families: [
+        {
+          id: "",
+          relation: "",
+        },
+      ],
       members: [],
       mask: "",
     };
@@ -92,17 +128,12 @@ export default {
     async updateFamily(e) {
       const btn = this.$refs.submitBtn;
       const formMsg = this.$refs.formMsg;
-      const relationData = [];
-      this.member.forEach((el) => {
-        const obj = {};
-        (obj.id = el), (obj.relation = this.relation);
-        relationData.push(obj);
-      });
+
       try {
         addBtnLoading(btn);
         const formData = {
           name: this.name,
-          people: relationData,
+          people: this.families,
         };
         const response = await Family.update(formData, this.mask);
         const res = response.data;
@@ -128,12 +159,19 @@ export default {
     //set data
     setData(family) {
       const { data } = family[1].data;
-      let relation = !data.people.length ? "" : data.people[0].relation;
       this.members = family[0].data.data;
       this.name = data.name;
-      this.member = data.people.map(({ id }) => id);
-      this.relation = relation;
+      this.families = data.people;
       this.mask = data.mask;
+    },
+    addMoreRecords() {
+      this.families.push({
+        id: "",
+        relation: "",
+      });
+    },
+    RemoveRecord() {
+      this.families.pop();
     },
   },
 
