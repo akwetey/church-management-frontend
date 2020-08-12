@@ -191,6 +191,11 @@ export default [
             name: "TitheEdit",
             component: () => import("@views/contribution/tithe/Edit.vue"),
           },
+          {
+            path: "group/add",
+            name: "addgroup",
+            component: () => import("@views/contribution/groups/Add.vue"),
+          },
         ],
       },
     ],

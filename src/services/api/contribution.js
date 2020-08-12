@@ -37,4 +37,7 @@ export default {
   titheUpdate(payload, mask) {
     return Axios.put("/staff/contributions/tithes/" + mask, payload);
   },
+  groupAdd(payload) {
+    return Axios.post("/staff/contributions/groups", payload);
+  },
 };
