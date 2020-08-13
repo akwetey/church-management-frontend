@@ -28,6 +28,7 @@
                   type="number"
                   name="amount"
                   id="amount"
+                  min="0"
                   class="form-control"
                   required
                   v-model.trim="amount"
@@ -70,7 +71,7 @@ export default {
   data() {
     return {
       title: "",
-      amount: "",
+      amount: 0,
       purpose: "",
     };
   },

@@ -61,4 +61,16 @@ export default {
   welfaredelete(mask) {
     return Axios.delete("/staff/contributions/welfare/" + mask);
   },
+  pledgeAdd(payload) {
+    return Axios.post("/staff/contributions/pledge", payload);
+  },
+  pledgeShow(mask) {
+    return Axios.get("/staff/contributions/pledge/" + mask);
+  },
+  pledgeUpdate(payload, mask) {
+    return Axios.put("/staff/contributions/pledge/" + mask, payload);
+  },
+  pledgedelete(mask) {
+    return Axios.delete("/staff/contributions/pledge/" + mask);
+  },
 };

@@ -31,7 +31,10 @@
               <router-link :to="{ name: 'addwelfare' }" class="dropdown-item"
                 >Welfare</router-link
               >
-              <a class="dropdown-item" href="#">Pledge</a>
+              <router-link :to="{ name: 'pledgeAdd' }" class="dropdown-item"
+                >Pledge</router-link
+              >
+
               <a class="dropdown-item" href="#">General</a>
             </div>
           </div>
@@ -123,6 +126,18 @@
                 >
                   <i class="pi pi-pencil"></i>
                 </router-link>
+                <router-link
+                  tag="button"
+                  :to="{
+                    name: 'pledgeEdit',
+                    params: { mask: slotProps.data.mask },
+                  }"
+                  class="btn btn-primary btn-icon mr-2"
+                  v-tooltip.top="'Edit'"
+                  v-if="slotProps.data.type.toLowerCase() === 'pledge'"
+                >
+                  <i class="pi pi-pencil"></i>
+                </router-link>
                 <button
                   class="btn btn-danger btn-icon mr-2"
                   v-tooltip.top="'Delete'"
@@ -205,6 +220,9 @@ export default {
               break;
             case "welfare":
               response = await Contribution.welfaredelete(mask);
+              break;
+            case "pledge":
+              response = await Contribution.pledgedelete(mask);
               break;
           }
 

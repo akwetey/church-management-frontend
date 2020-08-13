@@ -211,6 +211,11 @@ export default [
             name: "welfareedit",
             component: () => import("@views/contribution/welfare/Edit.vue"),
           },
+          {
+            path: "pledge/add",
+            name: "pledgeAdd",
+            component: () => import("@views/contribution/pledge/Add.vue"),
+          },
         ],
       },
     ],
