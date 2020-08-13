@@ -49,4 +49,7 @@ export default {
   groupdelete(mask) {
     return Axios.delete("/staff/contributions/groups/" + mask);
   },
+  welfareAdd(payload) {
+    return Axios.post("/staff/contributions/welfare", payload);
+  },
 };

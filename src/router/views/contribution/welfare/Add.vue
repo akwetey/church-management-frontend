@@ -115,6 +115,7 @@ import Dropdown from "primevue/dropdown";
 import Calendar from "primevue/calendar";
 import "flatpickr/dist/flatpickr.css";
 import contributionMixin from "@/mixins/contributionMixin";
+import dayjs from "dayjs";
 
 export default {
   name: "Welfare",
@@ -140,10 +141,16 @@ export default {
           return;
         }
         addBtnLoading(btn);
-        const formData = {
-          contributions: this.contributions,
-        };
-        const response = await Contribution.busing(formData);
+        const contributions = this.contributions.map((contribute) => {
+          const date = dayjs(contribute.date).format("YYYY-MM-DD");
+
+          return {
+            ...contribute,
+            date,
+          };
+        });
+
+        const response = await Contribution.welfareAdd({ contributions });
         const res = response.data;
         removeBtnLoading(btn);
         Swal.fire("Success", res.message, "success");
