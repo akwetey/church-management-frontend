@@ -41,6 +41,9 @@ export default {
     return Axios.post("/staff/contributions/groups", payload);
   },
   groupShow(mask) {
-    return Axios.post("/staff/contributions/groups", mask);
+    return Axios.post("/staff/contributions/groups/", mask);
+  },
+  groupUpdate(payload, mask) {
+    return Axios.put("/staff/contributions/groups/" + mask, payload);
   },
 };

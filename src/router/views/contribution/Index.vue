@@ -100,7 +100,7 @@
                 <router-link
                   tag="button"
                   :to="{
-                    name: 'TitheEdit',
+                    name: 'groupedit',
                     params: { mask: slotProps.data.mask },
                   }"
                   class="btn btn-primary btn-icon mr-2"
