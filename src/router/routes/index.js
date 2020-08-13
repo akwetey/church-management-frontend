@@ -216,6 +216,11 @@ export default [
             name: "pledgeAdd",
             component: () => import("@views/contribution/pledge/Add.vue"),
           },
+          {
+            path: "pledge/:mask",
+            name: "pledgeEdit",
+            component: () => import("@views/contribution/pledge/Edit.vue"),
+          },
         ],
       },
     ],
