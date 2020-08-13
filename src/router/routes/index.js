@@ -198,8 +198,13 @@ export default [
           },
           {
             path: "group/:mask",
-            name: "groupedit",
+            name: "groupEdit",
             component: () => import("@views/contribution/groups/Edit.vue"),
+          },
+          {
+            path: "welfare/add",
+            name: "addwelfare",
+            component: () => import("@views/contribution/welfare/Add.vue"),
           },
         ],
       },

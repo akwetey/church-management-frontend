@@ -28,7 +28,9 @@
               <router-link :to="{ name: 'addgroup' }" class="dropdown-item"
                 >Group</router-link
               >
-              <a class="dropdown-item" href="#">Welfare</a>
+              <router-link :to="{ name: 'addwelfare' }" class="dropdown-item"
+                >Welfare</router-link
+              >
               <a class="dropdown-item" href="#">Pledge</a>
               <a class="dropdown-item" href="#">General</a>
             </div>
@@ -100,7 +102,7 @@
                 <router-link
                   tag="button"
                   :to="{
-                    name: 'groupedit',
+                    name: 'groupEdit',
                     params: { mask: slotProps.data.mask },
                   }"
                   class="btn btn-primary btn-icon mr-2"
@@ -185,6 +187,9 @@ export default {
               break;
             case "busing":
               response = await Contribution.busingdelete(mask);
+              break;
+            case "group":
+              response = await Contribution.groupdelete(mask);
               break;
           }
 
