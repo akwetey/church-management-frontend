@@ -40,4 +40,7 @@ export default {
   groupAdd(payload) {
     return Axios.post("/staff/contributions/groups", payload);
   },
+  groupShow(mask) {
+    return Axios.post("/staff/contributions/groups", mask);
+  },
 };

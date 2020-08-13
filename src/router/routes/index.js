@@ -196,6 +196,11 @@ export default [
             name: "addgroup",
             component: () => import("@views/contribution/groups/Add.vue"),
           },
+          {
+            path: "group/:mask",
+            name: "addgroup",
+            component: () => import("@views/contribution/groups/Edit.vue"),
+          },
         ],
       },
     ],

@@ -47,16 +47,6 @@
                   placeholder="Select Person"
                   class="form-control"
                 />
-                <!-- <MultiSelect
-                  v-model="member"
-                  :options="members"
-                  :filter="true"
-                  optionValue="id"
-                  optionLabel="name"
-                  placeholder="Select Person"
-                  class="form-control"
-                  required
-                /> -->
               </div>
             </div>
             <div class="col-md-6">

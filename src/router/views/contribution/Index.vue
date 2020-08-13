@@ -97,6 +97,18 @@
                 >
                   <i class="pi pi-pencil"></i>
                 </router-link>
+                <router-link
+                  tag="button"
+                  :to="{
+                    name: 'TitheEdit',
+                    params: { mask: slotProps.data.mask },
+                  }"
+                  class="btn btn-primary btn-icon mr-2"
+                  v-tooltip.top="'Edit'"
+                  v-if="slotProps.data.type.toLowerCase() === 'group'"
+                >
+                  <i class="pi pi-pencil"></i>
+                </router-link>
                 <button
                   class="btn btn-danger btn-icon mr-2"
                   v-tooltip.top="'Delete'"
