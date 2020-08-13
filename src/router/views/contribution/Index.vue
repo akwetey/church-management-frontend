@@ -111,6 +111,18 @@
                 >
                   <i class="pi pi-pencil"></i>
                 </router-link>
+                <router-link
+                  tag="button"
+                  :to="{
+                    name: 'welfareedit',
+                    params: { mask: slotProps.data.mask },
+                  }"
+                  class="btn btn-primary btn-icon mr-2"
+                  v-tooltip.top="'Edit'"
+                  v-if="slotProps.data.type.toLowerCase() === 'welfare'"
+                >
+                  <i class="pi pi-pencil"></i>
+                </router-link>
                 <button
                   class="btn btn-danger btn-icon mr-2"
                   v-tooltip.top="'Delete'"
@@ -190,6 +202,9 @@ export default {
               break;
             case "group":
               response = await Contribution.groupdelete(mask);
+              break;
+            case "welfare":
+              response = await Contribution.welfaredelete(mask);
               break;
           }
 

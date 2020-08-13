@@ -206,6 +206,11 @@ export default [
             name: "addwelfare",
             component: () => import("@views/contribution/welfare/Add.vue"),
           },
+          {
+            path: "welfare/:mask",
+            name: "welfareedit",
+            component: () => import("@views/contribution/welfare/Edit.vue"),
+          },
         ],
       },
     ],

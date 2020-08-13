@@ -52,4 +52,13 @@ export default {
   welfareAdd(payload) {
     return Axios.post("/staff/contributions/welfare", payload);
   },
+  welfareShow(mask) {
+    return Axios.get("/staff/contributions/welfare/" + mask);
+  },
+  welfareUpdate(payload, mask) {
+    return Axios.put("/staff/contributions/welfare/" + mask, payload);
+  },
+  welfaredelete(mask) {
+    return Axios.delete("/staff/contributions/welfare/" + mask);
+  },
 };

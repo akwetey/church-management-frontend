@@ -113,7 +113,6 @@ import Contribution from "@services/api/contribution";
 import Swal from "sweetalert2";
 import Dropdown from "primevue/dropdown";
 import Calendar from "primevue/calendar";
-import "flatpickr/dist/flatpickr.css";
 import contributionMixin from "@/mixins/contributionMixin";
 import dayjs from "dayjs";
 
