@@ -48,6 +48,8 @@
             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
             :rowsPerPageOptions="[10, 25, 50]"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            :scrollable="true"
+            scrollHeight="70vh"
           >
             <template #empty>
               <div class="text-center">No data found.</div>

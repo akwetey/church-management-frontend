@@ -23,12 +23,12 @@
         </li>
         <li class="nav-item nav-category">Navigation</li>
 
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <router-link :to="{ name: 'Books' }" class="nav-link">
             <i class="link-icon pi pi-file-pdf"></i>
             <span class="link-title">Books</span>
           </router-link>
-        </li>
+        </li> -->
         <li class="nav-item">
           <router-link :to="{ name: 'people' }" class="nav-link">
             <i class="link-icon pi pi-user"></i>
@@ -76,10 +76,14 @@
           <div class="collapse" id="contributions">
             <ul class="nav sub-menu">
               <li class="nav-item">
-                <router-link :to="{ name: 'pledge' }" class="nav-link">Pledge</router-link>
+                <router-link :to="{ name: 'pledge' }" class="nav-link"
+                  >Pledge</router-link
+                >
               </li>
               <li class="nav-item">
-                <router-link :to="{ name: 'Contributions' }" class="nav-link">All Contributions</router-link>
+                <router-link :to="{ name: 'Contributions' }" class="nav-link"
+                  >All Contributions</router-link
+                >
               </li>
             </ul>
           </div>
@@ -101,10 +105,14 @@
           <div class="collapse" id="users-roles">
             <ul class="nav sub-menu">
               <li class="nav-item">
-                <router-link :to="{ name: 'user' }" class="nav-link">Users</router-link>
+                <router-link :to="{ name: 'user' }" class="nav-link"
+                  >Users</router-link
+                >
               </li>
               <li class="nav-item">
-                <router-link :to="{ name: 'role' }" class="nav-link">Roles</router-link>
+                <router-link :to="{ name: 'role' }" class="nav-link"
+                  >Roles</router-link
+                >
               </li>
             </ul>
           </div>
