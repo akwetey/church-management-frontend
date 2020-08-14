@@ -10,7 +10,11 @@
               <form @submit.prevent="createFollowUp">
                 <div class="row">
                   <div class="col-md-6">
-                    <ValidationProvider name="People field" rules="required" v-slot="{ errors }">
+                    <ValidationProvider
+                      name="People field"
+                      rules="required"
+                      v-slot="{ errors }"
+                    >
                       <div class="form-group">
                         <label for="people" class="d-block">
                           People
@@ -31,7 +35,11 @@
                   </div>
 
                   <div class="col-md-6">
-                    <ValidationProvider name="Assigned to" rules="required" v-slot="{ errors }">
+                    <ValidationProvider
+                      name="Assigned to"
+                      rules="required"
+                      v-slot="{ errors }"
+                    >
                       <div class="form-group">
                         <label for="assigned_to" class="d-block">
                           Assigned To
@@ -52,7 +60,11 @@
                   </div>
 
                   <div class="col-md-6">
-                    <ValidationProvider name="Follow-up date" rules="required" v-slot="{ errors }">
+                    <ValidationProvider
+                      name="Follow-up date"
+                      rules="required"
+                      v-slot="{ errors }"
+                    >
                       <div class="form-group">
                         <label for="date" class="d-block">
                           Follow-Up Date
@@ -96,7 +108,9 @@
                           id="done"
                           v-model="form.completed"
                         />
-                        <label class="custom-control-label" for="done">Done</label>
+                        <label class="custom-control-label" for="done"
+                          >Done</label
+                        >
                       </div>
 
                       <div class v-if="form.completed">
@@ -119,9 +133,7 @@
                                 :config="dateConfig"
                               />
                               <span class="text-danger d-block">
-                                {{
-                                errors[0]
-                                }}
+                                {{ errors[0] }}
                               </span>
                             </div>
                           </ValidationProvider>
@@ -146,7 +158,13 @@
 
                   <div class="col-md-12">
                     <div class="text-center">
-                      <button class="btn btn-success px-5" type="submit" ref="submitBtn">Save</button>
+                      <button
+                        class="btn btn-success px-5"
+                        type="submit"
+                        ref="submitBtn"
+                      >
+                        Save
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -239,7 +257,12 @@ export default {
           formMsg.innerHTML = "";
           addBtnLoading(btn);
 
-          FollowUp.store(this.form)
+          const formData = {
+            ...this.form,
+            completed: this.form.completed ? 1 : 0,
+          };
+
+          FollowUp.store(formData)
             .then(({ data: res }) => {
               Swal.fire("Success", res.message, "success");
               this.$router.push({ name: "FollowUp" });

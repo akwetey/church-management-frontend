@@ -4,7 +4,10 @@
       <div class="card-body">
         <div class="row">
           <div class="col-md-10 offset-md-1">
-            <TabView @tab-change="tabChanged" class="customer-profile-tab position-relative">
+            <TabView
+              @tab-change="tabChanged"
+              class="customer-profile-tab position-relative"
+            >
               <TabPanel data-section="details" :active.sync="tab.active[0]">
                 <template slot="header">
                   <i class="pi pi-user pr-2"></i>
@@ -19,9 +22,14 @@
                   <i class="pi pi-calendar pr-2"></i>
                   <span>Attendance</span>
                 </template>
+
+                <Attendance v-if="tab.section.includes('attendance')" />
               </TabPanel>
 
-              <TabPanel data-section="contributions" :active.sync="tab.active[2]">
+              <TabPanel
+                data-section="contributions"
+                :active.sync="tab.active[2]"
+              >
                 <template slot="header">
                   <i class="pi pi-money-bill pr-2"></i>
                   <span>Contributions</span>
@@ -33,6 +41,8 @@
                   <i class="pi pi-mobile pr-2"></i>
                   <span>Follow Up</span>
                 </template>
+
+                <FollowUp v-if="tab.section.includes('follow-up')" />
               </TabPanel>
             </TabView>
           </div>
@@ -43,14 +53,16 @@
 </template>
 
 <script>
+import People from "@services/api/people";
 import TabView from "primevue/tabview";
 import TabPanel from "primevue/tabpanel";
 import Personal from "./Personal";
-import People from "@services/api/people";
+import Attendance from "./Attendance";
+import FollowUp from "./FollowUp";
 
 export default {
   name: "Detail",
-  components: { TabView, TabPanel, Personal },
+  components: { TabView, TabPanel, Personal, Attendance, FollowUp },
   data() {
     return {
       person: {},
@@ -58,17 +70,18 @@ export default {
         active: [true, false, false, false],
         section: "",
       },
+      path: "",
     };
   },
   methods: {
     setData(payload) {
-      console.log(payload.data);
       this.person = payload.data;
     },
 
     tabChanged({ originalEvent, tab }) {
       const section = tab.$el.dataset.section;
       this.tab.section = section;
+      this.addParamsToLocation({ section }, this.path);
     },
 
     setTabSection() {
@@ -96,6 +109,21 @@ export default {
           this.tab.section = "details";
           break;
       }
+    },
+    addParamsToLocation(params, path) {
+      history.pushState(
+        {},
+        null,
+        path +
+          "?" +
+          Object.keys(params)
+            .map((key) => {
+              return (
+                encodeURIComponent(key) + "=" + encodeURIComponent(params[key])
+              );
+            })
+            .join("&")
+      );
     },
   },
   created() {

@@ -232,12 +232,18 @@ export default {
       const { data: peopleRes } = response[1].data;
       const { data: usersRes } = response[2].data;
 
+      console.table(followUp);
+
       this.mask = followUp.mask;
       this.form.people = followUp.person_id;
       this.form.assigned_to = followUp.user_id;
       this.form.date = followUp.date;
       this.form.comment = followUp.comment;
       this.form.type = followUp.type;
+      this.form.completed = followUp.completed ? true : false;
+      this.form.completion_date = followUp.completion_date
+        ? followUp.completion_date
+        : null;
       //this.form.type = followUp.type;
       // this.form.people = followUp.id;
       // this.form.people = followUp.id;
