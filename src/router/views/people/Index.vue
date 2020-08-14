@@ -3,9 +3,7 @@
     <div class="card">
       <div class="card-body">
         <div class="mb-5">
-          <router-link :to="{ name: 'addperson' }" class="btn btn-primary px-5"
-            >Add Person</router-link
-          >
+          <router-link :to="{ name: 'addperson' }" class="btn btn-primary px-5">Add Person</router-link>
         </div>
 
         <div>
@@ -23,17 +21,12 @@
               <div class="table-header d-flex justify-content-end">
                 <span class="p-input-icon-left">
                   <i class="pi pi-search" />
-                  <InputText
-                    v-model="filters['global']"
-                    placeholder="Search For"
-                  />
+                  <InputText v-model="filters['global']" placeholder="Search For" />
                 </span>
               </div>
             </template>
             <template #empty>
-              <div class="text-center">
-                No data found.
-              </div>
+              <div class="text-center">No data found.</div>
             </template>
             <Column field="id" header="S/N" sortable></Column>
             <Column field="name" header="Name" sortable>
@@ -44,25 +37,33 @@
                       :src="
                         slotProps.data.avatar ? slotProps.data.avatar : avatar
                       "
-                      class="img-fluid rounded avatar-image "
+                      class="img-fluid rounded avatar-image"
                     />
                   </div>
                   <div class="ml-3">
-                    <span> {{ slotProps.data.name }}</span>
+                    <span>{{ slotProps.data.name }}</span>
                   </div>
                 </div>
               </template>
             </Column>
             <Column field="email" header="Email" sortable></Column>
-            <Column
-              field="primary_telephone"
-              header="Mobile Phone"
-              sortable
-            ></Column>
-            <Column field="created_at" header="Date Added" sortable> </Column>
+            <Column field="primary_telephone" header="Mobile Phone" sortable></Column>
+            <Column field="created_at" header="Date Added" sortable></Column>
             <Column field="actions" header="Actions">
               <template #body="slotProps">
                 <router-link
+                  tag="button"
+                  :to="{
+                    name: 'PersonDetail',
+                    params: { mask: slotProps.data.mask },
+                  }"
+                  class="btn btn-primary btn-icon mr-2"
+                  v-tooltip.top="'View Detail'"
+                >
+                  <i class="pi pi-eye"></i>
+                </router-link>
+
+                <!-- <router-link
                   tag="button"
                   :to="{
                     name: 'personedit',
@@ -72,15 +73,17 @@
                   v-tooltip.top="'Edit'"
                 >
                   <i class="pi pi-pencil"></i>
-                </router-link>
+                </router-link>-->
+
                 <button
                   class="btn btn-danger btn-icon mr-2"
                   v-tooltip.top="'Delete'"
                   @click="deletePerson(slotProps.data.mask, $event)"
                 >
                   <i class="pi pi-trash no-pointer-events"></i>
-                </button> </template
-            ></Column>
+                </button>
+              </template>
+            </Column>
           </DataTable>
         </div>
       </div>

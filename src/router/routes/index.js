@@ -103,6 +103,11 @@ export default [
         component: () => import("@views/people/Edit.vue"),
       },
       {
+        path: "person/detail/:mask",
+        name: "PersonDetail",
+        component: () => import("@views/people/detail/Index.vue"),
+      },
+      {
         path: "family",
         name: "family",
         component: () => import("@views/family/Index.vue"),

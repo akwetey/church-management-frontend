@@ -19,18 +19,11 @@
                       @change="changeImage"
                     />
                     <label for="imageUpload">
-                      <i
-                        class="pi pi-pencil"
-                        style="position:absolute;top:5px; left:10px;"
-                      ></i>
+                      <i class="pi pi-pencil" style="position:absolute;top:5px; left:10px;"></i>
                     </label>
                   </div>
                   <div class="avatar-preview">
-                    <div
-                      id="imagePreview"
-                      ref="imagePreview"
-                      :style="avatar"
-                    ></div>
+                    <div id="imagePreview" ref="imagePreview" :style="avatar"></div>
                   </div>
                 </div>
               </div>
@@ -64,7 +57,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="middle_name">Middle Name </label>
+                <label for="middle_name">Middle Name</label>
                 <input
                   type="text"
                   name="middle_name"
@@ -76,7 +69,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="date_of_birth">Date of Birth </label>
+                <label for="date_of_birth">Date of Birth</label>
                 <flat-pickr
                   v-model="date_of_birth"
                   :config="config"
@@ -89,7 +82,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="email">Email </label>
+                <label for="email">Email</label>
                 <input
                   type="email"
                   name="email"
@@ -101,16 +94,9 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="gender">
-                  Gender
-                </label>
-                <select
-                  name="gender"
-                  id="gender"
-                  v-model.trim="gender"
-                  class="form-control"
-                >
-                  <option value="">Select</option>
+                <label for="gender">Gender</label>
+                <select name="gender" id="gender" v-model.trim="gender" class="form-control">
+                  <option value>Select</option>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                 </select>
@@ -118,16 +104,9 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="grade">
-                  Grade
-                </label>
-                <select
-                  name="grade"
-                  id="grade"
-                  v-model.trim="grade"
-                  class="form-control"
-                >
-                  <option value="">Select</option>
+                <label for="grade">Grade</label>
+                <select name="grade" id="grade" v-model.trim="grade" class="form-control">
+                  <option value>Select</option>
                   <option value="Primary">Primary</option>
                   <option value="Junior High">Junior High</option>
                   <option value="Senior High">Senior High</option>
@@ -138,16 +117,14 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="marital_status">
-                  Marital Status
-                </label>
+                <label for="marital_status">Marital Status</label>
                 <select
                   name="marital_status"
                   id="marital_status"
                   v-model.trim="marital_status"
                   class="form-control"
                 >
-                  <option value="">Select</option>
+                  <option value>Select</option>
                   <option value="Single">Single</option>
                   <option value="Married">Married</option>
                   <option value="Widowed">Widowed</option>
@@ -158,16 +135,14 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="member_status">
-                  Member Status
-                </label>
+                <label for="member_status">Member Status</label>
                 <select
                   name="member_status"
                   id="member_status"
                   v-model.trim="member_status"
                   class="form-control"
                 >
-                  <option value="">Select</option>
+                  <option value>Select</option>
                   <option value="1">Member</option>
                   <option value="2">Guest</option>
                 </select>
@@ -175,7 +150,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="baptism_date">Baptismal Date </label>
+                <label for="baptism_date">Baptismal Date</label>
                 <flat-pickr
                   v-model="baptism_date"
                   placeholder="Select Date"
@@ -188,7 +163,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="join_date">Join Date </label>
+                <label for="join_date">Join Date</label>
                 <flat-pickr
                   v-model="join_date"
                   :config="config"
@@ -201,7 +176,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="employer">Employer </label>
+                <label for="employer">Employer</label>
                 <input
                   type="text"
                   name="employer "
@@ -213,7 +188,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="occupation">Occupation </label>
+                <label for="occupation">Occupation</label>
                 <input
                   type="text"
                   name="occupation "
@@ -225,7 +200,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="primary_telephone">Primary Telephone </label>
+                <label for="primary_telephone">Primary Telephone</label>
                 <input
                   type="text"
                   name="primary_telephone"
@@ -237,7 +212,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="secondary_telephone">Secondary Telephone </label>
+                <label for="secondary_telephone">Secondary Telephone</label>
                 <input
                   type="text"
                   name="secondary_telephone"
@@ -249,7 +224,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="postal_address">Postal Address </label>
+                <label for="postal_address">Postal Address</label>
                 <input
                   type="text"
                   name="postal_address"
@@ -261,7 +236,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="physical_address">Physical Address </label>
+                <label for="physical_address">Physical Address</label>
                 <input
                   type="text"
                   name="physical_address"
@@ -273,7 +248,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="tithe_number">Tithe Number </label>
+                <label for="tithe_number">Tithe Number</label>
                 <input
                   type="text"
                   name="tithe_number"
@@ -301,9 +276,7 @@
 
           <div class="text-center">
             <div class="form-group mt-5">
-              <button class="btn btn-success px-5" ref="submitBtn">
-                Save
-              </button>
+              <button class="btn btn-success px-5" ref="submitBtn">Save</button>
             </div>
           </div>
         </form>
@@ -385,7 +358,10 @@ export default {
         formData.append("postal_address", this.postal_address);
         formData.append("physical_address", this.physical_address);
         formData.append("tithe_number", this.tithe_number);
-        formData.append("groups", this.group);
+
+        this.group.forEach((element) => {
+          formData.append("groups[]", element);
+        });
 
         const response = await People.store(formData);
         const res = response.data;

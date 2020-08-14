@@ -19,4 +19,9 @@ export default {
   delete(mask) {
     return axios.delete("/staff/people/" + mask);
   },
+  person: {
+    details(mask) {
+      return axios.get("/staff/people/" + mask + "/details");
+    },
+  },
 };
