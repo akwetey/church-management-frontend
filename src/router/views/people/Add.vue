@@ -21,11 +21,18 @@
                           @change="changeImage"
                         />
                         <label for="imageUpload">
-                          <i class="pi pi-pencil" style="position:absolute;top:5px; left:10px;"></i>
+                          <i
+                            class="pi pi-pencil"
+                            style="position:absolute;top:5px; left:10px;"
+                          ></i>
                         </label>
                       </div>
                       <div class="avatar-preview">
-                        <div id="imagePreview" ref="imagePreview" :style="avatar"></div>
+                        <div
+                          id="imagePreview"
+                          ref="imagePreview"
+                          :style="avatar"
+                        ></div>
                       </div>
                     </div>
                   </div>
@@ -97,7 +104,12 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="gender">Gender</label>
-                    <select name="gender" id="gender" v-model.trim="gender" class="custom-select">
+                    <select
+                      name="gender"
+                      id="gender"
+                      v-model.trim="gender"
+                      class="custom-select"
+                    >
                       <option value>Select</option>
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
@@ -107,7 +119,12 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="grade">Grade</label>
-                    <select name="grade" id="grade" v-model.trim="grade" class="custom-select">
+                    <select
+                      name="grade"
+                      id="grade"
+                      v-model.trim="grade"
+                      class="custom-select"
+                    >
                       <option value>Select</option>
                       <option value="Primary">Primary</option>
                       <option value="Junior High">Junior High</option>
@@ -279,22 +296,35 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="family">Family</label>
-                    <select name="family" id="family" class="custom-select" v-model="family">
+                    <select
+                      name="family"
+                      id="family"
+                      class="custom-select"
+                      v-model="family"
+                    >
                       <option value>Choose Family</option>
                       <option disabled>---------------</option>
-                      <option value="-1">Create a new family using surname</option>
+                      <option value="-1"
+                        >Create a new family using surname</option
+                      >
                       <option
                         :value="family.id"
                         v-for="(family, i) in families"
                         :key="i"
-                      >{{ family.name }}---{{ family.id }}</option>
+                        >{{ family.name }}---{{ family.id }}</option
+                      >
                     </select>
                   </div>
                 </div>
                 <div class="col-md-4" v-if="family">
                   <div class="form-group">
                     <label for="relation">Family Relation</label>
-                    <select name="relation" id="relation" class="custom-select" v-model="relation">
+                    <select
+                      name="relation"
+                      id="relation"
+                      class="custom-select"
+                      v-model="relation"
+                    >
                       <option value>Choose relation</option>
                       <option disabled>---------------</option>
                       <option value="Head">Head</option>
@@ -319,7 +349,9 @@
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label for="next_of_kin_telephone">Next of Kin Telephone</label>
+                    <label for="next_of_kin_telephone"
+                      >Next of Kin Telephone</label
+                    >
                     <input
                       type="text"
                       name="next_of_kin_telephone"
@@ -345,7 +377,9 @@
 
               <div class="text-center">
                 <div class="form-group mt-5">
-                  <button class="btn btn-success px-5" ref="submitBtn">Save</button>
+                  <button class="btn btn-success px-5" ref="submitBtn">
+                    Save
+                  </button>
                 </div>
               </div>
             </form>
@@ -365,7 +399,6 @@ import Group from "@services/api/groups";
 import Family from "@services/api/family";
 import Swal from "sweetalert2";
 import MultiSelect from "primevue/multiselect";
-
 export default {
   name: "PersonAdd",
   components: {
@@ -441,11 +474,9 @@ export default {
         formData.append("next_of_kin_telephone", this.next_of_kin_telephone);
         formData.append("family", this.family);
         formData.append("relation", this.relation);
-
         this.group.forEach((element) => {
           formData.append("groups[]", element);
         });
-
         const response = await People.store(formData);
         const res = response.data;
         removeBtnLoading(btn);
@@ -466,7 +497,6 @@ export default {
         formMsg.innerHTML = `<div class="alert alert-danger">${errorBag}</div>`;
       }
     },
-
     //fetch groups
     async getGroups() {
       try {
@@ -477,7 +507,6 @@ export default {
         console.log(error);
       }
     },
-
     async getFamilies() {
       try {
         const response = await Family.all();
@@ -487,7 +516,6 @@ export default {
         console.log(error);
       }
     },
-
     addTag(newTag) {
       const tag = {
         name: newTag,
@@ -506,7 +534,6 @@ export default {
       const imageUrl = URL.createObjectURL(file);
       const imagePreview = this.$refs.imagePreview;
       imagePreview.setAttribute("style", `background-image:url(${imageUrl})`);
-
       this.image = file;
     },
   },

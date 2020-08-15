@@ -53,7 +53,7 @@
             </div>
             <div class="col-md-6">
               <div class="form-group">
-                <label for="comment">Comment</label>
+                <label for="comment">Comment *</label>
                 <textarea
                   name="comment"
                   id="comment"

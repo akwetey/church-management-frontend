@@ -21,11 +21,18 @@
                           @change="changeImage"
                         />
                         <label for="imageUpload">
-                          <i class="pi pi-pencil" style="position:absolute;top:5px; left:10px;"></i>
+                          <i
+                            class="pi pi-pencil"
+                            style="position:absolute;top:5px; left:10px;"
+                          ></i>
                         </label>
                       </div>
                       <div class="avatar-preview">
-                        <div id="imagePreview" ref="imagePreview" :style="avatar"></div>
+                        <div
+                          id="imagePreview"
+                          ref="imagePreview"
+                          :style="avatar"
+                        ></div>
                       </div>
                     </div>
                   </div>
@@ -97,7 +104,12 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="gender">Gender</label>
-                    <select name="gender" id="gender" v-model.trim="gender" class="custom-select">
+                    <select
+                      name="gender"
+                      id="gender"
+                      v-model.trim="gender"
+                      class="custom-select"
+                    >
                       <option value>Select</option>
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
@@ -107,7 +119,12 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="grade">Grade</label>
-                    <select name="grade" id="grade" v-model.trim="grade" class="custom-select">
+                    <select
+                      name="grade"
+                      id="grade"
+                      v-model.trim="grade"
+                      class="custom-select"
+                    >
                       <option value>Select</option>
                       <option value="Primary">Primary</option>
                       <option value="Junior High">Junior High</option>
@@ -279,22 +296,35 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="family">Family</label>
-                    <select name="family" id="family" class="custom-select" v-model="family">
+                    <select
+                      name="family"
+                      id="family"
+                      class="custom-select"
+                      v-model="family"
+                    >
                       <option value>Choose Family</option>
                       <option disabled>---------------</option>
-                      <option value="-1">Create a new family using surname</option>
+                      <option value="-1"
+                        >Create a new family using surname</option
+                      >
                       <option
                         :value="family.id"
                         v-for="(family, i) in families"
                         :key="i"
-                      >{{ family.name }}---{{ family.id }}</option>
+                        >{{ family.name }}---{{ family.id }}</option
+                      >
                     </select>
                   </div>
                 </div>
                 <div class="col-md-4" v-if="family">
                   <div class="form-group">
                     <label for="relation">Family Relation</label>
-                    <select name="relation" id="relation" class="custom-select" v-model="relation">
+                    <select
+                      name="relation"
+                      id="relation"
+                      class="custom-select"
+                      v-model="relation"
+                    >
                       <option value>Choose relation</option>
                       <option disabled>---------------</option>
                       <option value="Head">Head</option>
@@ -319,7 +349,9 @@
                 </div>
                 <div class="col-md-4">
                   <div class="form-group">
-                    <label for="next_of_kin_telephone">Next of Kin Telephone</label>
+                    <label for="next_of_kin_telephone"
+                      >Next of Kin Telephone</label
+                    >
                     <input
                       type="text"
                       name="next_of_kin_telephone"
@@ -341,11 +373,26 @@
                     />
                   </div>
                 </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="comments">Comments *</label>
+                    <input
+                      type="text"
+                      name="comments"
+                      id="comments"
+                      class="form-control"
+                      v-model.trim="comments"
+                      required
+                    />
+                  </div>
+                </div>
               </div>
 
               <div class="text-center">
                 <div class="form-group mt-5">
-                  <button class="btn btn-success px-5" ref="submitBtn">Save</button>
+                  <button class="btn btn-success px-5" ref="submitBtn">
+                    Save
+                  </button>
                 </div>
               </div>
             </form>
@@ -406,6 +453,7 @@ export default {
       config: {
         maxDate: new Date(),
       },
+      comments: "",
     };
   },
   computed: {

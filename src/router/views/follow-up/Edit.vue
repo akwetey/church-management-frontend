@@ -140,17 +140,26 @@
                   </div>
 
                   <div class="col-md-12">
-                    <div class="form-group">
-                      <label for="comment">Comment</label>
-                      <textarea
-                        name="comment"
-                        id="comment"
-                        cols="30"
-                        rows="5"
-                        class="form-control"
-                        v-model="form.comment"
-                      ></textarea>
-                    </div>
+                    <ValidationProvider
+                      name="Comments"
+                      rules="required"
+                      v-slot="{ errors }"
+                    >
+                      <div class="form-group">
+                        <label for="comment"
+                          >Comment <span class="text-danger">*</span></label
+                        >
+                        <textarea
+                          name="comment"
+                          id="comment"
+                          cols="30"
+                          rows="5"
+                          class="form-control"
+                          v-model="form.comment"
+                        ></textarea>
+                        <span class="text-danger d-block">{{ errors[0] }}</span>
+                      </div>
+                    </ValidationProvider>
                   </div>
 
                   <div class="col-md-12">
