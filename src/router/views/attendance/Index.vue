@@ -301,6 +301,7 @@ export default {
       // this.mask = "";
       this.$refs.file.value = "";
       this.$refs.myModalLabel.innerHTML = "New Attendance";
+      this.$refs.formMsg.innerHTML = "";
     },
 
     /* add attendance */
@@ -328,10 +329,10 @@ export default {
         this.hideModal();
         this.getAttendance();
       } catch (err) {
+        removeBtnLoading(btn);
         const res = err.response.data;
         let errorBag = "";
         if (res.code === 422) {
-          removeBtnLoading(btn);
           const errorData = Object.values(res.errors);
           errorData.map((error) => {
             errorBag += `<span class="d-block">${error}</span>`;
@@ -412,11 +413,10 @@ export default {
         removeBtnLoading(btn);
         const res = response.data.data;
         this.name = res.attendance.name;
-        this.description = res.attendance.description;
         this.date = res.attendance.date;
+        this.description = res.attendance.description;
         this.mask = res.attendance.mask;
         this.$refs.myModalLabel.innerHTML = "Modify Attendance";
-        // console.log(typeof res.attendance.date);
         this.showModal();
       } catch (error) {
         const res = error.response.data;

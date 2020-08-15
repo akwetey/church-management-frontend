@@ -96,13 +96,14 @@
 
                   <div class="col-md-12">
                     <div class="form-group">
-                      <label for>Comments</label>
+                      <label for>Comments *</label>
                       <input
                         type="text"
                         name="comment"
                         id="comment"
                         class="form-control"
                         v-model="tithe.comment"
+                        required
                       />
                     </div>
 

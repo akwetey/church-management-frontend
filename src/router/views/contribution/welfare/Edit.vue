@@ -61,6 +61,7 @@
                   rows="5"
                   class="form-control"
                   v-model="comment"
+                  required
                 ></textarea>
               </div>
             </div>
