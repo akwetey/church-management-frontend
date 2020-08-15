@@ -63,7 +63,7 @@
                   <i class="pi pi-eye"></i>
                 </router-link>
 
-                <!-- <router-link
+                <router-link
                   tag="button"
                   :to="{
                     name: 'personedit',
@@ -73,7 +73,7 @@
                   v-tooltip.top="'Edit'"
                 >
                   <i class="pi pi-pencil"></i>
-                </router-link>-->
+                </router-link>
 
                 <button
                   class="btn btn-danger btn-icon mr-2"
