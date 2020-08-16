@@ -8,9 +8,16 @@ const contribution = {
           comment: "",
           date: "",
           person: "",
+          method: 1,
         },
       ],
       members: [],
+      methods: [
+        { name: "Cash", id: 1 },
+        { name: "Cheque", id: 2 },
+        { name: "Online", id: 3 },
+        { name: "Mobile Money", id: 4 },
+      ],
     };
   },
 
@@ -32,6 +39,7 @@ const contribution = {
         comment: "",
         date: "",
         person: "",
+        method: 1,
       });
     },
     RemoveRecord() {

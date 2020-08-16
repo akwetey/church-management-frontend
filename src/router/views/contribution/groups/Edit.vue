@@ -2,90 +2,102 @@
   <div>
     <div class="card min-height-500">
       <div class="card-body">
-        <p class="mb-3">NB: Fields marked * are required</p>
+        <div class="row">
+          <div class="col-md-8 offset-md-2">
+            <p class="mb-3">NB: Fields marked * are required</p>
 
-        <div class="form-msg" ref="formMsg"></div>
+            <div class="form-msg" ref="formMsg"></div>
 
-        <form @submit.prevent="updateGroup">
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="amount">Amount *</label>
-                <input
-                  type="number"
-                  name="amount"
-                  min="0"
-                  id="amount"
-                  class="form-control"
-                  required
-                  v-model.trim="amount"
-                />
+            <form @submit.prevent="updateGroup">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="amount">Amount *</label>
+                    <input
+                      type="number"
+                      name="amount"
+                      min="0"
+                      id="amount"
+                      class="form-control"
+                      required
+                      v-model.trim="amount"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="date">Date *</label>
+                    <flat-pickr
+                      v-model="date"
+                      placeholder="Select Date"
+                      name="date"
+                      id="date"
+                      required
+                      class="form-control bg-white"
+                    ></flat-pickr>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="person">Person *</label>
+                    <Dropdown
+                      v-model="member"
+                      :options="members"
+                      :filter="true"
+                      optionLabel="name"
+                      optionValue="id"
+                      placeholder="Select Person"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="person">Group *</label>
+                    <Dropdown
+                      v-model="group"
+                      :options="groups"
+                      :filter="true"
+                      optionLabel="name"
+                      optionValue="id"
+                      placeholder="Select Group"
+                      class="form-control"
+                    />
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="method">Method of payment *</label>
+                    <select name="method" id="method" class="custom-select" v-model.number="method">
+                      <option :value="m.id" v-for="(m, i) in methods" :key="i">{{ m.name }}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="comment">Comment *</label>
+                    <textarea
+                      name="comment"
+                      id="comment"
+                      cols="30"
+                      rows="3"
+                      class="form-control"
+                      v-model="comment"
+                      required
+                    ></textarea>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="date">Date *</label>
-                <flat-pickr
-                  v-model="date"
-                  placeholder="Select Date"
-                  name="date"
-                  id="date"
-                  required
-                  class="form-control bg-white"
-                ></flat-pickr>
+              <div class="text-center">
+                <div class="form-group mt-5">
+                  <button class="btn btn-success px-5" ref="submitBtn">Update</button>
+                </div>
               </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="person">Person *</label>
-                <Dropdown
-                  v-model="member"
-                  :options="members"
-                  :filter="true"
-                  optionLabel="name"
-                  optionValue="id"
-                  placeholder="Select Person"
-                  class="form-control"
-                />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="person">Group *</label>
-                <Dropdown
-                  v-model="group"
-                  :options="groups"
-                  :filter="true"
-                  optionLabel="name"
-                  optionValue="id"
-                  placeholder="Select Group"
-                  class="form-control"
-                />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="comment">Comment *</label>
-                <textarea
-                  name="comment"
-                  id="comment"
-                  cols="30"
-                  rows="5"
-                  class="form-control"
-                  v-model="comment"
-                  required
-                ></textarea>
-              </div>
-            </div>
+            </form>
           </div>
-          <div class="text-center">
-            <div class="form-group mt-5">
-              <button class="btn btn-success px-5" ref="submitBtn">
-                Update
-              </button>
-            </div>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   </div>
@@ -113,10 +125,17 @@ export default {
       comment: "",
       date: "",
       member: "",
+      method: "",
       group: "",
       members: [],
       groups: [],
       mask: "",
+      methods: [
+        { name: "Cash", id: 1 },
+        { name: "Cheque", id: 2 },
+        { name: "Online", id: 3 },
+        { name: "Mobile Money", id: 4 },
+      ],
     };
   },
   methods: {
@@ -131,6 +150,7 @@ export default {
           date: this.date,
           person: this.member,
           group: this.group,
+          method: this.method,
         };
         const response = await Contribution.groupUpdate(formData, this.mask);
         const res = response.data;
@@ -163,6 +183,7 @@ export default {
       this.date = data.date;
       this.comment = data.comment;
       this.mask = data.mask;
+      this.method = data.method;
     },
   },
 

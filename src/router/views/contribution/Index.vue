@@ -16,24 +16,12 @@
               <i class="link-arrow pi pi-angle-down"></i>
             </button>
             <div class="dropdown-menu" aria-labelledby="myDropdown">
-              <router-link :to="{ name: 'busingadd' }" class="dropdown-item"
-                >Busing</router-link
-              >
-              <router-link :to="{ name: 'covenantadd' }" class="dropdown-item"
-                >Covenant Partner</router-link
-              >
-              <router-link :to="{ name: 'TitheAdd' }" class="dropdown-item"
-                >Tithe</router-link
-              >
-              <router-link :to="{ name: 'addgroup' }" class="dropdown-item"
-                >Group</router-link
-              >
-              <router-link :to="{ name: 'addwelfare' }" class="dropdown-item"
-                >Welfare</router-link
-              >
-              <router-link :to="{ name: 'pledgeAdd' }" class="dropdown-item"
-                >Pledge</router-link
-              >
+              <router-link :to="{ name: 'busingadd' }" class="dropdown-item">Busing</router-link>
+              <router-link :to="{ name: 'covenantadd' }" class="dropdown-item">Covenant Partner</router-link>
+              <router-link :to="{ name: 'TitheAdd' }" class="dropdown-item">Tithe</router-link>
+              <router-link :to="{ name: 'addgroup' }" class="dropdown-item">Group</router-link>
+              <router-link :to="{ name: 'addwelfare' }" class="dropdown-item">Welfare</router-link>
+              <router-link :to="{ name: 'pledgeAdd' }" class="dropdown-item">Pledge</router-link>
 
               <a class="dropdown-item" href="#">General</a>
             </div>
@@ -54,7 +42,8 @@
             <template #empty>
               <div class="text-center">No data found.</div>
             </template>
-            <Column field="person.name" header="Person" sortable></Column>
+            <Column field="person.name" header="Contribution For" sortable></Column>
+
             <Column field="type" header="Type" sortable></Column>
 
             <Column field="amount" header="Amount" sortable>
@@ -63,7 +52,11 @@
                 {{ slotProps.data.amount }}
               </template>
             </Column>
+
+            <Column field="method" header="Method of Payment" sortable></Column>
+
             <Column field="created_at" header="Date Recorded" sortable></Column>
+
             <Column field="actions" header="Actions">
               <template #body="slotProps">
                 <router-link

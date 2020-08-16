@@ -11,7 +11,7 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="">Person *</label>
+                      <label for>Person *</label>
                       <input
                         type="text"
                         name="person"
@@ -24,13 +24,9 @@
                   </div>
 
                   <div class="col-md-6">
-                    <ValidationProvider
-                      name="amount"
-                      rules="required|decimal"
-                      v-slot="{ errors }"
-                    >
+                    <ValidationProvider name="amount" rules="required|decimal" v-slot="{ errors }">
                       <div class="form-group">
-                        <label for="">Amount *</label>
+                        <label for>Amount *</label>
                         <input
                           type="text"
                           name="amount"
@@ -45,7 +41,7 @@
 
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="">Frequency *</label>
+                      <label for>Frequency *</label>
                       <Dropdown
                         class="form-control"
                         v-model="tithe.frequency"
@@ -79,10 +75,7 @@
                       </ValidationProvider>
                     </keep-alive>
 
-                    <div
-                      class="form-group"
-                      v-if="tithe.frequency.toLowerCase() === 'weekly'"
-                    >
+                    <div class="form-group" v-if="tithe.frequency.toLowerCase() === 'weekly'">
                       <label for class="d-block">Select Date *</label>
                       <flatPickr
                         class="form-control bg-white"
@@ -91,6 +84,24 @@
                         :config="dateConfig"
                         required
                       />
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="method">Method of payment *</label>
+                      <select
+                        name="method"
+                        id="method"
+                        class="custom-select"
+                        v-model.number="tithe.method"
+                      >
+                        <option
+                          :value="method.id"
+                          v-for="(method, i) in methods"
+                          :key="i"
+                        >{{ method.name }}</option>
+                      </select>
                     </div>
                   </div>
 
@@ -108,9 +119,7 @@
                     </div>
 
                     <div class="form-group mt-4">
-                      <button class="btn btn-success px-5" ref="submitBtn">
-                        Submit
-                      </button>
+                      <button class="btn btn-success px-5" ref="submitBtn">Submit</button>
                     </div>
                   </div>
                 </div>
@@ -148,6 +157,7 @@ export default {
         amount: 0,
         frequency: "",
         comment: "",
+        method: "",
       },
       frequencies: ["Weekly", "Monthly"],
       dateConfig: {
@@ -157,6 +167,12 @@ export default {
         allowInput: true,
       },
       mask: "",
+      methods: [
+        { name: "Cash", id: 1 },
+        { name: "Cheque", id: 2 },
+        { name: "Online", id: 3 },
+        { name: "Mobile Money", id: 4 },
+      ],
     };
   },
   methods: {
@@ -168,6 +184,7 @@ export default {
         payload.frequency.charAt(0).toUpperCase() + payload.frequency.slice(1);
       this.tithe.comment = payload.comment;
       this.mask = payload.mask;
+      this.tithe.method = payload.method;
     },
     submitForm(e) {
       this.$refs.form.validate().then((result) => {
