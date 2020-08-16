@@ -3,9 +3,7 @@
     <div class="card">
       <div class="card-body">
         <div class="mb-5">
-          <router-link :to="{ name: 'groupadd' }" class="btn btn-primary px-5"
-            >Add Group</router-link
-          >
+          <router-link :to="{ name: 'groupadd' }" class="btn btn-primary px-5">Add Group</router-link>
         </div>
 
         <div>
@@ -23,20 +21,17 @@
               <div class="table-header d-flex justify-content-end">
                 <span class="p-input-icon-left">
                   <i class="pi pi-search" />
-                  <InputText
-                    v-model="filters['global']"
-                    placeholder="Search For"
-                  />
+                  <InputText v-model="filters['global']" placeholder="Search For" />
                 </span>
               </div>
             </template>
             <template #empty>
-              <div class="text-center">
-                No data found.
-              </div>
+              <div class="text-center">No data found.</div>
             </template>
             <Column field="name" header="Name" sortable></Column>
-            <Column field="persons" header="Persons" sortable></Column>
+
+            <Column field="persons" header="No. of Persons" sortable></Column>
+            <Column field="type" header="Type" sortable></Column>
             <Column field="leader" header="Leader" sortable></Column>
             <Column field="created_at" header="Date Added" sortable></Column>
             <Column field="actions" header="Actions">
@@ -58,8 +53,9 @@
                   @click="deleteGroup(slotProps.data.mask, $event)"
                 >
                   <i class="pi pi-trash no-pointer-events"></i>
-                </button> </template
-            ></Column>
+                </button>
+              </template>
+            </Column>
           </DataTable>
         </div>
       </div>

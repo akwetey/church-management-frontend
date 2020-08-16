@@ -10,11 +10,7 @@
               <form @submit.prevent="updateFollowUp">
                 <div class="row">
                   <div class="col-md-6">
-                    <ValidationProvider
-                      name="People field"
-                      rules="required"
-                      v-slot="{ errors }"
-                    >
+                    <ValidationProvider name="People field" rules="required" v-slot="{ errors }">
                       <div class="form-group">
                         <label for="people" class="d-block">
                           People
@@ -34,11 +30,7 @@
                   </div>
 
                   <div class="col-md-6">
-                    <ValidationProvider
-                      name="Assigned to"
-                      rules="required"
-                      v-slot="{ errors }"
-                    >
+                    <ValidationProvider name="Assigned to" rules="required" v-slot="{ errors }">
                       <div class="form-group">
                         <label for="assigned_to" class="d-block">
                           Assigned To
@@ -57,11 +49,7 @@
                   </div>
 
                   <div class="col-md-6">
-                    <ValidationProvider
-                      name="Follow-up date"
-                      rules="required"
-                      v-slot="{ errors }"
-                    >
+                    <ValidationProvider name="Follow-up date" rules="required" v-slot="{ errors }">
                       <div class="form-group">
                         <label for="date" class="d-block">
                           Follow-Up Date
@@ -82,7 +70,7 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for class="d-block">
-                        Visit Type
+                        Follow-up Type
                         <span class="text-danger">*</span>
                       </label>
                       <Dropdown
@@ -105,9 +93,7 @@
                           id="done"
                           v-model="form.completed"
                         />
-                        <label class="custom-control-label" for="done"
-                          >Done</label
-                        >
+                        <label class="custom-control-label" for="done">Done</label>
                       </div>
 
                       <div class v-if="form.completed">
@@ -129,9 +115,7 @@
                                 placeholder="Select date"
                                 :config="dateConfig"
                               />
-                              <span class="text-danger d-block">
-                                {{ errors[0] }}
-                              </span>
+                              <span class="text-danger d-block">{{ errors[0] }}</span>
                             </div>
                           </ValidationProvider>
                         </keep-alive>
@@ -140,15 +124,12 @@
                   </div>
 
                   <div class="col-md-12">
-                    <ValidationProvider
-                      name="Comments"
-                      rules="required"
-                      v-slot="{ errors }"
-                    >
+                    <ValidationProvider name="Comments" rules="required" v-slot="{ errors }">
                       <div class="form-group">
-                        <label for="comment"
-                          >Comment <span class="text-danger">*</span></label
-                        >
+                        <label for="comment">
+                          Comment
+                          <span class="text-danger">*</span>
+                        </label>
                         <textarea
                           name="comment"
                           id="comment"
@@ -164,13 +145,7 @@
 
                   <div class="col-md-12">
                     <div class="text-center">
-                      <button
-                        class="btn btn-success px-5"
-                        type="submit"
-                        ref="submitBtn"
-                      >
-                        Save
-                      </button>
+                      <button class="btn btn-success px-5" type="submit" ref="submitBtn">Save</button>
                     </div>
                   </div>
                 </div>
