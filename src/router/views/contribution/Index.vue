@@ -16,14 +16,27 @@
               <i class="link-arrow pi pi-angle-down"></i>
             </button>
             <div class="dropdown-menu" aria-labelledby="myDropdown">
-              <router-link :to="{ name: 'busingadd' }" class="dropdown-item">Busing</router-link>
-              <router-link :to="{ name: 'covenantadd' }" class="dropdown-item">Covenant Partner</router-link>
-              <router-link :to="{ name: 'TitheAdd' }" class="dropdown-item">Tithe</router-link>
-              <router-link :to="{ name: 'addgroup' }" class="dropdown-item">Group</router-link>
-              <router-link :to="{ name: 'addwelfare' }" class="dropdown-item">Welfare</router-link>
-              <router-link :to="{ name: 'pledgeAdd' }" class="dropdown-item">Pledge</router-link>
-
-              <a class="dropdown-item" href="#">General</a>
+              <router-link :to="{ name: 'busingadd' }" class="dropdown-item"
+                >Busing</router-link
+              >
+              <router-link :to="{ name: 'covenantadd' }" class="dropdown-item"
+                >Covenant Partner</router-link
+              >
+              <router-link :to="{ name: 'TitheAdd' }" class="dropdown-item"
+                >Tithe</router-link
+              >
+              <router-link :to="{ name: 'addgroup' }" class="dropdown-item"
+                >Group</router-link
+              >
+              <router-link :to="{ name: 'addwelfare' }" class="dropdown-item"
+                >Welfare</router-link
+              >
+              <router-link :to="{ name: 'pledgeAdd' }" class="dropdown-item"
+                >Pledge</router-link
+              >
+              <router-link :to="{ name: 'generalAdd' }" class="dropdown-item"
+                >General</router-link
+              >
             </div>
           </div>
         </div>
@@ -42,7 +55,11 @@
             <template #empty>
               <div class="text-center">No data found.</div>
             </template>
-            <Column field="person.name" header="Contribution For" sortable></Column>
+            <Column
+              field="person.name"
+              header="Contribution For"
+              sortable
+            ></Column>
 
             <Column field="type" header="Type" sortable></Column>
 
@@ -133,6 +150,18 @@
                 >
                   <i class="pi pi-pencil"></i>
                 </router-link>
+                <router-link
+                  tag="button"
+                  :to="{
+                    name: 'generalEdit',
+                    params: { mask: slotProps.data.mask },
+                  }"
+                  class="btn btn-primary btn-icon mr-2"
+                  v-tooltip.top="'Edit'"
+                  v-if="slotProps.data.type.toLowerCase() === 'general'"
+                >
+                  <i class="pi pi-pencil"></i>
+                </router-link>
                 <button
                   class="btn btn-danger btn-icon mr-2"
                   v-tooltip.top="'Delete'"
@@ -218,6 +247,12 @@ export default {
               break;
             case "pledge":
               response = await Contribution.pledgedelete(mask);
+              break;
+            case "tithe":
+              response = await Contribution.tithedelete(mask);
+              break;
+            case "general":
+              response = await Contribution.generaldelete(mask);
               break;
           }
 

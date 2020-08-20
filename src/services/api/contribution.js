@@ -37,6 +37,9 @@ export default {
   titheUpdate(payload, mask) {
     return Axios.put("/staff/contributions/tithes/" + mask, payload);
   },
+  tithedelete(mask) {
+    return Axios.delete("/staff/contributions/tithes/" + mask);
+  },
   groupAdd(payload) {
     return Axios.post("/staff/contributions/groups", payload);
   },
@@ -72,5 +75,15 @@ export default {
   },
   pledgedelete(mask) {
     return Axios.delete("/staff/contributions/pledge/" + mask);
+  },
+
+  generalAdd(payload) {
+    return Axios.post("/staff/contributions/general", payload);
+  },
+  generaldelete(mask) {
+    return Axios.delete("/staff/contributions/general/" + mask);
+  },
+  generalShow(mask) {
+    return Axios.get("/staff/contributions/general/" + mask);
   },
 };

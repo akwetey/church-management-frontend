@@ -12,7 +12,6 @@
           <StepOne
             :formModel="form"
             @set-step="changeStep"
-            @set-back="changeStepBack"
             v-if="current === 0"
           />
 
