@@ -86,4 +86,7 @@ export default {
   generalShow(mask) {
     return Axios.get("/staff/contributions/general/" + mask);
   },
+  generalUpdate(payload, mask) {
+    return Axios.put("/staff/contributions/general/" + mask, payload);
+  },
 };
