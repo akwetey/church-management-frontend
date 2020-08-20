@@ -7,8 +7,15 @@
     <div>
       <BFormFile v-model="uploadFile" plain class="mb-3" />
 
-      <div>
-        <button class="btn btn-success" :disabled="disableProgessButton" @click="next">Next</button>
+      <div class="d-flex">
+        <button class="btn btn-primary mr-3" @click="previous">Previous</button>
+        <button
+          class="btn btn-success"
+          :disabled="disableProgessButton"
+          @click="next"
+        >
+          Next
+        </button>
       </div>
     </div>
   </div>
@@ -40,6 +47,9 @@ export default {
   methods: {
     next(e) {
       this.$emit("set-step");
+    },
+    previous(e) {
+      this.$emit("set-back");
     },
   },
 };

@@ -5,7 +5,10 @@
       <ul class="pl-3 mt-2">
         <li>Enter a name for the attendance to be taken for</li>
         <li>Select the type of attendance</li>
-        <li>Please make sure you've created a group if you wanna take attendance for a group</li>
+        <li>
+          Please make sure you've created a group if you wanna take attendance
+          for a group
+        </li>
       </ul>
     </div>
 
@@ -14,14 +17,25 @@
         <div class="col-md-4">
           <div class="form-group">
             <label for="name">Name *</label>
-            <input type="text" name="name" id="name" class="form-control" v-model.trim="name" />
+            <input
+              type="text"
+              name="name"
+              id="name"
+              class="form-control"
+              v-model.trim="name"
+            />
           </div>
         </div>
 
         <div class="col-md-4">
           <div class="form-group">
             <label for="type">Type *</label>
-            <select name="type" id="type" class="custom-select" @change="onChangeAttendanceType">
+            <select
+              name="type"
+              id="type"
+              class="custom-select"
+              @change="onChangeAttendanceType"
+            >
               <option value>Select type</option>
               <option disabled>----------------</option>
               <option value="1">General</option>
@@ -33,10 +47,17 @@
         <div class="col-md-4" v-if="type === 2">
           <div class="form-group">
             <label for="group">Group *</label>
-            <select name="group" id="group" class="custom-select" v-model.trim="group">
+            <select
+              name="group"
+              id="group"
+              class="custom-select"
+              v-model.trim="group"
+            >
               <option value>Select group</option>
               <option disabled>----------------</option>
-              <option :value="group.id" v-for="(group, i) in groups" :key="i">{{ group.name }}</option>
+              <option :value="group.id" v-for="(group, i) in groups" :key="i">{{
+                group.name
+              }}</option>
             </select>
           </div>
         </div>
@@ -48,11 +69,19 @@
             class="btn btn-primary"
             type="button"
             :disabled="disableProgessButton"
-          >Download Template</button>
+          >
+            Download Template
+          </button>
         </div>
 
         <div>
-          <button class="btn btn-success" :disabled="disableProgessButton" @click="next">Next</button>
+          <button
+            class="btn btn-success"
+            :disabled="disableProgessButton"
+            @click="next"
+          >
+            Next
+          </button>
         </div>
       </div>
     </div>

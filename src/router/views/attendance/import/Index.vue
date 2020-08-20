@@ -9,11 +9,17 @@
             <Step title="Import Attendance"></Step>
           </Steps>
 
-          <StepOne :formModel="form" @set-step="changeStep" v-if="current === 0" />
+          <StepOne
+            :formModel="form"
+            @set-step="changeStep"
+            @set-back="changeStepBack"
+            v-if="current === 0"
+          />
 
           <StepTwo
             :file="form.file"
             @set-step="changeStep"
+            @set-back="changeStepBack"
             @set-file="setFile"
             v-if="current === 1"
           />
@@ -52,6 +58,9 @@ export default {
   methods: {
     changeStep() {
       this.currentStep += 1;
+    },
+    changeStepBack() {
+      this.currentStep -= 1;
     },
     changeStepStatus(val) {
       this.stepStatus = val;
