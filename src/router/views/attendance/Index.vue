@@ -3,7 +3,7 @@
     <div class="card">
       <div class="card-body">
         <div class="mb-5">
-          <button
+          <!-- <button
             id="myModalTrigger"
             class="btn btn-primary ml-3"
             type="button"
@@ -12,7 +12,8 @@
             @click="showModal"
           >
             New Attendance
-          </button>
+          </button>-->
+          <router-link :to="{name: 'AttendanceAdd'}" class="btn btn-primary ml-3">Import Attendance</router-link>
         </div>
         <div>
           <DataTable
@@ -29,17 +30,12 @@
               <div class="table-header d-flex justify-content-end">
                 <span class="p-input-icon-left">
                   <i class="pi pi-search" />
-                  <InputText
-                    v-model="filters['global']"
-                    placeholder="Search For"
-                  />
+                  <InputText v-model="filters['global']" placeholder="Search For" />
                 </span>
               </div>
             </template>
             <template #empty>
-              <div class="text-center">
-                No data found.
-              </div>
+              <div class="text-center">No data found.</div>
             </template>
             <Column field="name" header="Name" sortable></Column>
             <Column field="description" header="Description" sortable></Column>
@@ -71,8 +67,9 @@
                   @click="deleteAttendance(slotProps.data.mask, $event)"
                 >
                   <i class="pi pi-trash no-pointer-events"></i>
-                </button> </template
-            ></Column>
+                </button>
+              </template>
+            </Column>
           </DataTable>
         </div>
         <div
@@ -85,9 +82,7 @@
           <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="myModalLabel" ref="myModalLabel">
-                  New Attendance
-                </h5>
+                <h5 class="modal-title" id="myModalLabel" ref="myModalLabel">New Attendance</h5>
                 <div class="form-msg" ref="formMsg"></div>
                 <button
                   type="button"
@@ -106,14 +101,12 @@
                     class="btn btn-primary btn-sm"
                     ref="downloadTem"
                     @click="downloadTemplate($event)"
-                  >
-                    Download Template
-                  </button>
+                  >Download Template</button>
                 </div>
-                <small class="d-flex justify-content-end text-danger"
-                  >Before you save make sure you download and fill the
-                  template.</small
-                >
+                <small class="d-flex justify-content-end text-danger">
+                  Before you save make sure you download and fill the
+                  template.
+                </small>
                 <form @submit.prevent="addAttendance" ref="attendanceForm">
                   <div class="row mt-4">
                     <div class="col-md-6">
@@ -176,12 +169,8 @@
                       class="btn btn-secondary"
                       data-dismiss="modal"
                       @click="hideModal"
-                    >
-                      Close
-                    </button>
-                    <button class="btn btn-success" ref="submitBtn">
-                      Save changes
-                    </button>
+                    >Close</button>
+                    <button class="btn btn-success" ref="submitBtn">Save changes</button>
                   </div>
                 </form>
               </div>
