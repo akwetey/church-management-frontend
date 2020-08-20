@@ -7,7 +7,7 @@
     <div>
       <BFormFile v-model="uploadFile" plain class="mb-3" />
 
-      <div class="d-flex">
+      <div class="d-flex justify-content-between">
         <button class="btn btn-primary mr-3" @click="previous">Previous</button>
         <button
           class="btn btn-success"

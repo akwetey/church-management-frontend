@@ -1,31 +1,37 @@
 <template>
   <div>
     <div class="card">
-      <div class="card-body">
-        <div class="col-md-8 offset-md-2">
-          <Steps :current="current" :status="stepStatus">
-            <Step title="Download Template"></Step>
-            <Step title="Upload Data File"></Step>
-            <Step title="Import Attendance"></Step>
-          </Steps>
+      <BlockUI :blocked="loading" :fullScreen="true">
+        <div class="card-body">
+          <div class="col-md-8 offset-md-2">
+            <Steps :current="current" :status="stepStatus">
+              <Step title="Download Template"></Step>
+              <Step title="Upload Data File"></Step>
+              <Step title="Import Attendance"></Step>
+            </Steps>
 
-          <StepOne
-            :formModel="form"
-            @set-step="changeStep"
-            v-if="current === 0"
-          />
+            <StepOne
+              :formModel="form"
+              @set-step="changeStep"
+              v-if="current === 0"
+            />
 
-          <StepTwo
-            :file="form.file"
-            @set-step="changeStep"
-            @set-back="changeStepBack"
-            @set-file="setFile"
-            v-if="current === 1"
-          />
+            <StepTwo
+              :file="form.file"
+              @set-step="changeStep"
+              @set-back="changeStepBack"
+              @set-file="setFile"
+              v-if="current === 1"
+            />
 
-          <StepThree v-if="current === 2" />
+            <StepThree
+              v-if="current === 2"
+              @set-back="changeStepBack"
+              @submit-data="submitData"
+            />
+          </div>
         </div>
-      </div>
+      </BlockUI>
     </div>
   </div>
 </template>
@@ -35,19 +41,23 @@ import { Steps, Step } from "view-design";
 import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
 import StepThree from "./StepThree";
-
+import Attendance from "@services/api/attendance";
+import BlockUI from "primevue/blockui";
+import Swal from "sweetalert2";
 export default {
   name: "AttendanceAdd",
-  components: { Steps, Step, StepOne, StepTwo, StepThree },
+  components: { Steps, Step, StepOne, StepTwo, StepThree, BlockUI },
   data: () => ({
     stepStatus: "process",
     currentStep: 0,
     form: {
       name: "",
+      date: "",
       type: "",
       group_id: "",
       file: null,
     },
+    loading: false,
   }),
   computed: {
     current() {
@@ -66,6 +76,23 @@ export default {
     },
     setFile(val) {
       this.form.file = val;
+    },
+    async submitData() {
+      try {
+        this.loading = true;
+        const formData = new FormData();
+        formData.append("name", this.form.name);
+        formData.append("type", this.form.type);
+        formData.append("date", this.form.date);
+        formData.append("file", this.form.file);
+        const response = await Attendance.store(formData);
+        this.loading = false;
+        const res = response.data;
+        Swal.fire("Success", res.message, "success");
+      } catch (error) {
+        this.loading = false;
+        console.log(error);
+      }
     },
   },
 };

@@ -9,6 +9,9 @@
           Please make sure you've created a group if you wanna take attendance
           for a group
         </li>
+        <li>
+          All fields marked * are required
+        </li>
       </ul>
     </div>
 
@@ -26,6 +29,18 @@
             />
           </div>
         </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <label for="date">Date *</label>
+            <flat-pickr
+              v-model.trim="date"
+              placeholder="Select Date"
+              name="date"
+              id="date"
+              class="form-control bg-white"
+            ></flat-pickr>
+          </div>
+        </div>
 
         <div class="col-md-4">
           <div class="form-group">
@@ -35,6 +50,7 @@
               id="type"
               class="custom-select"
               @change="onChangeAttendanceType"
+              v-model.trim="type"
             >
               <option value>Select type</option>
               <option disabled>----------------</option>
@@ -69,6 +85,8 @@
             class="btn btn-primary"
             type="button"
             :disabled="disableProgessButton"
+            ref="downloadTem"
+            @click="downloadTemplate($event)"
           >
             Download Template
           </button>
@@ -90,6 +108,11 @@
 
 <script>
 import Groups from "@services/api/groups";
+import Attendance from "@services/api/attendance";
+import flatPickr from "vue-flatpickr-component";
+import "flatpickr/dist/flatpickr.css";
+import { addBtnLoading, removeBtnLoading } from "@services/helpers";
+import Swal from "sweetalert2";
 
 export default {
   data() {
@@ -97,6 +120,7 @@ export default {
       groups: [],
     };
   },
+  components: { flatPickr },
   props: {
     formModel: {
       type: Object,
@@ -128,9 +152,17 @@ export default {
         this.formModel.group_id = val;
       },
     },
+    date: {
+      get() {
+        return this.formModel.date;
+      },
+      set(val) {
+        this.formModel.date = val;
+      },
+    },
     disableProgessButton() {
-      if (this.name && this.type === 1) return false;
-      if (this.name && this.type === 2 && this.group) return false;
+      if (this.name && this.type === 1 && this.date) return false;
+      if (this.name && this.type === 2 && this.group && this.date) return false;
       return true;
     },
   },
@@ -159,6 +191,39 @@ export default {
 
     next() {
       if (!this.disableProgessButton) this.$emit("set-step");
+    },
+
+    /** download template */
+    downloadTemplate(mask, e) {
+      const btn = this.$refs.downloadTem;
+
+      (async () => {
+        try {
+          addBtnLoading(btn);
+          const getParams = {
+            params: {
+              type: this.type,
+            },
+          };
+          const response = await Attendance.template(getParams);
+          removeBtnLoading(btn);
+          const res = response.data;
+          const { url, filename } = res.data;
+          const anchor = document.createElement("a");
+          anchor.setAttribute("download", filename);
+          anchor.setAttribute("href", url);
+          document.body.appendChild(anchor);
+          anchor.click();
+          document.body.removeChild(anchor);
+        } catch (error) {
+          const res = error.response.data;
+          Swal.fire({
+            icon: "error",
+            title: res.message,
+          });
+          removeBtnLoading(btn);
+        }
+      })();
     },
   },
 };

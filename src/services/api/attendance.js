@@ -19,7 +19,7 @@ export default {
   download(mask) {
     return Axios.get(`/staff/attendance/${mask}/download`);
   },
-  template() {
-    return Axios.get("/staff/attendance/template");
+  template(params) {
+    return Axios.get("/staff/attendance/template", params);
   },
 };
