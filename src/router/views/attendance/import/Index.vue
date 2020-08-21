@@ -86,12 +86,23 @@ export default {
         formData.append("date", this.form.date);
         formData.append("file", this.form.file);
         const response = await Attendance.store(formData);
-        this.loading = false;
         const res = response.data;
         Swal.fire("Success", res.message, "success");
+        this.loading = false;
+        this.$router.push({ name: "attendance" });
       } catch (error) {
         this.loading = false;
-        console.log(error);
+        const res = error.response.data;
+        let errorBag = "";
+        if (res.code === 422) {
+          const errorData = Object.values(res.errors);
+          errorData.map((error) => {
+            errorBag += `<span class="d-block">${error}</span>`;
+          });
+        } else {
+          errorBag += res.message;
+        }
+        Swal.fire("Error", errorBag, "error");
       }
     },
   },

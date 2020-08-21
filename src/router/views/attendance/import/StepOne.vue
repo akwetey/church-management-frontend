@@ -200,11 +200,15 @@ export default {
       (async () => {
         try {
           addBtnLoading(btn);
+
           const getParams = {
             params: {
               type: this.type,
             },
           };
+          this.type === 2
+            ? (getParams.params.group_id = this.group)
+            : delete getParams.params.group_id;
           const response = await Attendance.template(getParams);
           removeBtnLoading(btn);
           const res = response.data;
