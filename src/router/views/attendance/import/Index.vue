@@ -1,21 +1,21 @@
 <template>
   <div>
     <div class="card">
-      <BlockUI :blocked="loading" :fullScreen="true">
-        <div class="card-body">
-          <div class="col-md-8 offset-md-2">
-            <Steps :current="current" :status="stepStatus">
-              <Step title="Download Template"></Step>
-              <Step title="Upload Data File"></Step>
-              <Step title="Import Attendance"></Step>
-            </Steps>
-
+      <div class="card-body">
+        <div class="col-md-8 offset-md-2">
+          <Steps :current="current" :status="stepStatus">
+            <Step title="Download Template"></Step>
+            <Step title="Upload Data File"></Step>
+            <Step title="Import Attendance"></Step>
+          </Steps>
+          <keep-alive>
             <StepOne
               :formModel="form"
               @set-step="changeStep"
               v-if="current === 0"
             />
-
+          </keep-alive>
+          <keep-alive>
             <StepTwo
               :file="form.file"
               @set-step="changeStep"
@@ -23,15 +23,15 @@
               @set-file="setFile"
               v-if="current === 1"
             />
+          </keep-alive>
 
-            <StepThree
-              v-if="current === 2"
-              @set-back="changeStepBack"
-              @submit-data="submitData"
-            />
-          </div>
+          <StepThree
+            v-if="current === 2"
+            @set-back="changeStepBack"
+            @submit-data="submitData"
+          />
         </div>
-      </BlockUI>
+      </div>
     </div>
   </div>
 </template>
@@ -42,11 +42,11 @@ import StepOne from "./StepOne";
 import StepTwo from "./StepTwo";
 import StepThree from "./StepThree";
 import Attendance from "@services/api/attendance";
-import BlockUI from "primevue/blockui";
 import Swal from "sweetalert2";
+import { addBtnLoading, removeBtnLoading } from "@services/helpers";
 export default {
   name: "AttendanceAdd",
-  components: { Steps, Step, StepOne, StepTwo, StepThree, BlockUI },
+  components: { Steps, Step, StepOne, StepTwo, StepThree },
   data: () => ({
     stepStatus: "process",
     currentStep: 0,
@@ -77,21 +77,22 @@ export default {
     setFile(val) {
       this.form.file = val;
     },
-    async submitData() {
+    async submitData(btn) {
       try {
-        this.loading = true;
+        addBtnLoading(btn);
         const formData = new FormData();
         formData.append("name", this.form.name);
         formData.append("type", this.form.type);
         formData.append("date", this.form.date);
         formData.append("file", this.form.file);
+        formData.append("group", this.form.group_id);
         const response = await Attendance.store(formData);
         const res = response.data;
+        removeBtnLoading(btn);
         Swal.fire("Success", res.message, "success");
-        this.loading = false;
         this.$router.push({ name: "attendance" });
       } catch (error) {
-        this.loading = false;
+        removeBtnLoading(btn);
         const res = error.response.data;
         let errorBag = "";
         if (res.code === 422) {
