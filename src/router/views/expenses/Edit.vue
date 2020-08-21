@@ -140,7 +140,7 @@ export default {
         addBtnLoading(btn);
         const formData = {
           amount: this.amount,
-          comment: this.comment,
+          name: this.name,
           date: this.date,
           type: this.type,
           comment: this.comment,
@@ -166,7 +166,9 @@ export default {
       }
     },
     //set data
-    setData(data) {
+    setData(expense) {
+      console.log(data);
+      const { data } = expense;
       this.amount = data.amount;
       this.name = data.name;
       this.date = data.date;

@@ -173,6 +173,11 @@ export default [
         component: () => import("@views/expenses/Add.vue"),
       },
       {
+        path: "expenses/edit/:mask",
+        name: "expensesedit",
+        component: () => import("@views/expenses/Edit.vue"),
+      },
+      {
         path: "contributions",
         component: () => import("@layouts/Finance.vue"),
         children: [
