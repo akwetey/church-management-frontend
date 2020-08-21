@@ -8,18 +8,18 @@
 
             <div class="form-msg" ref="formMsg"></div>
 
-            <form @submit.prevent="updateGroup">
+            <form @submit.prevent="updateExpense">
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="title">Title *</label>
+                    <label for="name">Name *</label>
                     <input
                       type="text"
-                      name="title"
-                      id="title"
+                      name="name"
+                      id="name"
                       class="form-control"
-                      v-model.trim="name"
                       required
+                      v-model.trim="name"
                     />
                   </div>
                 </div>
@@ -29,8 +29,8 @@
                     <input
                       type="number"
                       name="amount"
-                      min="0"
                       id="amount"
+                      min="0"
                       class="form-control"
                       required
                       v-model.trim="amount"
@@ -52,12 +52,12 @@
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="method">Method of payment *</label>
+                    <label for="method">Type *</label>
                     <select
-                      name="method"
-                      id="method"
+                      name="type"
+                      id="type"
                       class="custom-select"
-                      v-model.number="method"
+                      v-model.number="type"
                     >
                       <option
                         :value="m.id"
@@ -101,18 +101,14 @@
 
 <script>
 import { addBtnLoading, removeBtnLoading } from "@services/helpers";
-import Member from "@services/api/people";
-import Contribution from "@services/api/contribution";
-import Group from "@services/api/groups";
+import Expenses from "@services/api/expenses";
 import Swal from "sweetalert2";
-import Dropdown from "primevue/dropdown";
 import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 
 export default {
-  name: "GeneralEdit",
+  name: "ExpenseEdit",
   components: {
-    Dropdown,
     flatPickr,
   },
   data() {
@@ -121,18 +117,23 @@ export default {
       comment: "",
       date: "",
       name: "",
-      method: "",
+      type: "",
+      group: "",
       mask: "",
       methods: [
-        { name: "Cash", id: 1 },
-        { name: "Cheque", id: 2 },
-        { name: "Online", id: 3 },
-        { name: "Mobile Money", id: 4 },
+        { name: "Utility ", id: 1 },
+        { name: "Donation ", id: 2 },
+        { name: "Welfare ", id: 3 },
+        { name: "Equipment And Technology ", id: 4 },
+        { name: "Allowance  ", id: 5 },
+        { name: "Building And Construction", id: 6 },
+        { name: "Publicity", id: 7 },
+        { name: "Evangelism", id: 8 },
       ],
     };
   },
   methods: {
-    async updateGroup(e) {
+    async updateExpense(e) {
       const btn = this.$refs.submitBtn;
       const formMsg = this.$refs.formMsg;
       try {
@@ -141,14 +142,14 @@ export default {
           amount: this.amount,
           comment: this.comment,
           date: this.date,
-          name: this.name,
-          method: this.method,
+          type: this.type,
+          comment: this.comment,
         };
-        const response = await Contribution.generalUpdate(formData, this.mask);
+        const response = await Expenses.update(formData, this.mask);
         const res = response.data;
         removeBtnLoading(btn);
         Swal.fire("Success", res.message, "success");
-        this.$router.push({ name: "Contributions" });
+        this.$router.push({ name: "expenses" });
       } catch (err) {
         const res = err.response.data;
         let errorBag = "";
@@ -171,7 +172,7 @@ export default {
       this.date = data.date;
       this.comment = data.comment;
       this.mask = data.mask;
-      this.method = data.method;
+      this.type = data.type;
     },
   },
 
@@ -182,7 +183,7 @@ export default {
         next({ name: "Home" });
       }
 
-      const response = await Contribution.generalShow(mask);
+      const response = await Expenses.show(mask);
       next((vm) => vm.setData(response.data));
     } catch (error) {
       console.log(error);

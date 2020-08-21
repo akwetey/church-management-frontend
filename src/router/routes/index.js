@@ -163,6 +163,16 @@ export default [
         component: () => import("@views/pledge/Edit.vue"),
       },
       {
+        path: "expenses",
+        name: "expenses",
+        component: () => import("@views/expenses/Index.vue"),
+      },
+      {
+        path: "expenses/add",
+        name: "expensesadd",
+        component: () => import("@views/expenses/Add.vue"),
+      },
+      {
         path: "contributions",
         component: () => import("@layouts/Finance.vue"),
         children: [

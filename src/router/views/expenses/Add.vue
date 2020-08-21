@@ -19,17 +19,42 @@
             </div>
             <div class="form-msg" ref="formMsg"></div>
 
-            <form @submit.prevent="addGroups">
+            <form @submit.prevent="addExpenses">
               <div class="row mt-3">
                 <div
                   class="col-md-6 mb-4"
-                  v-for="(contribution, i) in contributions"
+                  v-for="(expense, i) in expenses"
                   :key="i"
                 >
                   <div class="row border mr-2 py-4 px-3">
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label for="amount">Amount *</label>
+                        <label for="name">Name *</label>
+                        <input
+                          type="text"
+                          :name="`name-${i}`"
+                          :id="`name-${i}`"
+                          class="form-control"
+                          required
+                          v-model.trim="expense.name"
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <div class="d-flex">
+                          <label for="date">Amount *</label>
+                          <button
+                            style="margin-top: -8px;"
+                            class="btn btn-danger btn-icon-28 ml-auto"
+                            type="button"
+                            @click="RemoveRecord"
+                            v-if="expenses.length > 1 && i !== 0"
+                            v-tooltip.top="'Remove'"
+                          >
+                            <i class="pi pi-trash"></i>
+                          </button>
+                        </div>
                         <input
                           type="number"
                           :name="`amount-${i}`"
@@ -37,27 +62,16 @@
                           :id="`amount-${i}`"
                           class="form-control"
                           required
-                          v-model.trim="contribution.amount"
+                          v-model.trim="expense.amount"
                         />
                       </div>
                     </div>
+
                     <div class="col-md-6">
                       <div class="form-group">
-                        <div class="d-flex">
-                          <label for="date">Date *</label>
-                          <button
-                            style="margin-top: -8px;"
-                            class="btn btn-danger btn-icon-28 ml-auto"
-                            type="button"
-                            @click="RemoveRecord"
-                            v-if="contributions.length > 1 && i !== 0"
-                            v-tooltip.top="'Remove'"
-                          >
-                            <i class="pi pi-trash"></i>
-                          </button>
-                        </div>
+                        <label for="date">Date *</label>
                         <flat-pickr
-                          v-model="contribution.date"
+                          v-model="expense.date"
                           placeholder="Select Date"
                           :name="`date-${i}`"
                           :id="`date-${i}`"
@@ -65,42 +79,15 @@
                         ></flat-pickr>
                       </div>
                     </div>
+
                     <div class="col-md-6">
                       <div class="form-group">
-                        <label for="person">Person *</label>
-                        <Dropdown
-                          v-model="contribution.person"
-                          :options="members"
-                          :filter="true"
-                          optionLabel="name"
-                          optionValue="id"
-                          placeholder="Select Person"
-                          class="form-control"
-                        />
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label for="person">Group *</label>
-                        <Dropdown
-                          v-model="contribution.group"
-                          :options="groups"
-                          :filter="true"
-                          optionLabel="name"
-                          optionValue="id"
-                          placeholder="Select Group"
-                          class="form-control"
-                        />
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label for="method">Method of payment *</label>
+                        <label for="method">Type *</label>
                         <select
                           name="method"
                           id="method"
                           class="custom-select"
-                          v-model.number="contribution.method"
+                          v-model.number="expense.type"
                         >
                           <option
                             :value="method.id"
@@ -119,7 +106,7 @@
                           :name="`comment-${i}`"
                           :id="`comment-${i}`"
                           class="form-control"
-                          v-model="contribution.comment"
+                          v-model="expense.comment"
                         />
                       </div>
                     </div>
@@ -144,54 +131,51 @@
 
 <script>
 import { addBtnLoading, removeBtnLoading } from "@services/helpers";
-import Contribution from "@services/api/contribution";
-import Member from "@services/api/people";
-import Group from "@services/api/groups";
+import Expenses from "@services/api/expenses";
 import Swal from "sweetalert2";
-import Dropdown from "primevue/dropdown";
 import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 
 export default {
-  name: "Covenant",
+  name: "Expenses",
   components: {
-    Dropdown,
     flatPickr,
   },
   data() {
     return {
-      contributions: [
+      expenses: [
         {
           amount: 0,
           comment: "",
+          type: "",
+          name: "",
           date: "",
-          person: "",
-          group: "",
-          method: 1,
         },
       ],
-      members: [],
-      groups: [],
       methods: [
-        { name: "Cash", id: 1 },
-        { name: "Cheque", id: 2 },
-        { name: "Online", id: 3 },
-        { name: "Mobile Money", id: 4 },
+        { name: "Utility ", id: 1 },
+        { name: "Donation ", id: 2 },
+        { name: "Welfare ", id: 3 },
+        { name: "Equipment And Technology ", id: 4 },
+        { name: "Allowance  ", id: 5 },
+        { name: "Building And Construction", id: 6 },
+        { name: "Publicity", id: 7 },
+        { name: "Evangelism", id: 8 },
       ],
     };
   },
 
   methods: {
-    async addGroups(e) {
+    async addExpenses(e) {
       const btn = this.$refs.submitBtn;
       const formMsg = this.$refs.formMsg;
       try {
         const errors = [];
-        this.contributions.forEach((contribution) => {
-          if (!contribution.person) errors.push("error");
-          if (!contribution.date) errors.push("error");
-          if (!contribution.group) errors.push("error");
-          if (!contribution.method) errors.push("error");
+        this.expenses.forEach((expense) => {
+          if (!expense.name) errors.push("error");
+          if (!expense.type) errors.push("error");
+          if (!expense.amount) errors.push("error");
+          if (!expense.date) errors.push("error");
         });
 
         if (errors.length) {
@@ -200,13 +184,13 @@ export default {
         }
         addBtnLoading(btn);
         const formData = {
-          contributions: this.contributions,
+          expenses: this.expenses,
         };
-        const response = await Contribution.groupAdd(formData);
+        const response = await Expenses.store(formData);
         const res = response.data;
         removeBtnLoading(btn);
         Swal.fire("Success", res.message, "success");
-        this.$router.push({ name: "Contributions" });
+        this.$router.push({ name: "expenses" });
       } catch (err) {
         const res = err.response.data;
         let errorBag = "";
@@ -222,43 +206,19 @@ export default {
         formMsg.innerHTML = `<div class="alert alert-danger">${errorBag}</div>`;
       }
     },
-    //fetch members
-    async getMembers() {
-      try {
-        const response = await Member.members();
-        const res = response.data;
-        this.members = res.data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    //fetch groups
-    async getGroups() {
-      try {
-        const response = await Group.all();
-        const res = response.data;
-        this.groups = res.data;
-      } catch (error) {
-        console.log(error);
-      }
-    },
 
     addMoreRecords() {
-      this.contributions.push({
+      this.expenses.push({
         amount: 0,
         comment: "",
+        type: "",
+        name: "",
         date: "",
-        person: "",
-        group: "",
-        method: 1,
       });
     },
     RemoveRecord() {
-      this.contributions.pop();
+      this.expenses.pop();
     },
-  },
-  async created() {
-    await Promise.all([this.getMembers(), this.getGroups()]);
   },
 };
 </script>
