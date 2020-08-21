@@ -5,7 +5,13 @@
     </div>
     <div>
       <div class="d-flex justify-content-between">
-        <button class="btn btn-primary mr-3" @click="previous">Previous</button>
+        <button
+          class="btn btn-primary mr-3"
+          @click="previous"
+          ref="previousBtn"
+        >
+          Previous
+        </button>
         <button class="btn btn-success" @click="submitData" ref="submitBtn">
           Submit
         </button>
@@ -27,7 +33,7 @@ export default {
     },
 
     submitData(e) {
-      this.$emit("submit-data", this.$refs.submitBtn);
+      this.$emit("submit-data", this.$refs.submitBtn, this.$refs.previousBtn);
     },
   },
 };

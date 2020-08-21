@@ -77,9 +77,10 @@ export default {
     setFile(val) {
       this.form.file = val;
     },
-    async submitData(btn) {
+    async submitData(btn, prevBtn) {
       try {
         addBtnLoading(btn);
+        addBtnLoading(prevBtn);
         const formData = new FormData();
         formData.append("name", this.form.name);
         formData.append("type", this.form.type);
@@ -89,10 +90,12 @@ export default {
         const response = await Attendance.store(formData);
         const res = response.data;
         removeBtnLoading(btn);
+        removeBtnLoading(prevBtn);
         Swal.fire("Success", res.message, "success");
         this.$router.push({ name: "attendance" });
       } catch (error) {
         removeBtnLoading(btn);
+        removeBtnLoading(prevBtn);
         const res = error.response.data;
         let errorBag = "";
         if (res.code === 422) {
