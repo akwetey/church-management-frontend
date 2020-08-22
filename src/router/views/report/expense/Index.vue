@@ -35,7 +35,7 @@
                     <label for="type">Type of report *</label>
                     <select name="type" id="type" class="custom-select" v-model.number="form.type">
                       <option value="1">Chart</option>
-                      <option value="2">Accumulation</option>
+                      <option value="2">Table | Accumulation</option>
                     </select>
                   </div>
                 </div>
@@ -48,6 +48,7 @@
                       id="duration"
                       class="custom-select"
                       v-model.number="form.duration"
+                      @change="form.date = ''"
                     >
                       <option value="1">Day</option>
                       <option value="2">Week</option>
@@ -62,6 +63,7 @@
                   <div class="form-group">
                     <label for="day">Date *</label>
                     <DatePicker
+                      id="dayPicker"
                       class="form-control bg-white"
                       v-model="form.date"
                       placeholder="Select date"
@@ -79,9 +81,11 @@
                       id="weekSelector"
                       v-model="form.date"
                       :yearNavigator="true"
+                      dateFormat="yy-mm-dd"
                       yearRange="1970:2030"
                       placeholder="Select week"
                       showWeek
+                      selectOtherMonths
                       required
                     />
                   </div>
@@ -125,6 +129,7 @@
                     <div class="form-group">
                       <label for="from">Start Date *</label>
                       <DatePicker
+                        id="fromPicker"
                         class="form-control bg-white"
                         v-model="form.from"
                         placeholder="Select date"
@@ -138,6 +143,7 @@
                     <div class="form-group">
                       <label for="to">End Date *</label>
                       <DatePicker
+                        id="toPicker"
                         class="form-control bg-white"
                         v-model="form.to"
                         placeholder="Select date"
@@ -150,7 +156,7 @@
               </div>
 
               <div class="text-center mb-3">
-                <button class="btn btn-success">Render Report</button>
+                <button class="btn btn-success" ref="renderReportBtn">Render Report</button>
               </div>
 
               <hr />
@@ -163,11 +169,13 @@
 </template>
 
 <script>
+import Report from "@services/api/reports";
 import DatePicker from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.min.css";
-import weekSelectPlugin from "flatpickr/dist/plugins/weekSelect/weekSelect.js";
 
 import Calendar from "primevue/calendar";
+import { addBtnLoading, removeBtnLoading } from "@services/helpers";
+const dayjs = require("dayjs");
 
 export default {
   name: "ReportExpense",
@@ -177,16 +185,13 @@ export default {
       years: [],
       form: {
         category: "all",
-        date: null,
+        date: "",
         duration: 1,
         type: 2,
         from: null,
         to: null,
       },
       dateConfig: {
-        week: {
-          plugins: [new weekSelectPlugin({})],
-        },
         date: {
           allowInput: true,
         },
@@ -194,7 +199,37 @@ export default {
     };
   },
   methods: {
-    renderReport() {},
+    renderReport(e) {
+      const btn = this.$refs.renderReportBtn;
+      let formData = {
+        category:
+          this.form.category !== "all"
+            ? [this.form.category]
+            : this.form.category,
+        duration: this.form.duration,
+        type: this.form.type,
+        date:
+          this.form.duration === 3 || this.form.duration === 2
+            ? dayjs(this.form.date).format("YYYY-MM-DD")
+            : this.form.date,
+      };
+
+      if (this.form.duration === 5) {
+        formData.from = this.form.from;
+        formData.to = this.form.to;
+      }
+
+      addBtnLoading(btn);
+
+      Report.expenses({ params: formData })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((err) => console.log(err))
+        .finally(() => {
+          removeBtnLoading(btn);
+        });
+    },
   },
   created() {
     const currentYear = new Date().getFullYear();
