@@ -13,6 +13,11 @@ export default [
         name: "ReportAttendance",
         component: () => import("@views/report/attendance/Index.vue"),
       },
+      {
+        path: "expenses",
+        name: "ReportExpense",
+        component: () => import("@views/report/expense/Index.vue"),
+      },
     ],
   },
 ];
