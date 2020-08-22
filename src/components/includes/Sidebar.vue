@@ -65,6 +65,7 @@
             <span class="link-title">Attendance</span>
           </router-link>
         </li>
+
         <li class="nav-item">
           <a
             id="contributions-collapse-btn"
@@ -82,17 +83,19 @@
           <div class="collapse" id="contributions">
             <ul class="nav sub-menu">
               <li class="nav-item">
-                <router-link :to="{ name: 'pledge' }" class="nav-link"
-                  >Pledge</router-link
-                >
+                <router-link :to="{ name: 'pledge' }" class="nav-link">Pledge</router-link>
               </li>
               <li class="nav-item">
-                <router-link :to="{ name: 'Contributions' }" class="nav-link"
-                  >All Contributions</router-link
-                >
+                <router-link :to="{ name: 'Contributions' }" class="nav-link">All Contributions</router-link>
               </li>
             </ul>
           </div>
+        </li>
+        <li class="nav-item">
+          <router-link :to="{ name: 'ReportIndex' }" class="nav-link">
+            <i class="link-icon pi pi-chart-bar"></i>
+            <span class="link-title">Reports</span>
+          </router-link>
         </li>
         <li class="nav-item">
           <a
@@ -111,14 +114,10 @@
           <div class="collapse" id="users-roles">
             <ul class="nav sub-menu">
               <li class="nav-item">
-                <router-link :to="{ name: 'user' }" class="nav-link"
-                  >Users</router-link
-                >
+                <router-link :to="{ name: 'user' }" class="nav-link">Users</router-link>
               </li>
               <li class="nav-item">
-                <router-link :to="{ name: 'role' }" class="nav-link"
-                  >Roles</router-link
-                >
+                <router-link :to="{ name: 'role' }" class="nav-link">Roles</router-link>
               </li>
             </ul>
           </div>
