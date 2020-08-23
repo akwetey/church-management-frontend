@@ -6,7 +6,7 @@
 
         <form @submit.prevent="renderReport">
           <div class="card mb-3">
-            <div class="card-body">
+            <div class="card-body px-5">
               <div class="row mb-3">
                 <div class="col-md-4">
                   <div class="form-group">
@@ -17,15 +17,12 @@
                       class="custom-select"
                       v-model.number="form.category"
                     >
-                      <option value="all">All</option>
-                      <option value="1">Utility</option>
-                      <option value="2">Donation</option>
-                      <option value="3">Welfare</option>
-                      <option value="4">Equipment & Technology</option>
-                      <option value="5">Allowance</option>
-                      <option value="6">Building & Construction</option>
-                      <option value="7">Publicity</option>
-                      <option value="8">Evangelism</option>
+                      <option
+                        :value="c.value"
+                        :key="i"
+                        v-for="(c, i) in categories"
+                        >{{ c.name }}</option
+                      >
                     </select>
                   </div>
                 </div>
@@ -33,9 +30,18 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <label for="type">Type of report *</label>
-                    <select name="type" id="type" class="custom-select" v-model.number="form.type">
-                      <option value="1">Chart</option>
-                      <option value="2">Table | Accumulation</option>
+                    <select
+                      name="type"
+                      id="type"
+                      class="custom-select"
+                      v-model.number="form.type"
+                    >
+                      <option
+                        :value="t.value"
+                        :key="i"
+                        v-for="(t, i) in reportTypes"
+                        >{{ t.name }}</option
+                      >
                     </select>
                   </div>
                 </div>
@@ -119,7 +125,12 @@
                       required
                     >
                       <option value>Choose year</option>
-                      <option :value="year" v-for="(year, i) in years" :key="i">{{ year }}</option>
+                      <option
+                        :value="year"
+                        v-for="(year, i) in years"
+                        :key="i"
+                        >{{ year }}</option
+                      >
                     </select>
                   </div>
                 </div>
@@ -155,11 +166,15 @@
                 </template>
               </div>
 
-              <div class="text-center mb-3">
-                <button class="btn btn-success" ref="renderReportBtn">Render Report</button>
+              <div class="text-center pb-4 mb-3">
+                <button class="btn btn-success" ref="renderReportBtn">
+                  Render Report
+                </button>
               </div>
 
               <hr />
+
+              <div class="report-container pt-3" ref="reportContainer"></div>
             </div>
           </div>
         </form>
@@ -175,7 +190,18 @@ import "flatpickr/dist/flatpickr.min.css";
 
 import Calendar from "primevue/calendar";
 import { addBtnLoading, removeBtnLoading } from "@services/helpers";
+
+import { Grid } from "gridjs";
+import { json2excel } from "js2excel";
+import ApexCharts from "apexcharts";
+
+import "gridjs/dist/theme/mermaid.css";
+
 const dayjs = require("dayjs");
+
+function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 export default {
   name: "ReportExpense",
@@ -183,6 +209,21 @@ export default {
   data() {
     return {
       years: [],
+      reportTypes: [
+        { value: 1, name: "Chart" },
+        { value: 2, name: "Accumulation" },
+      ],
+      categories: [
+        { value: "all", name: "All" },
+        { value: 1, name: "Utility" },
+        { value: 2, name: "Donation" },
+        { value: 3, name: "Welfare" },
+        { value: 4, name: "Equipment & Technology" },
+        { value: 5, name: "Allowance" },
+        { value: 6, name: "Building & Construction" },
+        { value: 7, name: "Publicity" },
+        { value: 8, name: "Evangelism" },
+      ],
       form: {
         category: "all",
         date: "",
@@ -196,7 +237,13 @@ export default {
           allowInput: true,
         },
       },
+      resultJsonData: [],
     };
+  },
+  computed: {
+    currency() {
+      return this.$store.getters.currency;
+    },
   },
   methods: {
     renderReport(e) {
@@ -223,12 +270,221 @@ export default {
 
       Report.expenses({ params: formData })
         .then((response) => {
-          console.log(response.data);
+          const res = response.data;
+          if (Object.entries(res.data).length === 0 || res.data.length === 0) {
+            document.querySelector(
+              ".report-container"
+            ).innerHTML = `<div class="mt-4 text-center">
+              <h3 class="display-4">NO DATA FOUND</h3>
+            </div>`;
+            return;
+          }
+
+          //this.reportTitleGenerator();
+          this.reportGenerator(res.data, formData.type);
         })
         .catch((err) => console.log(err))
         .finally(() => {
           removeBtnLoading(btn);
         });
+    },
+
+    reportTitleGenerator() {
+      let title;
+      let params = this.form;
+
+      const catIndex = this.categories.findIndex(
+        (record) => record.value === params.category
+      );
+      const { name: categoryName } = this.categories[catIndex];
+      if (params.type === 2) {
+        if (params.duration === 1) {
+          title = `Total amount of expenses for ${
+            params.category === "all"
+              ? "all expense categories"
+              : categoryName + " expense category"
+          } for`;
+        }
+      } else {
+      }
+    },
+
+    reportGenerator(results, reportType) {
+      // Accumulation
+      if (reportType === 2) {
+        this.renderAccumulationReport(results);
+      } else {
+        this.renderChartReport(results);
+      }
+    },
+
+    renderAccumulationReport(results) {
+      const reportContainer = this.$refs.reportContainer;
+      reportContainer.innerHTML = "";
+
+      const resultJsonData = [];
+      const { results: items } = results;
+      const totalElement = document.createElement("h5");
+      const exportBtn = document.createElement("button");
+      const tableContainer = document.createElement("div");
+      const totalExportContainer = document.createElement("div");
+      tableContainer.setAttribute("id", "table-wrapper");
+      totalExportContainer.className = "d-flex justify-content-between";
+      totalElement.className = "mb-4";
+      exportBtn.className = "btn btn-primary export-btn";
+      exportBtn.textContent = "Export";
+
+      const tableData = items.map((element) => {
+        const jsonData = {
+          Name: element.name,
+          Amount: `${this.currency + "" + element.amount}`,
+          Date: element.date,
+          Type: element.type,
+        };
+
+        resultJsonData.push(jsonData);
+        return [
+          element.name,
+          `${this.currency + "" + element.amount}`,
+          element.date,
+          element.type,
+        ];
+      });
+
+      let tableConfig = {
+        columns: ["Name", "Amount", "Date", "Type"],
+        data: tableData,
+        fixedHeader: true,
+        search: {
+          enabled: true,
+        },
+      };
+
+      if (items.length > 10) {
+        tableConfig.height = "600px";
+      }
+
+      totalElement.innerHTML = `Total: <small>${
+        this.currency
+      }</small>${numberWithCommas(results.total)}`;
+      totalExportContainer.appendChild(totalElement);
+      totalExportContainer.appendChild(exportBtn);
+      reportContainer.appendChild(totalExportContainer);
+      reportContainer.appendChild(tableContainer);
+
+      new Grid(tableConfig).render(document.getElementById("table-wrapper"));
+
+      exportBtn.onclick = () => {
+        try {
+          json2excel({
+            data: resultJsonData,
+            name: "Expense-report",
+          });
+        } catch (err) {
+          console.log(err);
+        }
+      };
+    },
+
+    renderChartReport(results) {
+      const { chart_type: chartType, results: items } = results;
+      const reportContainer = this.$refs.reportContainer;
+      reportContainer.innerHTML = "";
+
+      if (chartType) {
+        if (chartType === "multiple bar charts") {
+          const chartContainer = document.createElement("div");
+          chartContainer.setAttribute("id", "chartContainer");
+          chartContainer.className = "mt-4";
+
+          for (const key of Object.keys(items)) {
+            const yearElement = document.createElement("h5");
+            const yearContainer = document.createElement("div");
+            const yearChartContainer = document.createElement("div");
+            yearChartContainer.setAttribute("id", `report-${key}`);
+            yearContainer.className = "mt-4";
+            yearElement.className = "text-center";
+            yearElement.textContent = `Expense report for ${key}`;
+
+            const data = items[key];
+            const options = {
+              series: [{ name: `Expense (${this.currency})`, data: [] }],
+              chart: {
+                type: "bar",
+                height: 350,
+              },
+              plotOptions: {},
+              dataLabels: {
+                enabled: true,
+              },
+              xaxis: {
+                categories: [],
+              },
+              yaxis: {
+                title: {
+                  text: `Expense Amount (${this.currency})`,
+                },
+              },
+            };
+
+            // Set chart values
+            data.forEach((element) => {
+              options.series[0].data.push(element.total);
+              options.xaxis.categories.push(element.name);
+            });
+
+            yearContainer.appendChild(yearElement);
+            yearContainer.appendChild(yearChartContainer);
+            chartContainer.appendChild(yearContainer);
+
+            reportContainer.appendChild(chartContainer);
+
+            const chart = new ApexCharts(yearChartContainer, options);
+            chart.render();
+          }
+        } else {
+          const chartContainer = document.createElement("div");
+          chartContainer.setAttribute("id", "chartContainer");
+          chartContainer.className = "mt-4";
+
+          const options = {
+            series: [{ name: `Expense (${this.currency})`, data: [] }],
+            chart: {
+              type: "bar",
+              height: 350,
+            },
+            plotOptions: {
+              // bar: {
+              //   horizontal: true,
+              // },
+            },
+            dataLabels: {
+              enabled: true,
+            },
+            xaxis: {
+              categories: [],
+            },
+            yaxis: {
+              title: {
+                text: `Expense Amount (${this.currency})`,
+              },
+            },
+          };
+
+          // Set chart values
+          items.forEach((element) => {
+            options.series[0].data.push(element.total);
+            options.xaxis.categories.push(element.name);
+          });
+
+          reportContainer.appendChild(chartContainer);
+
+          const chart = new ApexCharts(chartContainer, options);
+          chart.render();
+        }
+      } else {
+        this.renderAccumulationReport(results.results);
+      }
     },
   },
   created() {

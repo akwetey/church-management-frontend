@@ -129,3 +129,29 @@ select.form-control {
     }
   }
 }
+.table-fixed-header tbody {
+  height: 300px;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.table-fixed-header thead,
+.table-fixed-header tbody,
+.table-fixed-header tr,
+.table-fixed-header td,
+.table-fixed-header th {
+  display: block;
+}
+
+.table-fixed-header tbody td,
+.table-fixed-header tbody th,
+.table-fixed-header thead > tr > th {
+  float: left;
+  position: relative;
+
+  &::after {
+    content: "";
+    clear: both;
+    display: block;
+  }
+}
