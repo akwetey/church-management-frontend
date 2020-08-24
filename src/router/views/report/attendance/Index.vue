@@ -102,6 +102,8 @@
                         name="date"
                         id="date"
                         class="form-control bg-white"
+                        :config="config"
+                        required
                       ></flat-pickr>
                     </div>
                   </div>
@@ -116,6 +118,7 @@
                         :yearNavigator="true"
                         yearRange="2000:2100"
                         placeholder="Select Month"
+                        required
                       />
                     </div>
                   </div>
@@ -127,7 +130,9 @@
                         id="year"
                         class="custom-select"
                         v-model="form.date"
+                        required
                       >
+                        <option value>Choose year</option>
                         <option
                           :value="year"
                           v-for="(year, i) in years"
@@ -146,6 +151,8 @@
                         name="to"
                         id="to"
                         class="form-control bg-white"
+                        :config="config"
+                        required
                       ></flat-pickr>
                     </div>
                   </div>
@@ -158,6 +165,8 @@
                         name="from"
                         id="from"
                         class="form-control bg-white"
+                        :config="config"
+                        required
                       ></flat-pickr>
                     </div>
                   </div>
@@ -263,7 +272,7 @@ export default {
         for: 1,
         group_id: "",
         gender: 3,
-        date: null,
+        date: "",
         type: 3,
         to: null,
         from: null,
@@ -279,6 +288,9 @@ export default {
       },
       attendances: [],
       chartType: "",
+      config: {
+        allowInput: true,
+      },
     };
   },
   methods: {
