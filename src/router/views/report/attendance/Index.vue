@@ -217,6 +217,18 @@
                     :series="chartData.attendance.series"
                   ></ApexChart>
                 </div>
+                <div
+                  class="d-flex justify-content-center"
+                  v-if="chartType === 'Bar'"
+                >
+                  <ApexChart
+                    type="bar"
+                    :height="450"
+                    :width="450"
+                    :options="chartData.attendanceSpecific.chartOptions"
+                    :series="chartData.attendanceSpecific.series"
+                  ></ApexChart>
+                </div>
                 <div v-if="chartType === 'Table'">
                   <DataTable
                     :value="attendances"
@@ -286,6 +298,10 @@ export default {
           series: [],
           chartOptions: {},
         },
+        attendanceSpecific: {
+          series: [],
+          chartOptions: {},
+        },
       },
       attendances: [],
       chartType: "",
@@ -300,53 +316,42 @@ export default {
       try {
         addBtnLoading(btn);
         const groupID = `${this.form.group_id}`;
-        const getParams = {
-          params: {
-            date:
-              this.form.duration === 4
-                ? this.form.date
-                : dayjs(this.form.date).format("YYYY-MM-DD"),
-            from: this.form.from,
-            to: this.form.to,
-            group_id: groupID.split(""),
-            for: this.form.for,
-            status: this.form.status,
-            duration: this.form.duration,
-            gender: this.form.gender,
-            type: this.form.type,
-          },
+        const params = {
+          date:
+            this.form.duration === 4
+              ? this.form.date
+              : dayjs(this.form.date).format("YYYY-MM-DD"),
+          group_id: groupID.split(""),
+          for: this.form.for,
+          status: this.form.status,
+          duration: this.form.duration,
+          gender: this.form.gender,
+          type: this.form.type,
         };
 
-        const response = await Report.attendance(getParams);
+        if (this.form.duration === 5) {
+          params.from = this.form.from;
+          params.to = this.form.to;
+          delete params.date;
+        }
+
+        const response = await Report.attendance({ params });
         removeBtnLoading(btn);
-        this.attendances = response.data.data;
-        const series = [];
-        const labels = [];
         const data = Object.entries(response.data.data);
         if (data.length > 0) {
-          data.forEach(([key, value]) => {
-            series.push(value);
-            labels.push(key.toUpperCase());
-          });
-          this.chartData.attendance = {
-            series: series,
-            chartOptions: {
-              labels: labels,
-              legend: {
-                position: "right",
-              },
-            },
-          };
           if (this.form.type == 1) {
             if (this.form.duration == 5) {
               this.chartType = "Bar chart";
+              this.renderBar(data);
             } else {
               this.chartType = "Donut";
+              this.renderDonut(data);
             }
           }
 
           if (this.form.type == 2) {
             this.chartType = "Table";
+            this.attendances = response.data.data;
           }
 
           if (this.form.type == 3) {
@@ -395,6 +400,41 @@ export default {
 
     exportCSV() {
       this.$refs.dt.exportCSV();
+    },
+
+    renderDonut(data) {
+      const series = [];
+      const labels = [];
+      data.forEach(([key, value]) => {
+        series.push(value);
+        labels.push(key.toUpperCase());
+      });
+      this.chartData.attendance = {
+        series: series,
+        chartOptions: {
+          labels: labels,
+          legend: {
+            position: "right",
+          },
+        },
+      };
+    },
+    renderBar(data) {
+      const series = [];
+      const labels = [];
+      data.forEach(([key, value]) => {
+        series.push(value);
+        labels.push(key.toUpperCase());
+      });
+      this.chartData.attendance = {
+        series: series,
+        chartOptions: {
+          labels: labels,
+          legend: {
+            position: "right",
+          },
+        },
+      };
     },
   },
   created() {
