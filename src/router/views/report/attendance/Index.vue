@@ -241,6 +241,7 @@
                     <Column field="attendance_date" header="Date"></Column>
                   </DataTable>
                 </div>
+                <div ref="formMsg"></div>
               </div>
             </form>
           </div>
@@ -318,40 +319,61 @@ export default {
 
         const response = await Report.attendance(getParams);
         removeBtnLoading(btn);
-        if (this.form.type == 1) {
-          if (this.form.duration == 5) {
-            this.chartType = "Bar chart";
-          } else {
-            this.chartType = "Donut";
-          }
-        }
-
-        if (this.form.type == 2) {
-          this.chartType = "Table";
-        }
-
-        if (this.form.type == 3) {
-          this.chartType = "Count";
-        }
         this.attendances = response.data.data;
         const series = [];
         const labels = [];
         const data = Object.entries(response.data.data);
-        data.forEach(([key, value]) => {
-          series.push(value);
-          labels.push(key.toUpperCase());
-        });
-        this.chartData.attendance = {
-          series: series,
-          chartOptions: {
-            labels: labels,
-            legend: {
-              position: "right",
+        if (data.length > 0) {
+          data.forEach(([key, value]) => {
+            series.push(value);
+            labels.push(key.toUpperCase());
+          });
+          this.chartData.attendance = {
+            series: series,
+            chartOptions: {
+              labels: labels,
+              legend: {
+                position: "right",
+              },
             },
-          },
-        };
+          };
+          if (this.form.type == 1) {
+            if (this.form.duration == 5) {
+              this.chartType = "Bar chart";
+            } else {
+              this.chartType = "Donut";
+            }
+          }
+
+          if (this.form.type == 2) {
+            this.chartType = "Table";
+          }
+
+          if (this.form.type == 3) {
+            this.chartType = "Count";
+          }
+          this.$refs.formMsg.innerHTML = ``;
+        } else {
+          if (this.form.type == 1) {
+            if (this.form.duration == 5) {
+              this.chartType = "";
+            } else {
+              this.chartType = "";
+            }
+          }
+
+          if (this.form.type == 2) {
+            this.chartType = "";
+          }
+
+          if (this.form.type == 3) {
+            this.chartType = "";
+          }
+          this.$refs.formMsg.innerHTML = `<h5 class="text-center">No Data Found</h5>`;
+        }
       } catch (error) {
         removeBtnLoading(btn);
+        console.log(error);
       }
     },
     async onChangeAttendanceType(e) {
