@@ -129,7 +129,7 @@
                         name="date"
                         id="year"
                         class="custom-select"
-                        v-model="form.date"
+                        v-model="form.year"
                         required
                       >
                         <option value>Choose year</option>
@@ -144,12 +144,12 @@
                   </div>
                   <div class="col-md-4" v-if="form.duration === 5">
                     <div class="form-group">
-                      <label for="to">To *</label>
+                      <label for="from">Start Date *</label>
                       <flat-pickr
-                        v-model.trim="form.to"
+                        v-model.trim="form.from"
                         placeholder="Select Date"
-                        name="to"
-                        id="to"
+                        name="from"
+                        id="from"
                         class="form-control bg-white"
                         :config="config"
                         required
@@ -158,12 +158,12 @@
                   </div>
                   <div class="col-md-4" v-if="form.duration === 5">
                     <div class="form-group">
-                      <label for="from">From *</label>
+                      <label for="to">End Date *</label>
                       <flat-pickr
-                        v-model.trim="form.from"
+                        v-model.trim="form.to"
                         placeholder="Select Date"
-                        name="from"
-                        id="from"
+                        name="to"
+                        id="to"
                         class="form-control bg-white"
                         :config="config"
                         required
@@ -224,7 +224,7 @@
                   <ApexChart
                     type="bar"
                     :height="450"
-                    :width="450"
+                    :width="850"
                     :options="chartData.attendanceSpecific.chartOptions"
                     :series="chartData.attendanceSpecific.series"
                   ></ApexChart>
@@ -286,6 +286,7 @@ export default {
         group_id: "",
         gender: 3,
         date: "",
+        year: "",
         type: 3,
         to: null,
         from: null,
@@ -319,7 +320,7 @@ export default {
         const params = {
           date:
             this.form.duration === 4
-              ? this.form.date
+              ? this.form.year
               : dayjs(this.form.date).format("YYYY-MM-DD"),
           group_id: groupID.split(""),
           for: this.form.for,
@@ -337,15 +338,17 @@ export default {
 
         const response = await Report.attendance({ params });
         removeBtnLoading(btn);
-        const data = Object.entries(response.data.data);
-        if (data.length > 0) {
+        if (
+          Object.entries(response.data.data).length > 0 ||
+          response.data.data.length > 0
+        ) {
           if (this.form.type == 1) {
             if (this.form.duration == 5) {
-              this.chartType = "Bar chart";
-              this.renderBar(data);
+              this.chartType = "Bar";
+              this.renderBar(response.data.data);
             } else {
               this.chartType = "Donut";
-              this.renderDonut(data);
+              this.renderDonut(response.data.data);
             }
           }
 
@@ -402,7 +405,8 @@ export default {
       this.$refs.dt.exportCSV();
     },
 
-    renderDonut(data) {
+    renderDonut(response) {
+      const data = Object.entries(response);
       const series = [];
       const labels = [];
       data.forEach(([key, value]) => {
@@ -416,22 +420,42 @@ export default {
           legend: {
             position: "right",
           },
+          title: {
+            text: "Attendance Report",
+            align: "center",
+          },
         },
       };
     },
     renderBar(data) {
-      const series = [];
-      const labels = [];
-      data.forEach(([key, value]) => {
-        series.push(value);
-        labels.push(key.toUpperCase());
+      const series = [
+        { name: "Attendees ", data: [] },
+        { name: "Absentees ", data: [] },
+      ];
+      const categories = [];
+      data.forEach((val, index) => {
+        categories.push(val.name.toUpperCase());
+        series[0].data.push(val.attendees);
+        series[1].data.push(val.absentees);
       });
-      this.chartData.attendance = {
+      this.chartData.attendanceSpecific = {
         series: series,
         chartOptions: {
-          labels: labels,
-          legend: {
-            position: "right",
+          plotOptions: {
+            bar: {
+              horizontal: false,
+            },
+          },
+          dataLabels: {
+            enabled: true,
+          },
+          xaxis: {
+            categories: categories,
+          },
+
+          title: {
+            text: "Attendance Report",
+            align: "center",
           },
         },
       };
