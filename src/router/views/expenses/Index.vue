@@ -3,11 +3,7 @@
     <div class="card">
       <div class="card-body">
         <div class="mb-5">
-          <router-link
-            :to="{ name: 'expensesadd' }"
-            class="btn btn-primary px-5"
-            >Add Expenses</router-link
-          >
+          <router-link :to="{ name: 'expensesadd' }" class="btn btn-primary px-5">Add Expenses</router-link>
         </div>
 
         <div>
@@ -20,22 +16,19 @@
             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
             :rowsPerPageOptions="[10, 25, 50]"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            :scrollable="true"
+            scrollHeight="55vh"
           >
             <template #header>
               <div class="table-header d-flex justify-content-end">
                 <span class="p-input-icon-left">
                   <i class="pi pi-search" />
-                  <InputText
-                    v-model="filters['global']"
-                    placeholder="Search For"
-                  />
+                  <InputText v-model="filters['global']" placeholder="Search For" />
                 </span>
               </div>
             </template>
             <template #empty>
-              <div class="text-center">
-                No data found.
-              </div>
+              <div class="text-center">No data found.</div>
             </template>
             <Column field="name" header="Name" sortable></Column>
             <Column field="type" header="type" sortable></Column>
@@ -60,8 +53,9 @@
                   @click="deleteExpense(slotProps.data.mask, $event)"
                 >
                   <i class="pi pi-trash no-pointer-events"></i>
-                </button> </template
-            ></Column>
+                </button>
+              </template>
+            </Column>
           </DataTable>
         </div>
       </div>
