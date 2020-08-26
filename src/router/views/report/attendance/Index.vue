@@ -192,8 +192,7 @@
                       v-model.number="form.type"
                     >
                       <option value="1">Chart</option>
-                      <option value="2">Table</option>
-                      <option value="3">Count</option>
+                      <option value="2">Count</option>
                     </select>
                   </div>
                 </div>
@@ -217,17 +216,30 @@
                     :series="chartData.attendance.series"
                   ></ApexChart>
                 </div>
-                <div
-                  class="d-flex justify-content-center"
-                  v-if="chartType === 'Bar'"
-                >
-                  <ApexChart
-                    type="bar"
-                    :height="450"
-                    :width="850"
-                    :options="chartData.attendanceSpecific.chartOptions"
-                    :series="chartData.attendanceSpecific.series"
-                  ></ApexChart>
+
+                <div v-if="chartType === 'bar chart'">
+                  <div class="d-flex">
+                    <h5 class="pr-3">Attendance Report</h5>
+                    <InputSwitch v-model="toggleReport" />
+                  </div>
+                  <div v-show="!toggleReport">
+                    <ApexChart
+                      type="bar"
+                      :height="450"
+                      :width="850"
+                      :options="chartData.attendanceSpecific.chartOptions"
+                      :series="chartData.attendanceSpecific.series"
+                    ></ApexChart>
+                  </div>
+                  <div v-show="toggleReport">
+                    <ApexChart
+                      type="line"
+                      :height="450"
+                      :width="850"
+                      :options="chartData.attendanceSpecific.chartOptions"
+                      :series="chartData.attendanceSpecific.series"
+                    ></ApexChart>
+                  </div>
                 </div>
                 <div v-if="chartType === 'Table'">
                   <DataTable
@@ -237,7 +249,13 @@
                     ref="dt"
                   >
                     <template #header>
-                      <div style="text-align: left">
+                      <div class="d-flex justify-content-between">
+                        <div class="d-flex">
+                          <h5 class="mr-3">
+                            Attendance Total: {{ attendees }}
+                          </h5>
+                          <h5>Absentees Total: {{ absentees }}</h5>
+                        </div>
                         <button class="btn btn-info" @click="exportCSV($event)">
                           Export
                         </button>
@@ -275,9 +293,18 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Dropdown from "primevue/dropdown";
 import ApexChart from "vue-apexcharts";
+import InputSwitch from "primevue/inputswitch";
 export default {
   name: "AttendanceReport",
-  components: { flatPickr, Calendar, Column, DataTable, Dropdown, ApexChart },
+  components: {
+    flatPickr,
+    Calendar,
+    Column,
+    DataTable,
+    Dropdown,
+    ApexChart,
+    InputSwitch,
+  },
   data() {
     return {
       form: {
@@ -287,13 +314,16 @@ export default {
         gender: 3,
         date: "",
         year: "",
-        type: 3,
+        type: 1,
         to: null,
         from: null,
         duration: 1,
       },
       groups: [],
       years: [],
+      attendees: "",
+      absentees: "",
+      toggleReport: false,
       chartData: {
         attendance: {
           series: [],
@@ -338,46 +368,30 @@ export default {
 
         const response = await Report.attendance({ params });
         removeBtnLoading(btn);
-        if (
-          Object.entries(response.data.data).length > 0 ||
-          response.data.data.length > 0
-        ) {
-          if (this.form.type == 1) {
-            if (this.form.duration == 5) {
-              this.chartType = "Bar";
-              this.renderBar(response.data.data);
-            } else {
-              this.chartType = "Donut";
-              this.renderDonut(response.data.data);
-            }
-          }
-
-          if (this.form.type == 2) {
-            this.chartType = "Table";
-            this.attendances = response.data.data;
-          }
-
-          if (this.form.type == 3) {
-            this.chartType = "Count";
-          }
-          this.$refs.formMsg.innerHTML = ``;
-        } else {
-          if (this.form.type == 1) {
-            if (this.form.duration == 5) {
-              this.chartType = "";
-            } else {
-              this.chartType = "";
-            }
-          }
-
-          if (this.form.type == 2) {
-            this.chartType = "";
-          }
-
-          if (this.form.type == 3) {
-            this.chartType = "";
-          }
+        const res = response.data;
+        if (Object.entries(res.data).length === 0 || res.data.length === 0) {
           this.$refs.formMsg.innerHTML = `<h5 class="text-center">No Data Found</h5>`;
+          this.chartType = "";
+          return;
+        }
+
+        switch (res.data.chart_type) {
+          case "bar chart":
+            this.renderBar(res.data);
+            this.chartType = res.data.chart_type;
+            this.$refs.formMsg.innerHTML = ``;
+            break;
+          case "multiple bar charts":
+            this.renderMultipleBar(res.data);
+            this.chartType = res.data.chart_type;
+            this.$refs.formMsg.innerHTML = ``;
+            break;
+          default:
+            this.chartType = "Table";
+            this.attendances = res.data.results;
+            this.attendees = res.data.count.attendees;
+            this.absentees = res.data.count.absentees;
+            this.$refs.formMsg.innerHTML = ``;
         }
       } catch (error) {
         removeBtnLoading(btn);
@@ -405,39 +419,18 @@ export default {
       this.$refs.dt.exportCSV();
     },
 
-    renderDonut(response) {
-      const data = Object.entries(response);
-      const series = [];
-      const labels = [];
-      data.forEach(([key, value]) => {
-        series.push(value);
-        labels.push(key.toUpperCase());
-      });
-      this.chartData.attendance = {
-        series: series,
-        chartOptions: {
-          labels: labels,
-          legend: {
-            position: "right",
-          },
-          title: {
-            text: "Attendance Report",
-            align: "center",
-          },
-        },
-      };
-    },
-    renderBar(data) {
+    renderMultipleBar(response) {
       const series = [
         { name: "Attendees ", data: [] },
         { name: "Absentees ", data: [] },
       ];
       const categories = [];
-      data.forEach((val, index) => {
+      response.results.forEach((val, index) => {
         categories.push(val.name.toUpperCase());
         series[0].data.push(val.attendees);
         series[1].data.push(val.absentees);
       });
+
       this.chartData.attendanceSpecific = {
         series: series,
         chartOptions: {
@@ -460,6 +453,36 @@ export default {
         },
       };
     },
+
+    renderBar(response) {
+      const series = [
+        { name: "Attendees ", data: [] },
+        { name: "Absentees ", data: [] },
+      ];
+      const categories = [];
+      response.results.forEach((val, index) => {
+        categories.push(val.name.toUpperCase());
+        series[0].data.push(val.attendees);
+        series[1].data.push(val.absentees);
+      });
+
+      this.chartData.attendanceSpecific = {
+        series: series,
+        chartOptions: {
+          plotOptions: {
+            bar: {
+              horizontal: false,
+            },
+          },
+          dataLabels: {
+            enabled: true,
+          },
+          xaxis: {
+            categories: categories,
+          },
+        },
+      };
+    },
   },
   created() {
     const year = new Date().getFullYear();
@@ -470,3 +493,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+div .p-inputswitch {
+  width: 3rem;
+  height: 1.5rem;
+}
+</style>
