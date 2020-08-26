@@ -23,14 +23,14 @@ export default {
     details(mask) {
       return axios.get("/staff/people/" + mask + "/details");
     },
-    attendance(mask) {
-      return axios.get("/staff/people/" + mask + "/attendance");
+    attendance(mask, params) {
+      return axios.get("/staff/people/" + mask + "/attendance", params);
     },
-    followUp(mask) {
-      return axios.get("/staff/people/" + mask + "/follow-ups");
+    followUp(mask, params) {
+      return axios.get("/staff/people/" + mask + "/follow-ups", params);
     },
-    contributions(mask) {
-      return axios.get("/staff/people/" + mask + "/contributions");
+    contributions(mask, params) {
+      return axios.get("/staff/people/" + mask + "/contributions", params);
     },
   },
 };

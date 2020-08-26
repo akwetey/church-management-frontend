@@ -22,10 +22,6 @@ export default new Vuex.Store({
     user(state) {
       return state.user;
     },
-    logout(state) {
-      state.user = {};
-      localStorage.removeItem("_chms_token");
-    },
     avatar(state) {
       return state.user.avatar;
     },
@@ -43,6 +39,10 @@ export default new Vuex.Store({
     },
     setToken(state, token) {
       localStorage.setItem("_chms_token", token);
+    },
+    logout(state) {
+      state.user = {};
+      localStorage.removeItem("_chms_token");
     },
   },
 

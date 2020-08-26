@@ -9,21 +9,6 @@ const Axios = axios.create({
   params: {},
 });
 
-// Request interceptor
-Axios.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("_chms_token");
-    //console.log(token);
-    if (token) {
-      config.headers.common["Authorization"] = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
 // Response interceptor
 // Axios.interceptors.response.use(
 //   (response) => response,

@@ -30,10 +30,10 @@
           </div>
         </div>
 
-        <div class="main-table" style="max-height: 400px">
+        <div class="main-table" style="max-height: 600px">
           <BTable
             :fields="table.fields"
-            :items="attendances"
+            :items="contributions"
             :filter="table.search"
             :current-page="table.currentPage"
             :per-page="table.perPage"
@@ -42,7 +42,17 @@
             head-variant="light"
             responsive
             show-empty
-          ></BTable>
+          >
+            <template v-slot:cell(type)="data">
+              <span
+                v-if="data.item.type.toLowerCase() === 'pledge'"
+              >{{ data.item.type + ' pledge' }}</span>
+              <span
+                v-else-if="data.item.type.toLowerCase() === 'group'"
+              >{{ data.item.type + ' group' }}</span>
+              <span v-else>{{data.item.type}}</span>
+            </template>
+          </BTable>
         </div>
 
         <div class="table-pagination mt-4">
@@ -69,17 +79,18 @@ import DatePickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
 
 export default {
-  name: "Attendance",
+  name: "contribution",
   components: { ProgressSpinner, BTable, BPagination, DatePickr },
   data() {
     return {
+      contributions: [],
       busy: true,
-      attendances: [],
       table: {
         fields: [
-          { label: "Attendance Name", key: "name", sortable: true },
+          { label: "For", key: "type", sortable: true },
+          { label: "Amount", key: "amount", sortable: true },
+          { label: "Payment Method", key: "method", sortable: true },
           { label: "Date", key: "date", sortable: true },
-          { label: "Status", key: "status", sortable: true },
           { label: "Note", key: "comment" },
         ],
         pageOptions: [10, 20, 50, 100],
@@ -95,21 +106,25 @@ export default {
   },
   computed: {
     tableRows() {
-      return this.attendances.length;
+      return this.contributions.length;
     },
   },
   methods: {
     async fetchData() {
       this.busy = true;
-      const response = await People.person.attendance(this.$route.params.mask, {
-        params: {
-          start_date: this.filter.start_date,
-          end_date: this.filter.end_date,
-        },
-      });
+
+      const response = await People.person.contributions(
+        this.$route.params.mask,
+        {
+          params: {
+            start_date: this.filter.start_date,
+            end_date: this.filter.end_date,
+          },
+        }
+      );
       const res = response.data;
 
-      this.attendances = res.data;
+      this.contributions = res.data;
       this.busy = false;
     },
   },
