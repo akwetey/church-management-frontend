@@ -41,7 +41,14 @@
             <template #empty>
               <div class="text-center">No data found.</div>
             </template>
-            <Column field="person.name" header="Contribution For" sortable></Column>
+            <Column field="person.name" header="Contribution For" sortable>
+              <template #body="slotProps">
+                <span
+                  v-if="slotProps.data.type.toLowerCase() === 'general'"
+                >{{ slotProps.data.title }}</span>
+                <span v-else>{{slotProps.data.person.name}}</span>
+              </template>
+            </Column>
 
             <Column field="type" header="Type" sortable></Column>
 

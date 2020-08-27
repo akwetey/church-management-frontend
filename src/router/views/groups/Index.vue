@@ -30,6 +30,7 @@
             <template #empty>
               <div class="text-center">No data found.</div>
             </template>
+            <Column field="id" header="ID" sortable></Column>
             <Column field="name" header="Name" sortable></Column>
 
             <Column field="persons" header="No. of Persons" sortable></Column>
