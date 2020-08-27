@@ -2,6 +2,7 @@ import reportRoutes from "./report";
 import contributionRoutes from "./contribution";
 import expenseRoutes from "./expense";
 import pledgeRoutes from "./pledge";
+import importRoutes from "./imports";
 
 export default [
   {
@@ -152,15 +153,11 @@ export default [
         name: "AttendanceAdd",
         component: () => import("@views/attendance/import/Index.vue"),
       },
-      {
-        path: "import-data",
-        name: "import",
-        component: () => import("@views/tools/Index.vue"),
-      },
       ...pledgeRoutes,
       ...expenseRoutes,
       ...contributionRoutes,
       ...reportRoutes,
+      ...importRoutes,
     ],
   },
   {

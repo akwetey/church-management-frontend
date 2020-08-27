@@ -65,12 +65,6 @@
             <span class="link-title">Attendance</span>
           </router-link>
         </li>
-        <li class="nav-item">
-          <router-link :to="{ name: 'import' }" class="nav-link">
-            <i class="link-icon pi pi-cog"></i>
-            <span class="link-title">Tools</span>
-          </router-link>
-        </li>
 
         <li class="nav-item">
           <a
@@ -96,6 +90,35 @@
               <li class="nav-item">
                 <router-link :to="{ name: 'Contributions' }" class="nav-link"
                   >All Contributions</router-link
+                >
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <a
+            id="import-collapse-btn"
+            class="nav-link"
+            data-toggle="collapse"
+            href="#import"
+            role="button"
+            aria-expanded="false"
+            aria-controls="users-roles"
+          >
+            <i class="link-icon pi pi-cog"></i>
+            <span class="link-title">Tools</span>
+            <i class="link-arrow pi pi-angle-down"></i>
+          </a>
+          <div class="collapse" id="import">
+            <ul class="nav sub-menu">
+              <li class="nav-item">
+                <router-link :to="{ name: 'AttendanceAdd' }" class="nav-link"
+                  >Import Attendance</router-link
+                >
+              </li>
+              <li class="nav-item">
+                <router-link :to="{ name: 'expenseimport' }" class="nav-link"
+                  >Import Expense</router-link
                 >
               </li>
             </ul>
@@ -149,6 +172,7 @@ export default {
   mounted() {
     new BSN.Collapse("#users-role-collapse-btn");
     new BSN.Collapse("#contributions-collapse-btn");
+    new BSN.Collapse("#import-collapse-btn");
   },
 };
 </script>
