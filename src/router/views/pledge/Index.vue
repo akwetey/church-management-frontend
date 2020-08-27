@@ -3,9 +3,7 @@
     <div class="card">
       <div class="card-body">
         <div class="mb-5">
-          <router-link :to="{ name: 'pledgeadd' }" class="btn btn-primary px-5"
-            >Add Pledge</router-link
-          >
+          <router-link :to="{ name: 'pledgeadd' }" class="btn btn-primary px-5">Add Pledge</router-link>
         </div>
 
         <div>
@@ -23,18 +21,14 @@
               <div class="table-header d-flex justify-content-end">
                 <span class="p-input-icon-left">
                   <i class="pi pi-search" />
-                  <InputText
-                    v-model="filters['global']"
-                    placeholder="Search For"
-                  />
+                  <InputText v-model="filters['global']" placeholder="Search For" />
                 </span>
               </div>
             </template>
             <template #empty>
-              <div class="text-center">
-                No data found.
-              </div>
+              <div class="text-center">No data found.</div>
             </template>
+            <Column field="id" header="ID" sortable></Column>
             <Column field="title" header="Title" sortable></Column>
             <Column field="amount" header="Amount" sortable></Column>
             <Column field="purpose" header="Purpose" sortable></Column>
@@ -57,8 +51,9 @@
                   @click="deletePledge(slotProps.data.mask, $event)"
                 >
                   <i class="pi pi-trash no-pointer-events"></i>
-                </button> </template
-            ></Column>
+                </button>
+              </template>
+            </Column>
           </DataTable>
         </div>
       </div>
