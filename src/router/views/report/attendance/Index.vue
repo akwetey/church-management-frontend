@@ -386,6 +386,13 @@ export default {
             this.chartType = res.data.chart_type;
             this.$refs.formMsg.innerHTML = ``;
             break;
+          case "":
+            this.chartType = "Table";
+            this.attendances = res.data.results.results;
+            this.attendees = res.data.results.count.attendees;
+            this.absentees = res.data.results.count.absentees;
+            this.$refs.formMsg.innerHTML = ``;
+            break;
           default:
             this.chartType = "Table";
             this.attendances = res.data.results;
@@ -440,7 +447,7 @@ export default {
             },
           },
           dataLabels: {
-            enabled: true,
+            enabled: false,
           },
           xaxis: {
             categories: categories,
@@ -475,10 +482,13 @@ export default {
             },
           },
           dataLabels: {
-            enabled: true,
+            enabled: false,
           },
           xaxis: {
             categories: categories,
+          },
+          stroke: {
+            curve: "smooth",
           },
         },
       };
