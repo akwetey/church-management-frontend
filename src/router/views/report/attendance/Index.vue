@@ -192,30 +192,28 @@
 
                 <template v-if="chartType === 'multiple bar charts'">
                   <div v-for="(report, i) in reports" :key="i">
-                    {{ i }}
-                    {{ report }}
                     <div class="d-flex">
                       <h5 class="pr-3">Attendance Report</h5>
-                      <InputSwitch v-model="toggleReport" />
+                      <InputSwitch v-model="report.toggle" />
                     </div>
-                    <div v-show="!toggleReport">
+                    <div v-show="!report.toggle">
                       <ApexChart
                         type="bar"
                         :id="`year-${i}`"
                         :height="450"
                         :width="850"
-                        :options="chartData.attendance.chartOptions"
-                        :series="chartData.attendance.series"
+                        :options="report.chartOptions"
+                        :series="report.series"
                       ></ApexChart>
                     </div>
-                    <div v-show="toggleReport">
+                    <div v-show="report.toggle">
                       <ApexChart
                         type="line"
                         :id="`year-${i}`"
                         :height="450"
                         :width="850"
-                        :options="chartData.attendance.chartOptions"
-                        :series="chartData.attendance.series"
+                        :options="report.chartOptions"
+                        :series="report.series"
                       ></ApexChart>
                     </div>
                   </div>
@@ -328,7 +326,6 @@ export default {
       years: [],
       attendees: "",
       absentees: "",
-      toggleReport: false,
       chartData: {
         attendance: {
           series: [],
@@ -434,27 +431,29 @@ export default {
     renderMultipleBar(response) {
       const { results } = response;
       console.log(results, "results");
-      this.reports = results;
+
       for (let index of Object.keys(results)) {
-        // console.log(index);
         const resultData = results[index];
-        // console.log(resultData);
+
         const series = [
           { name: `Attendees ${index}`, data: [] },
           { name: `Absentees ${index}`, data: [] },
         ];
         const categories = [];
 
-        this.chartData.attendance = {
+        resultData.forEach((val, index) => {
+          categories.push(val.name.toUpperCase());
+          series[0].data.push(val.attendees);
+          series[1].data.push(val.absentees);
+        });
+
+        this.reports.push({
           series: series,
           chartOptions: {
             plotOptions: {
               bar: {
                 horizontal: false,
               },
-            },
-            chart: {
-              id: `year-${index}`,
             },
             dataLabels: {
               enabled: false,
@@ -470,18 +469,9 @@ export default {
               align: "center",
             },
           },
-        };
-
-        resultData.forEach((val, index) => {
-          categories.push(val.name.toUpperCase());
-          series[0].data.push(val.attendees);
-          series[1].data.push(val.absentees);
+          toggle: false,
         });
-
-        console.log(series);
-        console.log(categories);
       }
-      /*   */
     },
 
     renderBar(response) {
