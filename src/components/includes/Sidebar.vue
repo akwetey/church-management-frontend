@@ -121,6 +121,13 @@
                   >Import Expense</router-link
                 >
               </li>
+              <li class="nav-item">
+                <router-link
+                  :to="{ name: 'contributionsimport' }"
+                  class="nav-link"
+                  >Import Contributions</router-link
+                >
+              </li>
             </ul>
           </div>
         </li>

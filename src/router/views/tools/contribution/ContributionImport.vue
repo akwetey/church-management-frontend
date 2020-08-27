@@ -6,7 +6,7 @@
           <Steps :current="current" :status="stepStatus">
             <Step title="Download Template"></Step>
             <Step title="Upload Data File"></Step>
-            <Step title="Import Expense"></Step>
+            <Step title="Import Contribution"></Step>
           </Steps>
           <keep-alive>
             <StepOne @set-step="changeStep" v-if="current === 0" />
@@ -41,7 +41,7 @@ import Import from "@services/api/imports";
 import Swal from "sweetalert2";
 import { addBtnLoading, removeBtnLoading } from "@services/helpers";
 export default {
-  name: "ExpenseImport",
+  name: "ContributionImport",
   components: { Steps, Step, StepOne, StepTwo, StepThree },
   data: () => ({
     stepStatus: "process",
@@ -75,12 +75,12 @@ export default {
         addBtnLoading(prevBtn);
         const formData = new FormData();
         formData.append("file", this.form.file);
-        const response = await Import.importexpense(formData);
+        const response = await Import.importcontribution(formData);
         const res = response.data;
         removeBtnLoading(btn);
         removeBtnLoading(prevBtn);
         Swal.fire("Success", res.message, "success");
-        this.$router.push({ name: "expenses" });
+        this.$router.push({ name: "Contributions" });
       } catch (error) {
         console.log(error);
         removeBtnLoading(btn);

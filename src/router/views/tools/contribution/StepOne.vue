@@ -5,20 +5,28 @@
       <ul class="pl-3 mt-2">
         <li>Make sure to download file before you proceed.</li>
         <li>
-          Required Fields in the excel template are; Name, Amount, Expense Type
-          And Type
+          Required Fields in the excel template are, Type, Amount, Method And
+          TItle
         </li>
         <li>
-          Values for expense type are as follows;
+          Values for payment methods are as follows;
           <ul class="pl-4">
-            <li>1 is for Utility</li>
-            <li>2 is for Donation</li>
-            <li>3 is for Welfare</li>
-            <li>4 is for Equipment And Technology</li>
-            <li>5 is for Allowance</li>
-            <li>6 is for Building And Construction</li>
-            <li>7 is for Publicity</li>
-            <li>8 is for Evangelism</li>
+            <li>1 is for Cash</li>
+            <li>2 is for Cheque</li>
+            <li>3 is for Online</li>
+            <li>4 is for Mobile Money</li>
+          </ul>
+        </li>
+        <li>
+          Values for contribution type are as follows;
+          <ul class="pl-4">
+            <li>1 is for Tithe</li>
+            <li>2 is for Busing</li>
+            <li>3 is for Covenant Partner</li>
+            <li>4 is for Group</li>
+            <li>5 is for Welfare</li>
+            <li>6 is for Pledge</li>
+            <li>7 is for General</li>
           </ul>
         </li>
       </ul>
@@ -75,7 +83,7 @@ export default {
         try {
           addBtnLoading(btn);
 
-          const response = await Import.expensetemplate();
+          const response = await Import.contributiontemplate();
           removeBtnLoading(btn);
           this.disableProgessButton = false;
           const res = response.data;
