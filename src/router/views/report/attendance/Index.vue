@@ -54,21 +54,6 @@
                           class="form-control"
                           :filter="true"
                         />
-                        <!-- <select
-                          name="group"
-                          id="group"
-                          class="custom-select"
-                          v-model.number="form.group_id"
-                        >
-                          <option value>Select group</option>
-                          <option disabled>----------------</option>
-                          <option
-                            :value="group.id"
-                            v-for="(group, i) in groups"
-                            :key="i"
-                            >{{ group.name }}</option
-                          >
-                        </select> -->
                       </div>
                     </div>
                   </keep-alive>
@@ -204,18 +189,37 @@
                   </div>
                 </div>
                 <hr class="py-4" />
-                <div
-                  class="d-flex justify-content-center"
-                  v-if="chartType === 'Donut'"
-                >
-                  <ApexChart
-                    type="donut"
-                    :height="450"
-                    :width="450"
-                    :options="chartData.attendance.chartOptions"
-                    :series="chartData.attendance.series"
-                  ></ApexChart>
-                </div>
+
+                <template v-if="chartType === 'multiple bar charts'">
+                  <div v-for="(report, i) in reports" :key="i">
+                    {{ i }}
+                    {{ report }}
+                    <div class="d-flex">
+                      <h5 class="pr-3">Attendance Report</h5>
+                      <InputSwitch v-model="toggleReport" />
+                    </div>
+                    <div v-show="!toggleReport">
+                      <ApexChart
+                        type="bar"
+                        :id="`year-${i}`"
+                        :height="450"
+                        :width="850"
+                        :options="chartData.attendance.chartOptions"
+                        :series="chartData.attendance.series"
+                      ></ApexChart>
+                    </div>
+                    <div v-show="toggleReport">
+                      <ApexChart
+                        type="line"
+                        :id="`year-${i}`"
+                        :height="450"
+                        :width="850"
+                        :options="chartData.attendance.chartOptions"
+                        :series="chartData.attendance.series"
+                      ></ApexChart>
+                    </div>
+                  </div>
+                </template>
 
                 <div v-if="chartType === 'bar chart'">
                   <div class="d-flex">
@@ -319,6 +323,7 @@ export default {
         from: null,
         duration: 1,
       },
+      reports: [],
       groups: [],
       years: [],
       attendees: "",
@@ -427,38 +432,56 @@ export default {
     },
 
     renderMultipleBar(response) {
-      const series = [
-        { name: "Attendees ", data: [] },
-        { name: "Absentees ", data: [] },
-      ];
-      const categories = [];
-      response.results.forEach((val, index) => {
-        categories.push(val.name.toUpperCase());
-        series[0].data.push(val.attendees);
-        series[1].data.push(val.absentees);
-      });
+      const { results } = response;
+      console.log(results, "results");
+      this.reports = results;
+      for (let index of Object.keys(results)) {
+        // console.log(index);
+        const resultData = results[index];
+        // console.log(resultData);
+        const series = [
+          { name: `Attendees ${index}`, data: [] },
+          { name: `Absentees ${index}`, data: [] },
+        ];
+        const categories = [];
 
-      this.chartData.attendanceSpecific = {
-        series: series,
-        chartOptions: {
-          plotOptions: {
-            bar: {
-              horizontal: false,
+        this.chartData.attendance = {
+          series: series,
+          chartOptions: {
+            plotOptions: {
+              bar: {
+                horizontal: false,
+              },
+            },
+            chart: {
+              id: `year-${index}`,
+            },
+            dataLabels: {
+              enabled: false,
+            },
+            xaxis: {
+              categories: categories,
+            },
+            stroke: {
+              curve: "smooth",
+            },
+            title: {
+              text: `Attendance ${index}`,
+              align: "center",
             },
           },
-          dataLabels: {
-            enabled: false,
-          },
-          xaxis: {
-            categories: categories,
-          },
+        };
 
-          title: {
-            text: "Attendance Report",
-            align: "center",
-          },
-        },
-      };
+        resultData.forEach((val, index) => {
+          categories.push(val.name.toUpperCase());
+          series[0].data.push(val.attendees);
+          series[1].data.push(val.absentees);
+        });
+
+        console.log(series);
+        console.log(categories);
+      }
+      /*   */
     },
 
     renderBar(response) {
