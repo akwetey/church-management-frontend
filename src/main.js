@@ -22,8 +22,10 @@ Vue.directive("can", {
     const { value } = binding;
 
     if (!permissions.includes(value)) {
-      el.style.display = "none";
-      //vnode.elm.remove();
+      //el.style.display = "none";
+      vnode.context.$nextTick(() => {
+        vnode.elm.remove();
+      });
     }
   },
 });
