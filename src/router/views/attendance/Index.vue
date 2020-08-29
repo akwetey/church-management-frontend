@@ -14,6 +14,7 @@
             New Attendance
           </button>-->
           <router-link
+            v-can="'import-attendance'"
             :to="{ name: 'AttendanceAdd' }"
             class="btn btn-primary ml-3"
             >Import Attendance</router-link

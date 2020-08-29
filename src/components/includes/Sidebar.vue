@@ -2,7 +2,7 @@
   <nav class="sidebar">
     <div class="sidebar-header">
       <a class="sidebar-brand">
-        <span>CHMS</span>
+        <img :src="logo" class="img-fluid" alt="logo" />
       </a>
 
       <!-- <div class="sidebar-toggler not-active">
@@ -83,14 +83,10 @@
           <div class="collapse" id="contributions">
             <ul class="nav sub-menu">
               <li class="nav-item">
-                <router-link :to="{ name: 'pledge' }" class="nav-link"
-                  >Pledge</router-link
-                >
+                <router-link :to="{ name: 'pledge' }" class="nav-link">Pledge</router-link>
               </li>
               <li class="nav-item">
-                <router-link :to="{ name: 'Contributions' }" class="nav-link"
-                  >All Contributions</router-link
-                >
+                <router-link :to="{ name: 'Contributions' }" class="nav-link">All Contributions</router-link>
               </li>
             </ul>
           </div>
@@ -112,21 +108,16 @@
           <div class="collapse" id="import">
             <ul class="nav sub-menu">
               <li class="nav-item">
-                <router-link :to="{ name: 'AttendanceAdd' }" class="nav-link"
-                  >Import Attendance</router-link
-                >
+                <router-link :to="{ name: 'AttendanceAdd' }" class="nav-link">Import Attendance</router-link>
               </li>
               <li class="nav-item">
-                <router-link :to="{ name: 'expenseimport' }" class="nav-link"
-                  >Import Expense</router-link
-                >
+                <router-link :to="{ name: 'expenseimport' }" class="nav-link">Import Expense</router-link>
               </li>
               <li class="nav-item">
                 <router-link
                   :to="{ name: 'contributionsimport' }"
                   class="nav-link"
-                  >Import Contributions</router-link
-                >
+                >Import Contributions</router-link>
               </li>
             </ul>
           </div>
@@ -154,14 +145,10 @@
           <div class="collapse" id="users-roles">
             <ul class="nav sub-menu">
               <li class="nav-item">
-                <router-link :to="{ name: 'user' }" class="nav-link"
-                  >Users</router-link
-                >
+                <router-link :to="{ name: 'user' }" class="nav-link">Users</router-link>
               </li>
               <li class="nav-item">
-                <router-link :to="{ name: 'role' }" class="nav-link"
-                  >Roles</router-link
-                >
+                <router-link :to="{ name: 'role' }" class="nav-link">Roles</router-link>
               </li>
             </ul>
           </div>
@@ -173,9 +160,15 @@
 
 <script>
 import BSN from "bootstrap.native";
+const logo = require("@assets/img/logo-long.png");
 
 export default {
   name: "Sidebar",
+  data() {
+    return {
+      logo,
+    };
+  },
   mounted() {
     new BSN.Collapse("#users-role-collapse-btn");
     new BSN.Collapse("#contributions-collapse-btn");

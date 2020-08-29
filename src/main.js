@@ -16,6 +16,19 @@ import "primevue/resources/themes/saga-blue/theme.css";
 import "@assets/scss/main.scss";
 
 Vue.directive("tooltip", Tooltip);
+Vue.directive("can", {
+  bind: function(el, binding, vnode) {
+    const permissions = store.state.user.permissions || [];
+    const { value } = binding;
+
+    if (!permissions.includes(value)) {
+      //el.style.display = "none";
+      vnode.context.$nextTick(() => {
+        vnode.elm.remove();
+      });
+    }
+  },
+});
 Vue.config.productionTip = false;
 
 new Vue({
