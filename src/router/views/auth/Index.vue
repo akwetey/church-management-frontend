@@ -1,8 +1,10 @@
 <template>
   <div>
-    <h5 class="text-muted font-weight-normal mb-4">
-      Welcome back! Log in to your account.
-    </h5>
+    <div class="mb-4">
+      <img :src="logo" alt="logo" height="40px" />
+    </div>
+
+    <h5 class="text-muted font-weight-normal mb-4">Welcome back! Log in to your account.</h5>
 
     <div class="form-msg" ref="formMsg"></div>
 
@@ -31,40 +33,27 @@
       </div>
       <div class="form-group">
         <div class="custom-control custom-checkbox">
-          <input
-            type="checkbox"
-            class="custom-control-input shadow-none"
-            id="remember-me"
-          />
-          <label class="custom-control-label" for="remember-me"
-            >Remember me</label
-          >
+          <input type="checkbox" class="custom-control-input shadow-none" id="remember-me" />
+          <label class="custom-control-label" for="remember-me">Remember me</label>
         </div>
       </div>
       <div class="mt-3">
-        <button
-          class="btn btn-primary mr-2 mb-2 mb-md-0 text-white px-5"
-          ref="submitBtn"
-        >
-          Login
-        </button>
+        <button class="btn btn-primary mr-2 mb-2 mb-md-0 text-white px-5" ref="submitBtn">Login</button>
       </div>
-      <router-link
-        :to="{ name: 'PasswordReset' }"
-        class="d-block mt-3 text-muted"
-        >Forgot password?</router-link
-      >
+      <router-link :to="{ name: 'PasswordReset' }" class="d-block mt-3 text-muted">Forgot password?</router-link>
     </form>
   </div>
 </template>
 
 <script>
 import { addBtnLoading, removeBtnLoading } from "@services/helpers";
+const logo = require("@assets/img/logo-long.png");
 
 export default {
   name: "Login",
   data() {
     return {
+      logo,
       form: { email: "", password: "", remember: false },
     };
   },

@@ -10,4 +10,7 @@ export default {
   user() {
     return Axios.get("/staff/auth/user");
   },
+  passwordReset(payload) {
+    return Axios.post("/staff/auth/password-reset", payload);
+  },
 };
