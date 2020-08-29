@@ -153,6 +153,11 @@ export default [
         name: "AttendanceAdd",
         component: () => import("@views/attendance/import/Index.vue"),
       },
+      {
+        path: "attendance/:mask",
+        name: "attendanceEdit",
+        component: () => import("@views/attendance/edit/Index.vue"),
+      },
       ...pledgeRoutes,
       ...expenseRoutes,
       ...contributionRoutes,

@@ -326,6 +326,7 @@ export default {
       years: [],
       attendees: "",
       absentees: "",
+      toggleReport: false,
       chartData: {
         attendance: {
           series: [],
