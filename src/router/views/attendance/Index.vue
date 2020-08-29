@@ -13,7 +13,11 @@
           >
             New Attendance
           </button>-->
-          <router-link :to="{name: 'AttendanceAdd'}" class="btn btn-primary ml-3">Import Attendance</router-link>
+          <router-link
+            v-can="'import-attendance'"
+            :to="{name: 'AttendanceAdd'}"
+            class="btn btn-primary ml-3"
+          >Import Attendance</router-link>
         </div>
         <div>
           <DataTable

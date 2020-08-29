@@ -34,8 +34,8 @@ export default new Vuex.Store({
   },
 
   mutations: {
-    setUser(state, { name, email, avatar }) {
-      state.user = { name, email, avatar };
+    setUser(state, { name, email, avatar, permissions }) {
+      state.user = { name, email, avatar, permissions };
     },
     setToken(state, token) {
       localStorage.setItem("_chms_token", token);
