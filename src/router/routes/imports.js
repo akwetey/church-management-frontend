@@ -9,4 +9,9 @@ export default [
     name: "contributionsimport",
     component: () => import("@views/tools/contribution/ContributionImport.vue"),
   },
+  {
+    path: "people-import",
+    name: "peopleimport",
+    component: () => import("@views/tools/people/PeopleImport.vue"),
+  },
 ];

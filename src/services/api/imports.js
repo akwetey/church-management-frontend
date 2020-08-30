@@ -13,4 +13,10 @@ export default {
   importcontribution(payload) {
     return axios.post("/staff/contributions/import", payload);
   },
+  peopletemplate() {
+    return axios.get("/staff/people/template");
+  },
+  importpeople(payload) {
+    return axios.post("/staff/people/import", payload);
+  },
 };
